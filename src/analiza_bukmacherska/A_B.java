@@ -2,7 +2,7 @@ import java.awt.*;
 import java.sql.*;
 import javax.swing.*;
 public class A_B{
-    z1_Baza baza;
+    z1_Baza baza ;
     z2_Tabele tabele;
     MenuDolne menu;
    // public LibraryMainMenu{
