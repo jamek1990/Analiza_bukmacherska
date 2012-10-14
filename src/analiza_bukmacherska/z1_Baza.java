@@ -12,7 +12,7 @@ public class z1_Baza extends JLayeredPane{
     public z1_Baza(){
         panel2= new JLayeredPane();
         setLayout(null);
-        baza2 = new JLabel("TUTAJ DODAĆ ŁADOWANIE BAZY PRELOADER TABELKE Z AKTUALNYMI KURSAMI STATYSTYKA BAZY2(:, ale również stronę tytułową");
+        baza2 = new JLabel("TUTAJ DODAĆ ŁADOWANIE BAZY PRELOADER TABELKE Z AKTUALNYMI KURSAMI STATYSTYKA BAZY2()):, ale również stronę tytułową");
         baza2.setBounds(0, 0, 1024, 20);
         panel2.add(baza2);
         panel2.setBounds(0, 0, 1024, 300);
