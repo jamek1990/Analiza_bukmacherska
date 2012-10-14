@@ -4,7 +4,7 @@ import javax.swing.*;
 public class A_B{
     z1_Baza baza ;
     z2_Tabele tabele;
-    MenuDolne menu;
+    MenuDolne menu ;
    // public LibraryMainMenu{
        
     
