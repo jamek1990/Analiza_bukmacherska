@@ -17,7 +17,7 @@ public class z2_Tabele extends JLayeredPane{
     JLabel jButton4;
     JLabel jButton5;
     JLabel jButton6;
-    JPanel jP_OknoTabela;
+    m1_okienko jP_OknoTabela;
     m1_okienko  jP_OknoWybierzLige;
     JLabel jLabel3;
     private int[] tabela_ligowa_button;
@@ -101,33 +101,20 @@ public class z2_Tabele extends JLayeredPane{
         tabela_ligowa_button_akt=0;
         JLabel  jLabel2 =new  JLabel();
         jLabel3 =new  JLabel();
-        jP_OknoTabela =new  JPanel();
+        jP_OknoTabela = new  m1_okienko(770,371,3,3,"TABELA LIGOWA - DOM");
         jP_OknoWybierzLige = new  m1_okienko(230,371,780,3,"LIGA");
         jButton4 =new  JLabel();
         jButton5 =new  JLabel();
         jButton6 =new  JLabel();
         jTable1 = new JTable();
         JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
-        jP_OknoTabela.setBackground(new java.awt.Color(0, 153, 153));
-        jP_OknoTabela.setLayout(null);
-        //jP_OknoWybierzLige.setBackground(new java.awt.Color(0, 153, 153));
-        //jP_OknoWybierzLige.setLayout(null);
-        jLabel3.setFont(new java.awt.Font("Arial Black", 1, 10));
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("TABELA LIGOWA - DOM");
-        jP_OknoTabela.add(jLabel3);
-        jLabel3.setBounds(0, 0, 770, 26);
-        jP_OknoTabela.setBounds(0, 0, 770, 500);
-        
-        
         jButton4.setIcon(new javax.swing.ImageIcon("images/btok.jpg")); // NOI18N
         jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {jButton4MouseEntered(evt);}
             public void mouseExited(java.awt.event.MouseEvent evt)  {jButton4MouseExited(evt);}
             public void mousePressed(java.awt.event.MouseEvent evt) {//jButton4MousePressed(evt);}
             }});
-        jP_OknoTabela.add(jButton4);
+        jP_OknoTabela.add(jButton4,1);
         jButton4.setBounds(700, 5, 16, 16);
         jButton5.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); // NOI18N
         jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -135,7 +122,7 @@ public class z2_Tabele extends JLayeredPane{
             public void mouseExited(java.awt.event.MouseEvent evt)  {jButton5MouseExited(evt); }
             public void mousePressed(java.awt.event.MouseEvent evt) {//jButton5MousePressed(evt);
             }});
-        jP_OknoTabela.add(jButton5);
+        jP_OknoTabela.add(jButton5,1);
         jButton5.setBounds(720, 5, 16, 16);
         jButton6.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); // NOI18N
         jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -143,17 +130,8 @@ public class z2_Tabele extends JLayeredPane{
             public void mouseExited(java.awt.event.MouseEvent evt)  {jButton6MouseExited(evt);}
             public void mousePressed(java.awt.event.MouseEvent evt) {//jButton6MousePressed(evt);}
             }});
-        jP_OknoTabela.add(jButton6);
+        jP_OknoTabela.add(jButton6,1);
         jButton6.setBounds(740, 5, 16, 16);
-        
-        
-        jLabel2.setBackground(new java.awt.Color(102, 102, 102));
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12));
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setIcon(new javax.swing.ImageIcon("images/TABELA_NAZWA2.jpg")); // NOI18N
-        jP_OknoTabela.add(jLabel2);
-        jLabel2.setBounds(0, 0, 770, 26);
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -207,7 +185,6 @@ public class z2_Tabele extends JLayeredPane{
         jTable1.getColumnModel().getColumn(9).setPreferredWidth(100);
         jP_OknoTabela.add(jScrollPane1);
         jScrollPane1.setBounds(0, 30, 770, 350);
-        jP_OknoTabela.setBounds(3, 3, 770, 371);
         Dodaj_Paski();
         //setLocation(0,0);
         setBounds(0, 0, 1024, 500);
