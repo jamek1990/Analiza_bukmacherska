@@ -17,6 +17,9 @@ public class z2_Tabele extends JLayeredPane{
     JLabel jButton4;
     JLabel jButton5;
     JLabel jButton6;
+    JPanel jP_OknoTabela;
+    m1_okienko  jP_OknoWybierzLige;
+    JLabel jLabel3;
     private int[] tabela_ligowa_button;
     private int tabela_ligowa_button_akt;
     private void jButton5MouseEntered(java.awt.event.MouseEvent evt) {                                      
@@ -97,22 +100,25 @@ public class z2_Tabele extends JLayeredPane{
         tabela_ligowa_button[2]=0;
         tabela_ligowa_button_akt=0;
         JLabel  jLabel2 =new  JLabel();
-        JLabel  jLabel3 =new  JLabel();
-        JPanel  jPanel3 =new  JPanel();
+        jLabel3 =new  JLabel();
+        jP_OknoTabela =new  JPanel();
+        jP_OknoWybierzLige = new  m1_okienko(230,371,780,3,"LIGA");
         jButton4 =new  JLabel();
         jButton5 =new  JLabel();
         jButton6 =new  JLabel();
         jTable1 = new JTable();
         JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel3.setBackground(new java.awt.Color(0, 153, 153));
-        jPanel3.setLayout(null);
+        jP_OknoTabela.setBackground(new java.awt.Color(0, 153, 153));
+        jP_OknoTabela.setLayout(null);
+        //jP_OknoWybierzLige.setBackground(new java.awt.Color(0, 153, 153));
+        //jP_OknoWybierzLige.setLayout(null);
         jLabel3.setFont(new java.awt.Font("Arial Black", 1, 10));
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("TABELA LIGOWA - DOM");
-        jPanel3.add(jLabel3);
+        jP_OknoTabela.add(jLabel3);
         jLabel3.setBounds(0, 0, 770, 26);
-        jPanel3.setBounds(0, 0, 770, 500);
+        jP_OknoTabela.setBounds(0, 0, 770, 500);
         
         
         jButton4.setIcon(new javax.swing.ImageIcon("images/btok.jpg")); // NOI18N
@@ -121,7 +127,7 @@ public class z2_Tabele extends JLayeredPane{
             public void mouseExited(java.awt.event.MouseEvent evt)  {jButton4MouseExited(evt);}
             public void mousePressed(java.awt.event.MouseEvent evt) {//jButton4MousePressed(evt);}
             }});
-        jPanel3.add(jButton4);
+        jP_OknoTabela.add(jButton4);
         jButton4.setBounds(700, 5, 16, 16);
         jButton5.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); // NOI18N
         jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -129,7 +135,7 @@ public class z2_Tabele extends JLayeredPane{
             public void mouseExited(java.awt.event.MouseEvent evt)  {jButton5MouseExited(evt); }
             public void mousePressed(java.awt.event.MouseEvent evt) {//jButton5MousePressed(evt);
             }});
-        jPanel3.add(jButton5);
+        jP_OknoTabela.add(jButton5);
         jButton5.setBounds(720, 5, 16, 16);
         jButton6.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); // NOI18N
         jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -137,7 +143,7 @@ public class z2_Tabele extends JLayeredPane{
             public void mouseExited(java.awt.event.MouseEvent evt)  {jButton6MouseExited(evt);}
             public void mousePressed(java.awt.event.MouseEvent evt) {//jButton6MousePressed(evt);}
             }});
-        jPanel3.add(jButton6);
+        jP_OknoTabela.add(jButton6);
         jButton6.setBounds(740, 5, 16, 16);
         
         
@@ -146,7 +152,7 @@ public class z2_Tabele extends JLayeredPane{
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setIcon(new javax.swing.ImageIcon("images/TABELA_NAZWA2.jpg")); // NOI18N
-        jPanel3.add(jLabel2);
+        jP_OknoTabela.add(jLabel2);
         jLabel2.setBounds(0, 0, 770, 26);
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -199,12 +205,14 @@ public class z2_Tabele extends JLayeredPane{
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(120);
         jTable1.getColumnModel().getColumn(6).setPreferredWidth(40);
         jTable1.getColumnModel().getColumn(9).setPreferredWidth(100);
-        jPanel3.add(jScrollPane1);
+        jP_OknoTabela.add(jScrollPane1);
         jScrollPane1.setBounds(0, 30, 770, 350);
-        jPanel3.setBounds(3, 3, 770, 371);
+        jP_OknoTabela.setBounds(3, 3, 770, 371);
         Dodaj_Paski();
-        setLocation(0,0);
+        //setLocation(0,0);
         setBounds(0, 0, 1024, 500);
-        add(jPanel3);
+        add(jP_OknoTabela);
+        //jP_OknoWybierzLige.se
+        add(jP_OknoWybierzLige);
     }
 }

@@ -5,12 +5,8 @@ public class A_B{
     z1_Baza baza ;
     z2_Tabele tabele;
     MenuDolne menu ;
-   // public LibraryMainMenu{
-       
-    
     static void rysuj() {
         JFrame f=new JFrame();
-        
         f.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         f.setTitle("Analiza Bukmacherska");
         f.setBackground(new java.awt.Color(153, 153, 153));
@@ -32,7 +28,6 @@ public class A_B{
         f.setVisible(true);
     }
     public static void main(String[] args) {
-        
         rysuj();
     }
 }
