@@ -13,29 +13,46 @@ public class MenuDolne extends JLayeredPane{
     JLabel Tlo_Menu;
     z1_Baza z1_baza;
     z2_Tabele z2_tabele;
-    private void BM_bazaMouseEntered(java.awt.event.MouseEvent evt) {                                      
-        BM_baza.setIcon(new javax.swing.ImageIcon("images/button_down_baza.jpg")); 
+    Integer zaswiec =1;
+    private void BM_bazaMouseEntered(java.awt.event.MouseEvent evt) {
+        if(zaswiec != 1){
+            BM_baza.setIcon(new javax.swing.ImageIcon("images/button_down_baza.jpg")); 
+        }
     }
-    private void BM_bazaMouseExited(java.awt.event.MouseEvent evt) {                                     
-        BM_baza.setIcon(new javax.swing.ImageIcon("images/button_up_baza.jpg")); 
+    private void BM_bazaMouseExited(java.awt.event.MouseEvent evt) {
+        if(zaswiec != 1){
+            BM_baza.setIcon(new javax.swing.ImageIcon("images/button_up_baza.jpg")); 
+        }
     }
     private void BM_bazaMousePressed(java.awt.event.MouseEvent evt) throws Exception { 
         //CSV cs = new CSV();
         //cs.read();
-        BM_baza.setIcon(new javax.swing.ImageIcon("images/button_press_baza.jpg")); 
-        z1_baza.setVisible(true);
-        z2_tabele.setVisible(false);
+        if(zaswiec != 1){
+            BM_baza.setIcon(new javax.swing.ImageIcon("images/button_press_baza.jpg")); 
+            BM_tabele.setIcon(new javax.swing.ImageIcon("images/button_up_tabele.jpg"));
+            z1_baza.setVisible(true);
+            z2_tabele.setVisible(false);
+            zaswiec=1;
+        }
     }
-    private void BM_tabeleMouseEntered(java.awt.event.MouseEvent evt) {                                      
-        BM_tabele.setIcon(new javax.swing.ImageIcon("images/button_down_tabele.jpg")); 
+    private void BM_tabeleMouseEntered(java.awt.event.MouseEvent evt) {          
+        if(zaswiec != 2){
+            BM_tabele.setIcon(new javax.swing.ImageIcon("images/button_down_tabele.jpg")); 
+        }
     }
-    private void BM_tabeleMouseExited(java.awt.event.MouseEvent evt) {                                     
-        BM_tabele.setIcon(new javax.swing.ImageIcon("images/button_up_tabele.jpg")); 
+    private void BM_tabeleMouseExited(java.awt.event.MouseEvent evt) {
+        if(zaswiec != 2){
+            BM_tabele.setIcon(new javax.swing.ImageIcon("images/button_up_tabele.jpg")); 
+        }
     }
     private void BM_tabeleMousePressed(java.awt.event.MouseEvent evt) throws Exception { 
-        BM_tabele.setIcon(new javax.swing.ImageIcon("images/button_press_tabele.jpg")); 
-        z1_baza.setVisible(false);
-        z2_tabele.setVisible(true);
+        if(zaswiec != 2){
+            BM_tabele.setIcon(new javax.swing.ImageIcon("images/button_press_tabele.jpg")); 
+            BM_baza.setIcon(new javax.swing.ImageIcon("images/button_up_baza.jpg")); 
+            z1_baza.setVisible(false);
+            z2_tabele.setVisible(true);
+            zaswiec =2;
+        }
     }
     public MenuDolne(z1_Baza z1,z2_Tabele z2){
         this.z1_baza=z1;
@@ -47,7 +64,7 @@ public class MenuDolne extends JLayeredPane{
         Tlo_Menu= new JLabel();
         Tlo_Menu.setIcon(new javax.swing.ImageIcon("images/menu_dolne.jpg"));
         BM_baza = new JLabel();
-        BM_baza.setIcon(new javax.swing.ImageIcon("images/button_up_baza.jpg"));
+        BM_baza.setIcon(new javax.swing.ImageIcon("images/button_press_baza.jpg"));
         BM_baza.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 BM_bazaMouseEntered(evt);
