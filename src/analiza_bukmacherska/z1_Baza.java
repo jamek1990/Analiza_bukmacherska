@@ -30,17 +30,23 @@ public class z1_Baza extends JLayeredPane{
                     data_do=data_do+Integer.toString((j+1)%100);
                     data=data_od+data_do;
                     URL url12  = new URL("http://www.football-data.co.uk/mmz4281/"+data+"/" + ligi[i]+".csv" );
-                    System.out.println(url12.getPath());
+                    
                     URLConnection urlConn = url12.openConnection();
                     InputStreamReader inStream = new InputStreamReader(urlConn.getInputStream());
                     BufferedReader buff= new BufferedReader(inStream);
-                    //String content1 = buff.readLine();
-                    String content2 = buff.readLine();
+                    String content1 = buff.readLine();
+                    content1 = buff.readLine();
+                    String[] currentLineArray = content1.replaceAll("\\s", "").split(",");
+                    if(currentLineArray.length>2){
+                        System.out.println(currentLineArray[2] + " " + currentLineArray[3]);
+                    }
+                    
+                    /*String content2 = buff.readLine();
                     while (content2 !=null){
                         System.out.println(content2);
                         content2 = buff.readLine(); 
                         break;
-                    }
+                    }*/
                 }
             }
         }
