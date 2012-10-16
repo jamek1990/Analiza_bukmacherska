@@ -17,10 +17,17 @@ public class z1_Baza extends JLayeredPane{
     m1_okienko  jP_OknoAktualizujBaze;
     
     private void RefreshDataBase(java.awt.event.MouseEvent evt) throws Exception { 
-        try {
+       // try {
             String ligi[]={"B1","D1","D2","E0","E1","E2","E3","EC","F1","F2","G1","I1","I2","N1","P1","SC0","SC1","SC2","SC3","SP1","SP2","T1"};
+            String kolumny[]={"Div","Date","HomeTeam","AwayTeam","FTHG","FTAG","FTR","HTHG","HTAG","HTR","HS","AS","HST","AST","HHW","AHW","HC","AC","HF","AF","HO","AO","HY","AY","HR","AR"};
+            String mecz[]= new String[29];
+            int[] hash = new int[29];
+            int[] gdzie = new int[29];
+            int gdzie_size=0;
+            
+            SQL sql = new SQL();
             for(int i=0;i<ligi.length;i++){
-                for(int j = 94;j<113;j++){
+                for(int j = 100;j<113;j++){
                     String data="";
                     String data_od="";
                     String data_do="";
@@ -29,33 +36,56 @@ public class z1_Baza extends JLayeredPane{
                     data_od=data_od+Integer.toString(j%100);
                     data_do=data_do+Integer.toString((j+1)%100);
                     data=data_od+data_do;
-                    URL url12  = new URL("http://www.football-data.co.uk/mmz4281/"+data+"/" + ligi[i]+".csv" );
-                    
-                    URLConnection urlConn = url12.openConnection();
-                    InputStreamReader inStream = new InputStreamReader(urlConn.getInputStream());
+                    URL url  = new URL("http://www.football-data.co.uk/mmz4281/"+data+"/" + ligi[i]+".csv" );
+                    URLConnection con = url.openConnection();
+                    InputStreamReader inStream = new InputStreamReader(con.getInputStream());
                     BufferedReader buff= new BufferedReader(inStream);
                     String content1 = buff.readLine();
-                    content1 = buff.readLine();
-                    String[] currentLineArray = content1.replaceAll("\\s", "").split(",");
-                    if(currentLineArray.length>2){
-                        System.out.println(currentLineArray[2] + " " + currentLineArray[3]);
+                    //content1 = buff.readLine();
+                    //System.out.println(content1);
+                    String[] kol = content1.replaceAll("\\s", "").split(",");
+                    gdzie_size=0;
+                    if(kol.length>2){
+                        //System.out.println(kol.length);
+                        for(int l=0;l<kolumny.length;l++){
+                            mecz[l]=null;
+                            for(int k =0;k<kol.length;k++){
+                                if(kolumny[l].startsWith(kol[k])){
+                                    gdzie[gdzie_size]=l;
+                                    gdzie_size++;
+                                    hash[l]=k;
+                                    //System.out.println(kolumny[l]);
+                                    break;
+                                }
+                            }
+                        }
                     }
-                    
-                    /*String content2 = buff.readLine();
-                    while (content2 !=null){
-                        System.out.println(content2);
-                        content2 = buff.readLine(); 
-                        break;
-                    }*/
+                    if(kol.length>2){
+                        String content2 = buff.readLine();
+                        
+                        while (content2 !=null){
+                            String[] kol2 = content2.replaceAll(", ", "").replaceAll("\\s+","\\s").split(",");
+                            if(kol2.length>=kol.length){
+                                for(int k=0;k<gdzie_size;k++){
+                                    mecz[k]=null;
+                                    if(!kol2[hash[gdzie[k]]].isEmpty())
+                                        mecz[gdzie[k]]=kol2[hash[gdzie[k]]];
+                                }
+                                Mecz_stat m_s=new Mecz_stat();
+                                m_s.zmien(mecz);
+                                sql.insert_do_statystyk(m_s);
+                            }
+                            content2 = buff.readLine(); 
+                            
+                        }
+                    }
                 }
             }
-        }
-        catch (Exception e){
-            System.out.print("KHONG TAI DUOC DU LIEU");
-        }
+       // }
+       
     }
     public z1_Baza(){
-        jP_OknoAktualizujBaze = new m1_okienko(200,200,805,5,"AKTUALIZACJA");
+        jP_OknoAktualizujBaze = new m1_okienko(230,200,780,3,"AKTUALIZACJA");
         jL_OdswiezBaze = new JLabel();
         
         jL_OdswiezBaze.setForeground(Color.red);
