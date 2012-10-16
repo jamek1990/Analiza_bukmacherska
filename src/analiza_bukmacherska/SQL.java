@@ -11,25 +11,60 @@ import javax.swing.JFrame;
 public class SQL {
     private static Connection con;
     private Statement stat;
-    public SQL() throws SQLException, ClassNotFoundException
-    {
+    
+    public SQL() throws SQLException, ClassNotFoundException{
         Class.forName("org.sqlite.JDBC");
         con = DriverManager.getConnection("jdbc:sqlite:mydb.db");
     }
     
-    public void createDB() throws SQLException
-    {        
+    public void createDB() throws SQLException{        
         stat = con.createStatement();        
-        //tworzenie tabeli ID|HOME|AWAY|WYNIK
-        stat.executeUpdate("create table IF NOT EXISTS mecze(id INT,"
-          + "home varchar(30)," 
-          + "away varchar(30)," 
-          + "wynik varchar(6),"
-          + "primary key (id));");
+        stat.executeUpdate("CREATE TABLE MECZE_STATYSTYKI("
+	+"Div		TEXT,"
+	+"DATA		NUMERIC,"
+	+"HomeTeam 	TEXT,"
+	+"AwayTeam	TEXT,"
+	+"FTHG		Integer,"
+	+"FTAG		INTEGER,"
+	+"FTR		INTEGER,"
+	+"HTHG		INTEGER,"
+	+"HTAG		INTEGER,"
+	+"HTR		INTEGER,"
+	+"HSH		INTEGER,"
+	+"ASH		INTEGER,"
+	+"HST		INTEGER,"
+	+"AST		INTEGER,"
+	+"HHW		INTEGER,"
+	+"AHW		INTEGER,"
+	+"HC		INTEGER,"
+	+"AC		INTEGER,"
+	+"HF		INTEGER,"
+	+"AF		INTEGER,"
+	+"HO		INTEGER,"
+	+"AO		INTEGER,"
+	+"HY		INTEGER,"
+	+"AY		INTEGER,"
+	+"HR		INTEGER,"
+	+"AR		INTEGER,"
+	+"K1		REAL,"
+	+"KX		REAL,"
+	+"K2		REAL");
     }
     
-    public void insert(String home, String away, String wynik) throws SQLException
-    {
+    public void insert_do_statystyk(String home, String away, String wynik) throws SQLException{
+        System.out.println(home + " " + " vs " + away);
+        //wrzucanie danych
+        PreparedStatement prep = con
+          .prepareStatement("insert into mecze values(?,?,?,?);");
+        prep.setString(2, home);
+        prep.setString(3, away);
+        prep.setString(4, wynik);
+        boolean rows = prep.execute();
+        System.out.println("update tabeli!");
+    }
+    
+    
+    public void insert(String home, String away, String wynik) throws SQLException{
         System.out.println(home + " " + " vs " + away);
         //wrzucanie danych
         PreparedStatement prep = con
