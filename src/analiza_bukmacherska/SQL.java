@@ -9,12 +9,14 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 public class SQL {
-    private static Connection con;
-    private Statement stat;
+    public static Connection con;
+    public  Statement stat;
     
     public SQL() throws SQLException, ClassNotFoundException{
         Class.forName("org.sqlite.JDBC");
         con = DriverManager.getConnection("jdbc:sqlite:mydb.db");
+        con.setAutoCommit(false);
+        con.commit();
     }
     
     public void createDB() throws SQLException{        

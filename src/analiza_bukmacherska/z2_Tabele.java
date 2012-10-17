@@ -10,8 +10,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 import javax.imageio.ImageIO;
-import javax.swing.plaf.metal.MetalIconFactory;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 public class z2_Tabele extends JLayeredPane{
     JLayeredPane panel2;
     JLabel baza2;
@@ -25,6 +34,8 @@ public class z2_Tabele extends JLayeredPane{
     JLabel jLabel3;
     private int[] tabela_ligowa_button;
     private int tabela_ligowa_button_akt;
+    String columny[] ={"POZ", "DRU", "MEC", "ZWY", "REM", "POR", "GOL", "RÓŻ", "PUN", "   Z%          R%          P%"};
+    SQL database;
     
     private Map<Object, Icon> icons = null;
     public void IconListRenderer(Map<Object, Icon> icons) {
@@ -93,7 +104,7 @@ public class z2_Tabele extends JLayeredPane{
             jTable1.getColumnModel().getColumn(9).setCellRenderer(new ImageRenderer());
             DefaultTableModel Tmodel=(DefaultTableModel) jTable1.getModel();
             Tmodel.fireTableDataChanged();
-            for(int i =0; i<20;i++){
+            for(int i =0; i<jTable1.getRowCount();i++){
                 int a = Integer.parseInt(jTable1.getValueAt(i,3).toString());
                 int b=  Integer.parseInt(jTable1.getValueAt(i,4).toString());
                 int d=  Integer.parseInt(jTable1.getValueAt(i,2).toString());
@@ -108,7 +119,126 @@ public class z2_Tabele extends JLayeredPane{
             }
         } catch (IOException ex) {}
     } 
-    public z2_Tabele(){
+    public void sortAllRowsBy(DefaultTableModel model, int colIndex, boolean ascending) {
+            Vector data = model.getDataVector();
+            Collections.sort(data, new sort(colIndex, ascending));
+            model.fireTableStructureChanged();
+    }
+    public void Tabelka_dane(String liga) throws SQLException, ClassNotFoundException{
+        database = new SQL();    
+        Statement stat;
+        Statement stat2;
+        //database.createDB();
+        String query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga +"'  AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7";
+        String query2="SELECT DISTINCT(HomeTeam)FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 ORDER BY HOMETEAM";
+        Integer columnCount=10;
+        Vector data = new Vector(columnCount);
+        Vector row = new Vector(columnCount);
+        Vector columnNames = new Vector(columnCount);
+        System.out.println(query2);
+        stat = database.con.createStatement(); 
+        stat2 = database.con.createStatement(); 
+        ResultSet rs = stat.executeQuery(query2);
+        Integer dr = 1;
+        while (rs.next()) {
+            Integer Punkty = 0;
+            Integer Mecze = 0;
+            Integer Wygrane = 0;
+            Integer Remisy = 0;
+            Integer Przegrane = 0;
+            Integer Gole_strzelone = 0;
+            Integer Gole_stracone = 0;
+            Integer d1,d2;
+            query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (HomeTeam='" +rs.getString(1) + "' OR AWAYTEAM='"+rs.getString(1) + "')" ;
+            ResultSet rs2 = stat2.executeQuery(query);
+            while (rs2.next()) {
+                Mecze = Mecze + 1;
+                if (rs2.getString(4).contentEquals(rs.getString(1))==true){
+                    d1 = rs2.getInt(1);
+                    d2 = rs2.getInt(2);
+                    Gole_strzelone = Gole_strzelone + d1;
+                    Gole_stracone = Gole_stracone + d2;
+                    if(rs2.getString(3).contentEquals("H")){
+                        Wygrane = Wygrane + 1;
+                        Punkty = Punkty + 3;
+                    }else if(rs2.getString(3).contentEquals("D")){
+                        Remisy = Remisy + 1;
+                        Punkty = Punkty + 1;
+                    }else{
+                        Przegrane = Przegrane + 1;
+                    }
+                }else{
+                    d1 = rs2.getInt(2);
+                    d2 = rs2.getInt(1);
+                    Gole_strzelone = Gole_strzelone + d1;
+                    Gole_stracone = Gole_stracone + d2;
+                    if(rs2.getString(3).contentEquals("A")){
+                        Wygrane = Wygrane + 1;
+                        Punkty = Punkty + 3;
+                    }
+                    else if(rs2.getString(3).contentEquals("D")){
+                        Remisy = Remisy + 1;
+                        Punkty = Punkty + 1;
+                    }else{
+                        Przegrane = Przegrane + 1;
+                    }
+                } 
+            }
+            row.addElement(new Integer(dr));
+            row.addElement(rs.getString(1));
+            row.addElement(new Integer(Mecze));
+            row.addElement(new Integer(Wygrane));
+            row.addElement(new Integer(Remisy));
+            row.addElement(new Integer(Przegrane));
+            row.addElement(new Integer(Gole_strzelone));
+            row.addElement(new Integer(Gole_strzelone-Gole_stracone));
+            row.addElement(new Integer(Punkty));       
+            data.addElement(row);
+            row = new Vector(columnCount);
+            dr = dr + 1;
+        }
+        
+        for (int i = 1; i <= columnCount; i++) {
+            columnNames.addElement(columny[i-1]);
+        }
+        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        jTable1.setModel( model ); 
+        Dodaj_Paski();
+        /*jTable1.setAutoCreateColumnsFromModel(false);
+        sortAllRowsBy(model, 8, false);
+        jTable1.setAutoCreateRowSorter(true);*/
+        stat.close();
+        stat2.close();
+        database.con.close();
+        
+    }
+     ListSelectionListener listSelectionListener = new ListSelectionListener() {
+         
+        public void valueChanged(ListSelectionEvent listSelectionEvent) {
+            System.out.print("As");
+          Integer ind =listSelectionEvent.getFirstIndex();
+          String s="";
+          if(ind == 0)s="E0";
+          if(ind == 1)s="B1";
+          if(ind == 2)s="F1";
+          if(ind == 3)s="G1";
+          if(ind == 4)s="SP1";
+          if(ind == 5)s="N1";
+          if(ind == 6)s="D1";
+          if(ind == 7)s="P1";
+          if(ind == 8)s="SC0";
+          if(ind == 1)s="T1";
+          if(ind == 10)s="I1";
+             try {
+                 Tabelka_dane(s);
+             } catch (SQLException ex) {
+                 Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
+             } catch (ClassNotFoundException ex) {
+                 Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
+             }
+        }
+    };
+    public z2_Tabele() throws SQLException, ClassNotFoundException{
         tabela_ligowa_button = new int[3];
         tabela_ligowa_button[0]=1;
         tabela_ligowa_button[1]=0;
@@ -151,26 +281,7 @@ public class z2_Tabele extends JLayeredPane{
         jTable1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"1", "FC Barcelona", "7", "6", "1", "0", "19-7", "12", "19", ""},
-                {"2", "Atletico Madryt", "7", "6", "1", "0", "18-8", "10", "19", ""},
-                {"3", "FC Malaga", "7", "4", "2", "1", "11-4", "7", "14", ""},
-                {"4", "Betis Sewilla", "7", "4", "0", "3", "12-13", "-1", "12", ""},
-                {"5", "FC Sevilla", "7", "3", "2", "2", "8-7", "1", "11", ""},
-                {"6", "RCD Mallorca", "7", "3", "2", "2", "8-6", "2", "11", ""},
-                {"7", "Real Madryt", "7", "3", "2", "2", "14-7", "7", "11", ""},
-                {"8", "Real Valladolid", "7", "3", "1", "3", "11-7", "4", "10", ""},
-                {"9", "FC Getafe", "7", "3", "1", "3", "8-10", "-2", "10", ""},
-                {"10", "UD Levante", "7", "3", "1", "3", "8-13", "-5", "10", ""},
-                {"11", "Rayo Vallecano", "7", "3", "1", "3", "9-14", "-5", "10", ""},
-                {"12", "Real Sociedad", "7", "3", "0", "4", "8-11", "-3", "9", ""},
-                {"13", "Celta de Vigo", "7", "3", "0", "4", "9-8", "1", "9", ""},
-                {"14", "FC Valencia", "7", "2", "2", "3", "8-9", "-1", "8", ""},
-                {"15", "Granada CF", "7", "2", "2", "3", "6-10", "-4", "8", ""},
-                {"16", "Athletic Bilbao", "7", "2", "2", "3", "9-14", "-5", "8", ""},
-                {"17", "Real Saragossa", "7", "2", "0", "5", "5-9", "-4", "6", ""},
-                {"18", "Deprotivo La Coruna", "7", "1", "3", "3", "9-14", "-5", "6", ""},
-                {"19", "Osasuna", "7", "1", "1", "5", "7-11", "-4", "4", ""},
-                {"20", "Espanyol Barcelona", "7", "0", "2", "5", "8-13", "-5", "4", ""}
+                
             },
             new String [] {
                 "POZ", "DRU", "MEC", "ZWY", "REM", "POR", "GOL", "RÓŻ", "PUN", "   Z%          R%          P%"
@@ -184,6 +295,7 @@ public class z2_Tabele extends JLayeredPane{
                 return canEdit [columnIndex];
             }
         });
+        Tabelka_dane("I1");
         jTable1.setFocusable(false);
         jTable1.setGridColor(new java.awt.Color(207, 205, 205));
         jTable1.setRequestFocusEnabled(false);
@@ -198,6 +310,7 @@ public class z2_Tabele extends JLayeredPane{
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(120);
         jTable1.getColumnModel().getColumn(6).setPreferredWidth(40);
         jTable1.getColumnModel().getColumn(9).setPreferredWidth(100);
+        
         jP_OknoTabela.add(jScrollPane1);
         jScrollPane1.setBounds(0, 30, 770, 350);
         Dodaj_Paski();
@@ -219,8 +332,10 @@ public class z2_Tabele extends JLayeredPane{
         icons.put("Holandia",new javax.swing.ImageIcon("images/Netherlands.gif"));
         icons.put("Szkocja",new javax.swing.ImageIcon("images/Scotland.gif"));
         list.setCellRenderer(new m2_lista_ikonki(icons));
+        list.addListSelectionListener(listSelectionListener);
         jP_OknoWybierzLige.add(list);
         list.setBounds(0, 30, 230, 198);
         add(jP_OknoWybierzLige);
+        
     }
 }
