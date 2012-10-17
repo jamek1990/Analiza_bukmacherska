@@ -18,8 +18,9 @@ public class z1_Baza extends JLayeredPane{
     
     private void RefreshDataBase(java.awt.event.MouseEvent evt) throws Exception { 
        // try {
-            String ligi[]={"B1","D1","D2","E0","E1","E2","E3","EC","F1","F2","G1","I1","I2","N1","P1","SC0","SC1","SC2","SC3","SP1","SP2","T1"};
+            String ligi[]={"G1","D1","D2","E0","E1","E2","E3","EC","F1","F2","B1","I1","I2","N1","P1","SC0","SC1","SC2","SC3","SP1","SP2","T1"};
             String kolumny[]={"Div","Date","HomeTeam","AwayTeam","FTHG","FTAG","FTR","HTHG","HTAG","HTR","HS","AS","HST","AST","HHW","AHW","HC","AC","HF","AF","HO","AO","HY","AY","HR","AR"};
+            String kolumny2[]={"***","***","HT","AT"};
             String mecz[]= new String[29];
             int[] hash = new int[29];
             int[] gdzie = new int[29];
@@ -41,35 +42,45 @@ public class z1_Baza extends JLayeredPane{
                     InputStreamReader inStream = new InputStreamReader(con.getInputStream());
                     BufferedReader buff= new BufferedReader(inStream);
                     String content1 = buff.readLine();
-                    //content1 = buff.readLine();
-                    //System.out.println(content1);
-                    String[] kol = content1.replaceAll("\\s", "").split(",");
+                    String[] kol = content1.replaceAll("\\s+","\\s").split(",");
                     gdzie_size=0;
                     if(kol.length>2){
-                        //System.out.println(kol.length);
                         for(int l=0;l<kolumny.length;l++){
                             mecz[l]=null;
                             for(int k =0;k<kol.length;k++){
-                                if(kolumny[l].startsWith(kol[k])){
-                                    gdzie[gdzie_size]=l;
-                                    gdzie_size++;
-                                    hash[l]=k;
-                                    //System.out.println(kolumny[l]);
-                                    break;
+                                if(!kol[k].isEmpty()){
+                                    if(kolumny[l].contentEquals(kol[k])){
+                                        gdzie[gdzie_size]=l;
+                                        gdzie_size++;
+                                        hash[l]=k;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        for(int l=0;l<kolumny2.length;l++){
+                            for(int k =0;k<kol.length;k++){
+                                if(!kol[k].isEmpty()){
+                                    if(kolumny2[l].contentEquals(kol[k])){
+                                        gdzie[gdzie_size]=l;
+                                        gdzie_size++;
+                                        hash[l]=k;
+                                        break;
+                                    }
                                 }
                             }
                         }
                     }
                     if(kol.length>2){
                         String content2 = buff.readLine();
-                        
                         while (content2 !=null){
-                            String[] kol2 = content2.replaceAll(", ", "").replaceAll("\\s+","\\s").split(",");
+                            content2=content2.replaceAll(", ", "").replaceAll("\\s+","\\s");
+                            String[] kol2 = content2.split(",",-1);
                             if(kol2.length>=kol.length){
                                 for(int k=0;k<gdzie_size;k++){
-                                    mecz[k]=null;
+                                    mecz[gdzie[k]]=null;
                                     if(!kol2[hash[gdzie[k]]].isEmpty())
-                                        mecz[gdzie[k]]=kol2[hash[gdzie[k]]];
+                                            mecz[gdzie[k]]=kol2[hash[gdzie[k]]];
                                 }
                                 Mecz_stat m_s=new Mecz_stat();
                                 m_s.zmien(mecz);
@@ -87,22 +98,21 @@ public class z1_Baza extends JLayeredPane{
     public z1_Baza(){
         jP_OknoAktualizujBaze = new m1_okienko(230,200,780,3,"AKTUALIZACJA");
         jL_OdswiezBaze = new JLabel();
-        
         jL_OdswiezBaze.setForeground(Color.red);
-        //jL_OdswiezBaze.setIcon(new javax.swing.ImageIcon("images/odswiezBaze.png"));
         jP_OknoAktualizujBaze.add(jL_OdswiezBaze,1);
         jL_OdswiezBaze.setBounds(70, 80, 80, 80);
         jP_OknoAktualizujBaze.dodajOdswiez();
         jP_OknoAktualizujBaze.jL_Odswiez.addMouseListener(new java.awt.event.MouseAdapter() {
             //public void mouseEntered(java.awt.event.MouseEvent evt) {jButton4MouseEntered(evt);}
             //public void mouseExited(java.awt.event.MouseEvent evt)  {jButton4MouseExited(evt);}
-            public void mousePressed(java.awt.event.MouseEvent evt) {try {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                try {
                     RefreshDataBase(evt);
                 } catch (Exception ex) {
                     Logger.getLogger(z1_Baza.class.getName()).log(Level.SEVERE, null, ex);
                 }
-}
-            });
+            }
+        });
         setLocation(0,0);
         setBounds(0, 0, 1024, 300);
         add(jP_OknoAktualizujBaze);

@@ -8,7 +8,10 @@ import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.imageio.ImageIO;
+import javax.swing.plaf.metal.MetalIconFactory;
 public class z2_Tabele extends JLayeredPane{
     JLayeredPane panel2;
     JLabel baza2;
@@ -22,6 +25,11 @@ public class z2_Tabele extends JLayeredPane{
     JLabel jLabel3;
     private int[] tabela_ligowa_button;
     private int tabela_ligowa_button_akt;
+    
+    private Map<Object, Icon> icons = null;
+    public void IconListRenderer(Map<Object, Icon> icons) {
+        this.icons = icons;
+    }
     private void jButton5MouseEntered(java.awt.event.MouseEvent evt) {                                      
         if(tabela_ligowa_button_akt != 1){    
             jButton5.setIcon(new javax.swing.ImageIcon("images/btok3.jpg")); 
@@ -62,6 +70,13 @@ public class z2_Tabele extends JLayeredPane{
             lbl.setIcon((ImageIcon)value);
             return lbl;
         }
+    }
+    public Component getListCellRendererComponent(JList list, Object value, int index,
+        boolean isSelected, boolean cellHasFocus) {
+        JLabel label =new JLabel();
+        Icon icon = icons.get(value); 
+        label.setIcon(icon);
+        return label;
     }
     private void Dodaj_Paski() {                                         
         try {
@@ -189,7 +204,23 @@ public class z2_Tabele extends JLayeredPane{
         //setLocation(0,0);
         setBounds(0, 0, 1024, 500);
         add(jP_OknoTabela);
-        //jP_OknoWybierzLige.se
+        
+        JList list = new JList(new Object[] {"Anglia", "Belgia", "Francja", "Grecja", "Hiszpania", "Holandia","Niemcy", "Portugalia", "Szkocja", "Turcja" , "Włochy"});
+        Map<Object, Icon> icons = new HashMap<Object, Icon>();
+        icons.put("Anglia",new javax.swing.ImageIcon("images/England.gif"));
+        icons.put("Francja",new javax.swing.ImageIcon("images/France.gif"));
+        icons.put("Niemcy",new javax.swing.ImageIcon("images/Germany.gif"));
+        icons.put("Belgia",new javax.swing.ImageIcon("images/Belgium.gif"));
+        icons.put("Portugalia",new javax.swing.ImageIcon("images/Portugal.gif"));
+        icons.put("Turcja",new javax.swing.ImageIcon("images/Turkey.gif"));
+        icons.put("Włochy",new javax.swing.ImageIcon("images/Italy.gif"));
+        icons.put("Grecja",new javax.swing.ImageIcon("images/Greece.gif"));
+        icons.put("Hiszpania",new javax.swing.ImageIcon("images/Spain.gif"));
+        icons.put("Holandia",new javax.swing.ImageIcon("images/Netherlands.gif"));
+        icons.put("Szkocja",new javax.swing.ImageIcon("images/Scotland.gif"));
+        list.setCellRenderer(new m2_lista_ikonki(icons));
+        jP_OknoWybierzLige.add(list);
+        list.setBounds(0, 30, 230, 198);
         add(jP_OknoWybierzLige);
     }
 }
