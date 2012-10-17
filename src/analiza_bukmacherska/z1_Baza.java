@@ -18,7 +18,7 @@ public class z1_Baza extends JLayeredPane{
     
     private void RefreshDataBase(java.awt.event.MouseEvent evt) throws Exception { 
        // try {
-            String ligi[]={"G1","D1","D2","E0","E1","E2","E3","EC","F1","F2","B1","I1","I2","N1","P1","SC0","SC1","SC2","SC3","SP1","SP2","T1"};
+            String ligi[]={"I1","G1","D1","D2","E0","E1","E2","E3","EC","F1","F2","B1","I2","N1","P1","SC0","SC1","SC2","SC3","SP1","SP2","T1"};
             String kolumny[]={"Div","Date","HomeTeam","AwayTeam","FTHG","FTAG","FTR","HTHG","HTAG","HTR","HS","AS","HST","AST","HHW","AHW","HC","AC","HF","AF","HO","AO","HY","AY","HR","AR"};
             String kolumny2[]={"***","***","HT","AT"};
             String mecz[]= new String[29];

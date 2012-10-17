@@ -91,7 +91,11 @@ public class Mecz_stat {
             htr=null;
         }
         if(st[10]!=null) {
-            hs=Integer.parseInt(st[10]);
+            try {
+                hs=Integer.parseInt(st[10]);
+            } catch (NumberFormatException e) {
+                hs=null;
+            }
         }
         else {
             hs=null;
@@ -157,31 +161,51 @@ public class Mecz_stat {
             ho=null;
         }
         if(st[21]!=null) {
-            ao=Integer.parseInt(st[21]);
+            try {
+                ao=Integer.parseInt(st[21]);
+            } catch (NumberFormatException e) {
+                ao=null;
+            }
         }
         else {
             ao=null;
         }
         if(st[22]!=null) {
-            hy=Integer.parseInt(st[22]);
+            try {
+                hy=Integer.parseInt(st[22]);
+            } catch (NumberFormatException e) {
+                hy=null;
+            }
         }
         else {
             hy=null;
         }
         if(st[23]!=null) {
-            ay=Integer.parseInt(st[23]);
+            try {
+                ay=Integer.parseInt(st[23]);
+            } catch (NumberFormatException e) {
+                ay=null;
+            }
         }
         else {
             ay=null;
         }
         if(st[24]!=null) {
-            hr=Integer.parseInt(st[24]);
+            try {
+                hr=Integer.parseInt(st[24]);
+            } catch (NumberFormatException e) {
+                hr=null;
+            }
         }
         else {
             hr=null;
         }
         if(st[25]!=null) {
-            ar=Integer.parseInt(st[25]);
+            try {
+                ar=Integer.parseInt(st[25]);
+            } catch (NumberFormatException e) {
+                ar=null;
+            }
         }
         else {
             ar=null;
