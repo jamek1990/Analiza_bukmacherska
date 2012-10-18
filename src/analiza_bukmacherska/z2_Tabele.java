@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.event.ListSelectionEvent;
@@ -32,6 +33,7 @@ public class z2_Tabele extends JLayeredPane{
     m1_okienko jP_OknoTabela;
     m1_okienko  jP_OknoWybierzLige;
     JLabel jLabel3;
+    
     private int[] tabela_ligowa_button;
     private int tabela_ligowa_button_akt;
     String columny[] ={"POZ", "DRU", "MEC", "ZWY", "REM", "POR", "GOL", "RÓŻ", "PUN", "   Z%          R%          P%"};
@@ -119,11 +121,7 @@ public class z2_Tabele extends JLayeredPane{
             }
         } catch (IOException ex) {}
     } 
-    public void sortAllRowsBy(DefaultTableModel model, int colIndex, boolean ascending) {
-            Vector data = model.getDataVector();
-            Collections.sort(data, new sort(colIndex, ascending));
-            model.fireTableStructureChanged();
-    }
+    
     public void Tabelka_dane(String liga) throws SQLException, ClassNotFoundException{
         database = new SQL();    
         Statement stat;
@@ -151,6 +149,7 @@ public class z2_Tabele extends JLayeredPane{
             Integer d1,d2;
             query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (HomeTeam='" +rs.getString(1) + "' OR AWAYTEAM='"+rs.getString(1) + "')" ;
             ResultSet rs2 = stat2.executeQuery(query);
+            System.out.println(query);
             while (rs2.next()) {
                 Mecze = Mecze + 1;
                 if (rs2.getString(4).contentEquals(rs.getString(1))==true){
@@ -203,7 +202,30 @@ public class z2_Tabele extends JLayeredPane{
         }
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         jTable1.setModel( model ); 
+        
+        jTable1.setFocusable(false);
+        jTable1.setGridColor(new java.awt.Color(207, 205, 205));
+        jTable1.setRequestFocusEnabled(false);
+        jTable1.setSelectionBackground(new java.awt.Color(83, 81, 83));
+        jTable1.setSelectionForeground(new java.awt.Color(0, 174, 239));
+        jTable1.getTableHeader().setReorderingAllowed(false);
+        for(int i=0;i<10;i++){
+            jTable1.getColumnModel().getColumn(i).setResizable(false);
+            jTable1.getColumnModel().getColumn(i).setPreferredWidth(20);
+        }
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(120);
+        jTable1.getColumnModel().getColumn(6).setPreferredWidth(40);
+        jTable1.getColumnModel().getColumn(9).setPreferredWidth(100);
+        TableRowSorter trs = new TableRowSorter(model);
+        for(int i=0;i<=8;i++){
+            if(i!=1){
+                trs.setComparator(i, new sort());
+                jTable1.setRowSorter(trs);
+            }
+        }
+        jTable1.setAutoCreateRowSorter(false);
         Dodaj_Paski();
+
         /*jTable1.setAutoCreateColumnsFromModel(false);
         sortAllRowsBy(model, 8, false);
         jTable1.setAutoCreateRowSorter(true);*/
@@ -213,29 +235,34 @@ public class z2_Tabele extends JLayeredPane{
         
     }
      ListSelectionListener listSelectionListener = new ListSelectionListener() {
-         
         public void valueChanged(ListSelectionEvent listSelectionEvent) {
-            System.out.print("As");
-          Integer ind =listSelectionEvent.getFirstIndex();
-          String s="";
-          if(ind == 0)s="E0";
-          if(ind == 1)s="B1";
-          if(ind == 2)s="F1";
-          if(ind == 3)s="G1";
-          if(ind == 4)s="SP1";
-          if(ind == 5)s="N1";
-          if(ind == 6)s="D1";
-          if(ind == 7)s="P1";
-          if(ind == 8)s="SC0";
-          if(ind == 1)s="T1";
-          if(ind == 10)s="I1";
-             try {
-                 Tabelka_dane(s);
-             } catch (SQLException ex) {
-                 Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
-             } catch (ClassNotFoundException ex) {
-                 Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
-             }
+           // System.out.print(listSelectionEvent.getFirstIndex());
+             boolean adjust = listSelectionEvent.getValueIsAdjusting();
+        System.out.println(", Adjusting? " + adjust);
+        if (!adjust) {
+            JList list = (JList) listSelectionEvent.getSource();
+            int selections[] = list.getSelectedIndices();
+            Integer ind =selections[0];
+            String s="";
+            if(ind == 0)s="E0";
+            if(ind == 1)s="B1";
+            if(ind == 2)s="F1";
+            if(ind == 3)s="G1";
+            if(ind == 4)s="SP1";
+            if(ind == 5)s="N1";
+            if(ind == 6)s="D1";
+            if(ind == 7)s="P1";
+            if(ind == 8)s="SC0";
+            if(ind == 9)s="T1";
+            if(ind == 10)s="I1";
+            try {
+                    Tabelka_dane(s);
+                } catch (SQLException ex) {
+                    Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
     };
     public z2_Tabele() throws SQLException, ClassNotFoundException{
