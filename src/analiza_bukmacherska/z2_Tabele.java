@@ -1,24 +1,18 @@
 import java.awt.*;
-import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.*;
-import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 import javax.imageio.ImageIO;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
+import java.sql.Statement;
+import java.util.Vector;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -33,6 +27,7 @@ public class z2_Tabele extends JLayeredPane{
     m1_okienko jP_OknoTabela;
     m1_okienko  jP_OknoWybierzLige;
     JLabel jLabel3;
+    String wybrana_liga;
     
     private int[] tabela_ligowa_button;
     private int tabela_ligowa_button_akt;
@@ -75,6 +70,36 @@ public class z2_Tabele extends JLayeredPane{
     private void jButton4MouseExited(java.awt.event.MouseEvent evt) {                                     
         if(tabela_ligowa_button_akt != 0){
             jButton4.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); 
+        }
+    }
+    private void jButton5MousePressed(java.awt.event.MouseEvent evt) throws SQLException, ClassNotFoundException {
+        if(tabela_ligowa_button_akt != 1){
+            jButton5.setIcon(new javax.swing.ImageIcon("images/btok.jpg")); 
+            jButton4.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); 
+            jButton6.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); 
+            Tabelka_dane(wybrana_liga);
+            jP_OknoTabela.jL_tytul.setText("TABELA LIGOWA - DOM");
+            tabela_ligowa_button_akt=1;
+        }
+    }
+    private void jButton4MousePressed(java.awt.event.MouseEvent evt) throws SQLException, ClassNotFoundException {
+        if(tabela_ligowa_button_akt != 0){
+            jButton5.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); 
+            jButton4.setIcon(new javax.swing.ImageIcon("images/btok.jpg")); 
+            jButton6.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); 
+            Tabelka_dane(wybrana_liga);
+            jP_OknoTabela.jL_tytul.setText("TABELA LIGOWA");
+            tabela_ligowa_button_akt=0;
+        }
+    }
+    private void jButton6MousePressed(java.awt.event.MouseEvent evt) throws SQLException, ClassNotFoundException {
+        if(tabela_ligowa_button_akt != 2){
+            jButton5.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); 
+            jButton4.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); 
+            jButton6.setIcon(new javax.swing.ImageIcon("images/btok.jpg"));
+            Tabelka_dane(wybrana_liga);
+            jP_OknoTabela.jL_tytul.setText("TABELA LIGOWA - WYJAZD");
+            tabela_ligowa_button_akt=2;
         }
     }
     class ImageRenderer extends DefaultTableCellRenderer {
@@ -133,7 +158,6 @@ public class z2_Tabele extends JLayeredPane{
         Vector data = new Vector(columnCount);
         Vector row = new Vector(columnCount);
         Vector columnNames = new Vector(columnCount);
-        System.out.println(query2);
         stat = database.con.createStatement(); 
         stat2 = database.con.createStatement(); 
         ResultSet rs = stat.executeQuery(query2);
@@ -147,9 +171,14 @@ public class z2_Tabele extends JLayeredPane{
             Integer Gole_strzelone = 0;
             Integer Gole_stracone = 0;
             Integer d1,d2;
-            query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (HomeTeam='" +rs.getString(1) + "' OR AWAYTEAM='"+rs.getString(1) + "')" ;
+            if(tabela_ligowa_button_akt==0)
+                query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (HomeTeam='" +rs.getString(1) + "' OR AWAYTEAM='"+rs.getString(1) + "')" ;
+            else if(tabela_ligowa_button_akt==1)
+                query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (HomeTeam='" +rs.getString(1) + "')" ;
+            else if(tabela_ligowa_button_akt==2)
+                query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (AWAYTEAM='"+rs.getString(1) + "')" ;
+           
             ResultSet rs2 = stat2.executeQuery(query);
-            System.out.println(query);
             while (rs2.next()) {
                 Mecze = Mecze + 1;
                 if (rs2.getString(4).contentEquals(rs.getString(1))==true){
@@ -255,6 +284,7 @@ public class z2_Tabele extends JLayeredPane{
             if(ind == 8)s="SC0";
             if(ind == 9)s="T1";
             if(ind == 10)s="I1";
+            wybrana_liga = s;
             try {
                     Tabelka_dane(s);
                 } catch (SQLException ex) {
@@ -266,6 +296,7 @@ public class z2_Tabele extends JLayeredPane{
         }
     };
     public z2_Tabele() throws SQLException, ClassNotFoundException{
+        wybrana_liga="E0";
         tabela_ligowa_button = new int[3];
         tabela_ligowa_button[0]=1;
         tabela_ligowa_button[1]=0;
@@ -273,35 +304,55 @@ public class z2_Tabele extends JLayeredPane{
         tabela_ligowa_button_akt=0;
         JLabel  jLabel2 =new  JLabel();
         jLabel3 =new  JLabel();
-        jP_OknoTabela = new  m1_okienko(770,371,3,3,"TABELA LIGOWA - DOM");
+        jP_OknoTabela = new  m1_okienko(770,371,3,3,"TABELA LIGOWA");
         jP_OknoWybierzLige = new  m1_okienko(230,371,780,3,"LIGA");
         jButton4 =new  JLabel();
         jButton5 =new  JLabel();
         jButton6 =new  JLabel();
         jTable1 = new JTable();
         JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
-        jButton4.setIcon(new javax.swing.ImageIcon("images/btok.jpg")); // NOI18N
+        jButton4.setIcon(new javax.swing.ImageIcon("images/btok.jpg"));
         jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {jButton4MouseEntered(evt);}
             public void mouseExited(java.awt.event.MouseEvent evt)  {jButton4MouseExited(evt);}
-            public void mousePressed(java.awt.event.MouseEvent evt) {//jButton4MousePressed(evt);}
-            }});
+            public void mousePressed(java.awt.event.MouseEvent evt) {try {
+                    jButton4MousePressed(evt);
+                } catch (SQLException ex) {
+                    Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        }});
         jP_OknoTabela.add(jButton4,1);
         jButton4.setBounds(700, 5, 16, 16);
-        jButton5.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); // NOI18N
+        jButton5.setIcon(new javax.swing.ImageIcon("images/btok2.jpg"));
         jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {jButton5MouseEntered(evt);}
             public void mouseExited(java.awt.event.MouseEvent evt)  {jButton5MouseExited(evt); }
-            public void mousePressed(java.awt.event.MouseEvent evt) {//jButton5MousePressed(evt);
-            }});
+            public void mousePressed(java.awt.event.MouseEvent evt) {try {
+                    jButton5MousePressed(evt);
+                } catch (SQLException ex) {
+                    Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
+                }
+}
+        });
         jP_OknoTabela.add(jButton5,1);
         jButton5.setBounds(720, 5, 16, 16);
-        jButton6.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); // NOI18N
+        jButton6.setIcon(new javax.swing.ImageIcon("images/btok2.jpg"));
         jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {jButton6MouseEntered(evt);}
             public void mouseExited(java.awt.event.MouseEvent evt)  {jButton6MouseExited(evt);}
-            public void mousePressed(java.awt.event.MouseEvent evt) {//jButton6MousePressed(evt);}
-            }});
+            public void mousePressed(java.awt.event.MouseEvent evt) {try {
+                    jButton6MousePressed(evt);
+                } catch (SQLException ex) {
+                    Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
+                }
+}           
+        });
         jP_OknoTabela.add(jButton6,1);
         jButton6.setBounds(740, 5, 16, 16);
         jTable1.setAutoCreateRowSorter(true);
