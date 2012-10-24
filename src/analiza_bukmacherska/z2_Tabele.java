@@ -76,20 +76,22 @@ public class z2_Tabele extends JLayeredPane{
         if(tabela_ligowa_button_akt != 1){
             jButton5.setIcon(new javax.swing.ImageIcon("images/btok.jpg")); 
             jButton4.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); 
-            jButton6.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); 
+            jButton6.setIcon(new javax.swing.ImageIcon("images/btok2.jpg"));
+            tabela_ligowa_button_akt=1; 
             Tabelka_dane(wybrana_liga);
             jP_OknoTabela.jL_tytul.setText("TABELA LIGOWA - DOM");
-            tabela_ligowa_button_akt=1;
+            
         }
     }
     private void jButton4MousePressed(java.awt.event.MouseEvent evt) throws SQLException, ClassNotFoundException {
         if(tabela_ligowa_button_akt != 0){
             jButton5.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); 
             jButton4.setIcon(new javax.swing.ImageIcon("images/btok.jpg")); 
-            jButton6.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); 
+            jButton6.setIcon(new javax.swing.ImageIcon("images/btok2.jpg"));
+            tabela_ligowa_button_akt=0; 
             Tabelka_dane(wybrana_liga);
             jP_OknoTabela.jL_tytul.setText("TABELA LIGOWA");
-            tabela_ligowa_button_akt=0;
+            
         }
     }
     private void jButton6MousePressed(java.awt.event.MouseEvent evt) throws SQLException, ClassNotFoundException {
@@ -97,9 +99,10 @@ public class z2_Tabele extends JLayeredPane{
             jButton5.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); 
             jButton4.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); 
             jButton6.setIcon(new javax.swing.ImageIcon("images/btok.jpg"));
+            tabela_ligowa_button_akt=2;
             Tabelka_dane(wybrana_liga);
             jP_OknoTabela.jL_tytul.setText("TABELA LIGOWA - WYJAZD");
-            tabela_ligowa_button_akt=2;
+            
         }
     }
     class ImageRenderer extends DefaultTableCellRenderer {
