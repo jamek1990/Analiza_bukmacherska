@@ -10,10 +10,12 @@ public class MenuDolne extends JLayeredPane{
     JLabel BM_baza;
     JLabel BM_tabele;
     JLabel BM_teamvsteam;
+    JLabel BM_prognozy;
     JLabel Tlo_Menu;
     z1_Baza z1_baza;
     z2_Tabele z2_tabele;
     z3_TeamVsTeam z3_teamvsteam;
+    z4_Prognozy z4_prognozy;
     Integer zaswiec =1;
     
     private void BM_bazaMouseEntered(java.awt.event.MouseEvent evt) {
@@ -35,9 +37,11 @@ public class MenuDolne extends JLayeredPane{
             BM_baza.setIcon(new javax.swing.ImageIcon("images/button_press_baza.jpg")); 
             BM_tabele.setIcon(new javax.swing.ImageIcon("images/button_up_tabele.jpg"));
             BM_teamvsteam.setIcon(new javax.swing.ImageIcon("images/button_up_team.jpg")); 
+            BM_prognozy.setIcon(new javax.swing.ImageIcon("images/button_up_prognoza.jpg"));
             z1_baza.setVisible(true);
             z2_tabele.setVisible(false);
             z3_teamvsteam.setVisible(false);
+            z4_prognozy.setVisible(false);
             zaswiec=1;
         }
     }
@@ -57,9 +61,11 @@ public class MenuDolne extends JLayeredPane{
             BM_tabele.setIcon(new javax.swing.ImageIcon("images/button_press_tabele.jpg")); 
             BM_baza.setIcon(new javax.swing.ImageIcon("images/button_up_baza.jpg")); 
             BM_teamvsteam.setIcon(new javax.swing.ImageIcon("images/button_up_team.jpg")); 
+            BM_prognozy.setIcon(new javax.swing.ImageIcon("images/button_up_prognoza.jpg"));
             z1_baza.setVisible(false);
             z2_tabele.setVisible(true);
             z3_teamvsteam.setVisible(false);
+            z4_prognozy.setVisible(false);
             zaswiec =2;
         }
     }
@@ -78,16 +84,42 @@ public class MenuDolne extends JLayeredPane{
             BM_teamvsteam.setIcon(new javax.swing.ImageIcon("images/button_press_team.jpg")); 
             BM_tabele.setIcon(new javax.swing.ImageIcon("images/button_up_tabele.jpg")); 
             BM_baza.setIcon(new javax.swing.ImageIcon("images/button_up_baza.jpg")); 
+            BM_prognozy.setIcon(new javax.swing.ImageIcon("images/button_up_prognoza.jpg"));
             z1_baza.setVisible(false);
             z2_tabele.setVisible(false);
             z3_teamvsteam.setVisible(true);
+            z4_prognozy.setVisible(false);
             zaswiec =3;
         }
     }
-    public MenuDolne(z1_Baza z1,z2_Tabele z2,z3_TeamVsTeam z3){
+     private void BM_prognozyMouseEntered(java.awt.event.MouseEvent evt) {          
+        if(zaswiec != 4){
+            BM_prognozy.setIcon(new javax.swing.ImageIcon("images/button_down_prognoza.jpg")); 
+        }
+    }
+    private void BM_prognozyMouseExited(java.awt.event.MouseEvent evt) {
+        if(zaswiec != 4){
+            BM_prognozy.setIcon(new javax.swing.ImageIcon("images/button_up_prognoza.jpg")); 
+        }
+    }
+    private void BM_prognozyMousePressed(java.awt.event.MouseEvent evt) throws Exception { 
+        if(zaswiec != 4){
+            BM_prognozy.setIcon(new javax.swing.ImageIcon("images/button_press_prognoza.jpg")); 
+            BM_teamvsteam.setIcon(new javax.swing.ImageIcon("images/button_up_team.jpg")); 
+            BM_tabele.setIcon(new javax.swing.ImageIcon("images/button_up_tabele.jpg")); 
+            BM_baza.setIcon(new javax.swing.ImageIcon("images/button_up_baza.jpg")); 
+            z1_baza.setVisible(false);
+            z2_tabele.setVisible(false);
+            z3_teamvsteam.setVisible(false);
+            z4_prognozy.setVisible(true);
+            zaswiec =4;
+        }
+    }
+    public MenuDolne(z1_Baza z1,z2_Tabele z2,z3_TeamVsTeam z3,z4_Prognozy z4){
         this.z1_baza=z1;
         this.z2_tabele=z2;
         this.z3_teamvsteam=z3;
+        this.z4_prognozy=z4;
         setBackground(new java.awt.Color(153, 153, 153));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         panel= new JLayeredPane();
@@ -145,15 +177,34 @@ public class MenuDolne extends JLayeredPane{
                 }
             }
         });
+        BM_prognozy = new JLabel();
+        BM_prognozy.setIcon(new javax.swing.ImageIcon("images/button_up_prognoza.jpg"));
+        BM_prognozy.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                BM_prognozyMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                BM_prognozyMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                try {
+                    BM_prognozyMousePressed(evt);
+                } catch (Exception ex) {
+                    Logger.getLogger(MenuDolne.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         Tlo_Menu.setBounds(0, 0, 1024, 49);
         BM_baza.setBounds(351, 0, 65, 49);
         BM_tabele.setBounds(351+65, 0, 65, 49);
         BM_teamvsteam.setBounds(351+2*65, 0, 65, 49);
+        BM_prognozy.setBounds(351+3*65, 0, 65, 49);
         setSize(1024, 49);
         setLocation(0,523);
         add(BM_baza,1);
         add(BM_tabele,1);
         add(BM_teamvsteam,1);
-        add(Tlo_Menu,5);
+        add(BM_prognozy,1);
+        add(Tlo_Menu,8);
     }
 }
