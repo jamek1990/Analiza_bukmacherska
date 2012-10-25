@@ -35,14 +35,31 @@ public class z4_Prognozy extends JLayeredPane{
         add(jP_TeamVsTeam);
         
     }
-    private void lameMethode(){        
+    private void lameMethode(){   
+        //double max = 0.75*countMaxOfExpectedValue();
+        Vector<Integer> optionsNumber = new Vector<Integer>(0);
+        int n = expectedValues.length;
+        for (int i = 0; i < n; i++){
+            if(expectedValues[i]>0){
+                optionsNumber.add(i);
+            }
+        }
+        double[] antyRisk = new double[optionsNumber.size()];
+        for (int i = 0; i < optionsNumber.size(); i++){
+            antyRisk[i] = 1.0-getRisk(next(optionsNumber.get(i)));
+        }
+        double maksimum = max(antyRisk);
+        int i = 0;
+        while(antyRisk[i] != maksimum){
+            i++;
+        }
+        int[] table = {optionsNumber.get(i)};
+        setResult(table);
     }
     private void optimalMethode(){        
-    }
-    private void agresiveMethode(){        
-        double max = countMaxOfExpectedValue();
+        double max = 0.3*countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
-        int n = expectedValues.length;                
+        int n = expectedValues.length;
         for (int i = 0; i < n; i++){
             if(expectedValues[i]>max){
                 optionsNumber.add(i);
@@ -52,7 +69,34 @@ public class z4_Prognozy extends JLayeredPane{
         for (int i = 0; i < optionsNumber.size(); i++){
             antyRisk[i] = 1.0-getRisk(next(optionsNumber.get(i)));
         }
-        
+        double maksimum = max(antyRisk);
+        int i = 0;
+        while(antyRisk[i] != maksimum){
+            i++;
+        }
+        int[] table = {optionsNumber.get(i)};
+        setResult(table);
+    }
+    private void agresiveMethode(){        
+        double max = 0.75*countMaxOfExpectedValue();
+        Vector<Integer> optionsNumber = new Vector<Integer>(0);
+        int n = expectedValues.length;
+        for (int i = 0; i < n; i++){
+            if(expectedValues[i]>max){
+                optionsNumber.add(i);
+            }
+        }
+        double[] antyRisk = new double[optionsNumber.size()];
+        for (int i = 0; i < optionsNumber.size(); i++){
+            antyRisk[i] = 1.0-getRisk(next(optionsNumber.get(i)));
+        }
+        double maksimum = max(antyRisk);
+        int i = 0;
+        while(antyRisk[i] != maksimum){
+            i++;
+        }
+        int[] table = {optionsNumber.get(i)};
+        setResult(table);
     }
     private double getRisk(int[] table){
         int n = table.length;
@@ -62,7 +106,7 @@ public class z4_Prognozy extends JLayeredPane{
         }
         return p;
     }
-    private void setResult(){
+    private void setResult(int[] table){
     }
     private double countMaxOfExpectedValue(){
         double n = Math.pow(2,courses.length)-1;
@@ -71,7 +115,7 @@ public class z4_Prognozy extends JLayeredPane{
         for (int i = 0; i < n; i++){
             expectedValues[i] = expectedValueOf(next(i+1));
         }
-        return 0.75*max(expectedValues);
+        return max(expectedValues);
     }
     private double max(double[] table){
         int n = table.length;        
