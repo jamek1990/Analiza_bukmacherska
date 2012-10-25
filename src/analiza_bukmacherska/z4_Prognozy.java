@@ -22,7 +22,12 @@ public class z4_Prognozy extends JLayeredPane{
     double[] expectedValues;
     //boolean[] tableOfCases;
     int money;
-    public z4_Prognozy(){}    
+    public z4_Prognozy(){
+        jP_TeamVsTeam = new m1_okienko(400,200,0,3,"Prognozy");
+        setLocation(0,0);
+        setBounds(0, 0, 1024, 300);
+        add(jP_TeamVsTeam);
+    }    
     public z4_Prognozy(String[] namesBis, double[] coursesBis, double[] preViewBis) {
         //if (namesBis.length == coursesBis.length && coursesBis.length == preViewBis.length){
         names = namesBis;
