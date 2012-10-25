@@ -6,6 +6,7 @@ public class A_B{
     z1_Baza baza ;
     z2_Tabele tabele;
     z3_TeamVsTeam team;
+    z4_Prognozy prognozy;
     MenuDolne menu ;
     
     static void rysuj() throws SQLException, ClassNotFoundException {
@@ -20,7 +21,9 @@ public class A_B{
         z1_Baza baza = new z1_Baza();
         z2_Tabele tabele = new z2_Tabele();
         z3_TeamVsTeam team = new z3_TeamVsTeam();
+        z4_Prognozy prognozy = new z4_Prognozy();
         MenuDolne menu = new MenuDolne(baza,tabele,team);
+        //MenuDolne menu = new MenuDolne(baza,tabele,team,prognozy);
         JLayeredPane p2 = new JLayeredPane();
         p2.add(baza,1);
         p2.add(tabele,2);
