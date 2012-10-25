@@ -15,7 +15,8 @@ import java.util.Vector;
         
 
 public class z4_Prognozy extends JLayeredPane{
-    m1_okienko  jP_TeamVsTeam;
+    m1_okienko  jP_Prognozy;
+    m1_okienko okienko;
     String[] names;
     double[] courses;
     double[] preView;
@@ -23,10 +24,12 @@ public class z4_Prognozy extends JLayeredPane{
     //boolean[] tableOfCases;
     int money;
     public z4_Prognozy(){
-        jP_TeamVsTeam = new m1_okienko(400,200,0,3,"Prognozy");
+        jP_Prognozy = new m1_okienko(400,200,0,3,"Prognozy");
         setLocation(0,0);
         setBounds(0, 0, 1024, 300);
-        add(jP_TeamVsTeam);
+        add(jP_Prognozy);
+        okienko = new m1_okienko(400,200,0,206,"Tutaj jest miejsce na proponowane strategie gry");
+        add(okienko);
     }    
     public z4_Prognozy(String[] namesBis, double[] coursesBis, double[] preViewBis) {
         //if (namesBis.length == coursesBis.length && coursesBis.length == preViewBis.length){
@@ -34,10 +37,10 @@ public class z4_Prognozy extends JLayeredPane{
         courses = coursesBis;
         preView = preViewBis;
         //}else{throw new}
-        jP_TeamVsTeam = new m1_okienko(400,200,0,3,"Prognozy");
+        jP_Prognozy = new m1_okienko(400,200,0,3,"Prognozy");
         setLocation(0,0);
         setBounds(0, 0, 1024, 300);
-        add(jP_TeamVsTeam);
+        add(jP_Prognozy);
         
     }
     private void lameMethode(){   
@@ -112,6 +115,7 @@ public class z4_Prognozy extends JLayeredPane{
         return p;
     }
     private void setResult(int[] table){
+        
     }
     private double countMaxOfExpectedValue(){
         double n = Math.pow(2,courses.length)-1;
