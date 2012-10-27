@@ -1,3 +1,6 @@
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -10,6 +13,9 @@ public class m1_okienko extends JLayeredPane{
     JLabel jL_tytul;
     JLabel jL_tloGorne;
     JLabel jL_Odswiez;
+    JLabel kolo1;
+    JLabel kolo2;
+    JLabel kolo3;
     public m1_okienko(Integer szerokosc,Integer wysokosc,Integer polozenie_x,Integer polozenie_y,String tytul){
         this.szerokosc=szerokosc;
         this.wysokosc=wysokosc;
@@ -46,5 +52,21 @@ public class m1_okienko extends JLayeredPane{
         jL_Odswiez.setIcon(new javax.swing.ImageIcon("images/odswiezBaze2.png"));
         add(jL_Odswiez,1);
         jL_Odswiez.setBounds(szerokosc-30, 2, 26, 26);
+    }
+    public void dodajPodzial(){
+         kolo3 = new JLabel();
+         kolo3.setIcon(new javax.swing.ImageIcon("images/btok2.jpg"));
+         add(kolo3,1);
+         kolo3.setBounds(szerokosc-30, 5, 16, 16);
+         
+         kolo2 = new JLabel();
+         kolo2.setIcon(new javax.swing.ImageIcon("images/btok2.jpg"));
+         add(kolo2,1);
+         kolo2.setBounds(szerokosc-30-20*1, 5, 16, 16);
+         
+         kolo1 = new JLabel();
+         kolo1.setIcon(new javax.swing.ImageIcon("images/btok.jpg"));
+         add(kolo1,1);
+         kolo1.setBounds(szerokosc-30-20*2, 5, 16, 16);
     }
 }

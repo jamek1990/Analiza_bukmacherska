@@ -8,7 +8,6 @@ public class A_B{
     z3_TeamVsTeam team;
     z4_Prognozy prognozy;
     MenuDolne menu ;
-    
     static void rysuj() throws SQLException, ClassNotFoundException {
         JFrame f=new JFrame();
         f.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);

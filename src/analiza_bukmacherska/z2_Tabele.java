@@ -86,7 +86,7 @@ public class z2_Tabele extends JLayeredPane{
             
         }
     }
-    private void jButton4MousePressed(java.awt.event.MouseEvent evt) throws SQLException, ClassNotFoundException {
+    private void jButton4MousePressed(java.awt.event.MouseEvent evt) throws  ClassNotFoundException, SQLException {
         if(tabela_ligowa_button_akt != 0){
             jButton5.setIcon(new javax.swing.ImageIcon("images/btok2.jpg")); 
             jButton4.setIcon(new javax.swing.ImageIcon("images/btok.jpg")); 
@@ -154,7 +154,7 @@ public class z2_Tabele extends JLayeredPane{
     } 
     
     public void Tabelka_dane(String liga) throws SQLException, ClassNotFoundException{
-        database = new SQL();    
+        database =new SQL();
         Statement stat;
         Statement stat2;
         //database.createDB();
@@ -269,29 +269,28 @@ public class z2_Tabele extends JLayeredPane{
         database.con.close();
         
     }
-     ListSelectionListener listSelectionListener = new ListSelectionListener() {
+    
+    ListSelectionListener listSelectionListener = new ListSelectionListener() {
         public void valueChanged(ListSelectionEvent listSelectionEvent) {
-           // System.out.print(listSelectionEvent.getFirstIndex());
-             boolean adjust = listSelectionEvent.getValueIsAdjusting();
-        System.out.println(", Adjusting? " + adjust);
-        if (!adjust) {
-            JList list = (JList) listSelectionEvent.getSource();
-            int selections[] = list.getSelectedIndices();
-            Integer ind =selections[0];
-            String s="";
-            if(ind == 0)s="E0";
-            if(ind == 1)s="B1";
-            if(ind == 2)s="F1";
-            if(ind == 3)s="G1";
-            if(ind == 4)s="SP1";
-            if(ind == 5)s="N1";
-            if(ind == 6)s="D1";
-            if(ind == 7)s="P1";
-            if(ind == 8)s="SC0";
-            if(ind == 9)s="T1";
-            if(ind == 10)s="I1";
-            wybrana_liga = s;
-            try {
+            boolean adjust = listSelectionEvent.getValueIsAdjusting();
+            if (!adjust) {
+                JList list = (JList) listSelectionEvent.getSource();
+                int selections[] = list.getSelectedIndices();
+                Integer ind =selections[0];
+                String s="";
+                if(ind == 0)s="E0";
+                if(ind == 1)s="B1";
+                if(ind == 2)s="F1";
+                if(ind == 3)s="G1";
+                if(ind == 4)s="SP1";
+                if(ind == 5)s="N1";
+                if(ind == 6)s="D1";
+                if(ind == 7)s="P1";
+                if(ind == 8)s="SC0";
+                if(ind == 9)s="T1";
+                if(ind == 10)s="I1";
+                wybrana_liga = s;
+                try {
                     Tabelka_dane(s);
                 } catch (SQLException ex) {
                     Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
@@ -301,6 +300,7 @@ public class z2_Tabele extends JLayeredPane{
             }
         }
     };
+    
     public z2_Tabele() throws SQLException, ClassNotFoundException{
         wybrana_liga="E0";
         tabela_ligowa_button = new int[3];
@@ -406,6 +406,7 @@ public class z2_Tabele extends JLayeredPane{
         setBounds(0, 0, 1024, 500);
         add(jP_OknoTabela);
         add(jP_WskaznikiFormy);
+        jP_OstatnieWyniki.dodajPodzial();
         add(jP_OstatnieWyniki);
         add(jP_Archiwum);
         

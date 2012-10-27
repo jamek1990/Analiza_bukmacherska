@@ -1,4 +1,6 @@
 public class Mecz_stat {
+    //ARRAY
+    
     String div;
     String date;
     String hometeam;
