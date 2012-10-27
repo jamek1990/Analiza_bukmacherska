@@ -17,6 +17,10 @@ import java.util.Vector;
 public class z4_Prognozy extends JLayeredPane{
     m1_okienko  jP_Prognozy;
     m1_okienko okienko;
+    
+    JTextField myMoney;
+    JTextField chooseMyLeague;
+    
     String[] names;
     double[] courses;
     double[] preView;
@@ -27,13 +31,9 @@ public class z4_Prognozy extends JLayeredPane{
     JLabel buttonOM;
     JLabel buttonAM;
     int money;          
-    public z4_Prognozy(){
-        jP_Prognozy = new m1_okienko(400,200,0,3,"Prognozy");
+    public z4_Prognozy(){      
         setLocation(0,0);
-        setBounds(0, 0, 1024, 300);
-        add(jP_Prognozy);
-        okienko = new m1_okienko(400,200,0,206,"Tutaj jest miejsce na proponowane strategie gry");
-        add(okienko);                
+        setBounds(0, 0, 1024, 600);
         
         String[] names = {"Borusia","Dortmundt","Real","Madrit"};
         double[] courses = {2.6, 2.7, 2.9, 2.68};
@@ -84,11 +84,43 @@ public class z4_Prognozy extends JLayeredPane{
         
         add(buttonLM);
         add(buttonOM);                
-        add(buttonAM);
-                
-        buttonLM.setBounds(750,5,40,40);                
-        buttonOM.setBounds(750,50,40,40);        
-        buttonAM.setBounds(750,95,40,40);              
+        add(buttonAM);                    
+        
+        /////////////////////////////////////////////////////////////Czesc druga
+        
+        jP_Prognozy = new m1_okienko(400,200,0,3,"Prognozy");
+        add(jP_Prognozy);
+        
+        JLabel chooseMyLeagueText = new JLabel();
+        chooseMyLeagueText.setBounds(0, 40, 100, 35);
+        chooseMyLeagueText.setText("Wybierz lige");
+        add(chooseMyLeagueText);
+        
+        chooseMyLeague = new JTextField();
+        chooseMyLeague.setText("To jest miejsce na rozwijane menu z ligami");
+        chooseMyLeague.setBounds(105, 40, 40, 35);
+        add(chooseMyLeague);
+        
+        JLabel myMoneyText = new JLabel();
+        myMoneyText.setText("Posiadana kwota");  
+        myMoneyText.setBounds(0, 80, 100, 35);
+        add(myMoneyText);
+        
+        myMoney = new JTextField();
+        myMoney.setText("Tu wpisz kwote przeznaczona na gre");
+        myMoney.setBounds(105, 75, 40, 35);
+        add(myMoney);
+        
+        myMoney.addMouseListener(null);
+        
+        ///////////////////////////////////////////////////////////czesc trzecia
+        
+        okienko = new m1_okienko(400,200,0,206,"Wybierz strategię gry");
+        add(okienko);      
+        
+        buttonLM.setBounds(50,250,50,50);                
+        buttonOM.setBounds(150,250,50,50);        
+        buttonAM.setBounds(250,250,50,50); 
     }
     private void setResult(int[] table){
         textFrame = new JTextArea();
@@ -103,7 +135,7 @@ public class z4_Prognozy extends JLayeredPane{
         text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option));
         textFrame.setText(text);
         add(textFrame);
-        textFrame.setBounds(300, 200, 300, 200);
+        textFrame.setBounds(0, 310, 300, 200);
     }
     
     private void lameMethode(){   
@@ -119,15 +151,15 @@ public class z4_Prognozy extends JLayeredPane{
         for (int i = 0; i < optionsNumber.size(); i++){
             antyRisk[i] = getChance(next(optionsNumber.get(i)+1));
         }
-        for(int j = 0; j<antyRisk.length;j++){System.out.print(antyRisk[j]);System.out.print(", ");}        
+        //for(int j = 0; j<antyRisk.length;j++){System.out.print(antyRisk[j]);System.out.print(", ");}        
         double maksimum = max(antyRisk);
         int i = 0;
         while(antyRisk[i] != maksimum){
             i++;
         }
-        System.out.println("");
-        System.out.println(i);
-        System.out.println(optionsNumber.get(i));
+        //System.out.println("");
+        //System.out.println(i);
+        //System.out.println(optionsNumber.get(i));
         int[] table = {optionsNumber.get(i)};
         setResult(table);
     }
