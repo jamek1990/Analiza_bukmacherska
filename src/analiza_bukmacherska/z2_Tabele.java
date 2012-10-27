@@ -26,6 +26,9 @@ public class z2_Tabele extends JLayeredPane{
     JLabel jButton6;
     m1_okienko jP_OknoTabela;
     m1_okienko  jP_OknoWybierzLige;
+    m1_okienko  jP_WskaznikiFormy;
+    m1_okienko  jP_OstatnieWyniki;
+    m1_okienko  jP_Archiwum;
     JLabel jLabel3;
     String wybrana_liga;
     
@@ -307,8 +310,12 @@ public class z2_Tabele extends JLayeredPane{
         tabela_ligowa_button_akt=0;
         JLabel  jLabel2 =new  JLabel();
         jLabel3 =new  JLabel();
+        
         jP_OknoTabela = new  m1_okienko(770,371,3,3,"TABELA LIGOWA");
         jP_OknoWybierzLige = new  m1_okienko(230,371,780,3,"LIGA");
+        jP_WskaznikiFormy = new  m1_okienko(500,371,3,375,"WSKAŹNIKI FORMY");
+        jP_OstatnieWyniki= new  m1_okienko(500,371,510,375,"OSTATNIE WYNIKI");
+        jP_Archiwum= new  m1_okienko(230,371,780,235,"ARCHIWUM");
         jButton4 =new  JLabel();
         jButton5 =new  JLabel();
         jButton6 =new  JLabel();
@@ -398,6 +405,9 @@ public class z2_Tabele extends JLayeredPane{
         //setLocation(0,0);
         setBounds(0, 0, 1024, 500);
         add(jP_OknoTabela);
+        add(jP_WskaznikiFormy);
+        add(jP_OstatnieWyniki);
+        add(jP_Archiwum);
         
         JList list = new JList(new Object[] {"Anglia", "Belgia", "Francja", "Grecja", "Hiszpania", "Holandia","Niemcy", "Portugalia", "Szkocja", "Turcja" , "Włochy"});
         Map<Object, Icon> icons = new HashMap<Object, Icon>();

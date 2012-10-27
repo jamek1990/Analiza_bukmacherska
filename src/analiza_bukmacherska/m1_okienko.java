@@ -7,8 +7,8 @@ public class m1_okienko extends JLayeredPane{
     Integer polozenie_x;
     Integer polozenie_y;
     String tytyl;
-    JLabel  jL_tytul;
-    JLabel  jL_tloGorne;
+    JLabel jL_tytul;
+    JLabel jL_tloGorne;
     JLabel jL_Odswiez;
     public m1_okienko(Integer szerokosc,Integer wysokosc,Integer polozenie_x,Integer polozenie_y,String tytul){
         this.szerokosc=szerokosc;
