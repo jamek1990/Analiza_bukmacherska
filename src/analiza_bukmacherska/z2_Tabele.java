@@ -332,8 +332,7 @@ public class z2_Tabele extends JLayeredPane{
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
                 }
-        }});
-        jP_OknoTabela.add(jButton4,1);
+        }});        jP_OknoTabela.add(jButton4,1);
         jButton4.setBounds(700, 5, 16, 16);
         jButton5.setIcon(new javax.swing.ImageIcon("images/btok2.jpg"));
         jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
