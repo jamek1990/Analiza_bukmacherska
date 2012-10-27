@@ -21,7 +21,7 @@ public class z4_Prognozy extends JLayeredPane{
     double[] courses;
     double[] preView;
     double[] expectedValues;
-    JLabel textFrame;
+    JTextArea textFrame;
     //boolean[] tableOfCases;
     JLabel buttonLM;
     JLabel buttonOM;
@@ -69,13 +69,13 @@ public class z4_Prognozy extends JLayeredPane{
         buttonAM = new JLabel();
         
         buttonLM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseEntered(java.awt.event.MouseEvent evt) {lameMethode(evt);}
+            public void mouseEntered(java.awt.event.MouseEvent evt) {lameMethode();}
         });   
         buttonOM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseEntered(java.awt.event.MouseEvent evt) {lameMethode(evt);}
+            public void mouseEntered(java.awt.event.MouseEvent evt) {optimalMethode();}
         }); 
         buttonAM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseEntered(java.awt.event.MouseEvent evt) {lameMethode(evt);}
+            public void mouseEntered(java.awt.event.MouseEvent evt) {agresiveMethode();}
         });  
         
         buttonLM.setIcon(new javax.swing.ImageIcon("images/button_down_prognoza.jpg"));          
@@ -91,22 +91,22 @@ public class z4_Prognozy extends JLayeredPane{
         buttonAM.setBounds(750,95,40,40);              
     }
     private void setResult(int[] table){
-        textFrame = new JLabel();
-        int[] option = next(table[0]);
+        textFrame = new JTextArea();
+        int[] option = next(table[0]+1);
         String text = "";
         for(int i = 0; i < option.length; i++){
             text += names[option[i]];
             text += ",";
         }
         text += '\n';
-        text += "Szansa wygranej wynosi: " + Double.toString(getRisk(option))+'\n';
+        text += "Szansa wygranej wynosi: " + Double.toString(getChance(option))+'\n';
         text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option));
         textFrame.setText(text);
         add(textFrame);
         textFrame.setBounds(300, 200, 300, 200);
     }
     
-    private void lameMethode(java.awt.event.MouseEvent evt){   
+    private void lameMethode(){   
         countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
@@ -117,13 +117,17 @@ public class z4_Prognozy extends JLayeredPane{
         }
         double[] antyRisk = new double[optionsNumber.size()];
         for (int i = 0; i < optionsNumber.size(); i++){
-            antyRisk[i] = 1.0-getRisk(next(optionsNumber.get(i)));
+            antyRisk[i] = getChance(next(optionsNumber.get(i)+1));
         }
+        for(int j = 0; j<antyRisk.length;j++){System.out.print(antyRisk[j]);System.out.print(", ");}        
         double maksimum = max(antyRisk);
         int i = 0;
         while(antyRisk[i] != maksimum){
             i++;
         }
+        System.out.println("");
+        System.out.println(i);
+        System.out.println(optionsNumber.get(i));
         int[] table = {optionsNumber.get(i)};
         setResult(table);
     }
@@ -138,7 +142,7 @@ public class z4_Prognozy extends JLayeredPane{
         }
         double[] antyRisk = new double[optionsNumber.size()];
         for (int i = 0; i < optionsNumber.size(); i++){
-            antyRisk[i] = 1.0-getRisk(next(optionsNumber.get(i)));
+            antyRisk[i] = getChance(next(optionsNumber.get(i)+1));
         }
         double maksimum = max(antyRisk);
         int i = 0;
@@ -159,7 +163,7 @@ public class z4_Prognozy extends JLayeredPane{
         }
         double[] antyRisk = new double[optionsNumber.size()];
         for (int i = 0; i < optionsNumber.size(); i++){
-            antyRisk[i] = 1.0-getRisk(next(optionsNumber.get(i)));
+            antyRisk[i] = getChance(next(optionsNumber.get(i)));
         }
         double maksimum = max(antyRisk);
         int i = 0;
@@ -170,7 +174,7 @@ public class z4_Prognozy extends JLayeredPane{
         setResult(table);
     }
     
-    private double getRisk(int[] table){
+    private double getChance(int[] table){
         int n = table.length;
         double p = 1.0;
         for (int i = 0; i < n; i++){
@@ -180,16 +184,16 @@ public class z4_Prognozy extends JLayeredPane{
     }    
     private double countMaxOfExpectedValue(){
         double n = Math.pow(2.0,(double)courses.length)-1.0;
-        //tableOfCases = new boolean[courses.length];
         expectedValues = new double[(int)n];                
         for (int i = 0; i < n; i++){
             expectedValues[i] = expectedValueOf(next(i+1));
         }
+        //for(int i=0;i<expectedValues.length;i++){System.out.print(expectedValues[i]);System.out.print(",");}         
         return max(expectedValues);
     }
     private double max(double[] table){
         int n = table.length;        
-        double r = 0.0;
+        double r = table[0];
         for (int i = 0; i < n; i++){
             if (r < table[i]){
                 r = table[i];
@@ -210,6 +214,8 @@ public class z4_Prognozy extends JLayeredPane{
         for(int j = 0; j<p;j++){
             result2[j] = result[j];
         }
+        //for(i=0;i<result2.length;i++){System.out.print(result2[i]);System.out.print(",");}
+        //System.out.println('\n');        
         return result2;
     }
     private double expectedValueOf(int[] table){
