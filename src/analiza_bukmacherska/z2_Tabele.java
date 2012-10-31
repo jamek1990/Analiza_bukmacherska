@@ -158,18 +158,31 @@ public class z2_Tabele extends JLayeredPane{
         Statement stat;
         Statement stat2;
         //database.createDB();
-        String query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga +"'  AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7";
-        String query2="SELECT DISTINCT(HomeTeam)FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 ORDER BY HOMETEAM";
+        String query="";
+        //String query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga +"'  AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7";
+        //String query2="SELECT DISTINCT(HomeTeam)FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 ORDER BY HOMETEAM";
         Integer columnCount=10;
         Vector data = new Vector(columnCount);
         Vector row = new Vector(columnCount);
         Vector columnNames = new Vector(columnCount);
         stat = database.con.createStatement(); 
         stat2 = database.con.createStatement(); 
-        ResultSet rs = stat.executeQuery(query2);
+        //ResultSet rs = stat.executeQuery(query2);
         Integer dr = 1;
+        if(tabela_ligowa_button_akt==0){
+            query = "SELECT  HomeTeam AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS POR,SUM(FTHG) AS GOL ,SUM(FTHG)-SUM(FTAG)  AS ROZ, sum(CASE WHEN FTR = 'H' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN  FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND length(DATA) = 8 GROUP BY  HomeTeam ORDER BY PUN DESC";
+           
+            //query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (HomeTeam='" +rs.getString(1) + "' OR AWAYTEAM='"+rs.getString(1) + "')" ;
+        }else if(tabela_ligowa_button_akt==1){
+            query = "SELECT  HomeTeam AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS POR,SUM(FTHG) AS GOL ,SUM(FTHG)-SUM(FTAG)  AS ROZ, sum(CASE WHEN FTR = 'H' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN  FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND length(DATA) = 8 GROUP BY  HomeTeam ORDER BY PUN DESC";
+            //query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (HomeTeam='" +rs.getString(1) + "')" ;
+        }else if(tabela_ligowa_button_akt==2){
+            query = "SELECT  AwayTeam AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS POR,SUM(FTHG) AS GOL ,SUM(FTHG)-SUM(FTAG)  AS ROZ, sum(CASE WHEN FTR = 'A' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN  FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND length(DATA) = 8 GROUP BY  AwayTeam ORDER BY PUN DESC";
+            //query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (AWAYTEAM='"+rs.getString(1) + "')" ;
+        }
+        ResultSet rs = stat.executeQuery(query);
         while (rs.next()) {
-            Integer Punkty = 0;
+            /*Integer Punkty = 0;
             Integer Mecze = 0;
             Integer Wygrane = 0;
             Integer Remisy = 0;
@@ -177,13 +190,7 @@ public class z2_Tabele extends JLayeredPane{
             Integer Gole_strzelone = 0;
             Integer Gole_stracone = 0;
             Integer d1,d2;
-            if(tabela_ligowa_button_akt==0)
-                query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (HomeTeam='" +rs.getString(1) + "' OR AWAYTEAM='"+rs.getString(1) + "')" ;
-            else if(tabela_ligowa_button_akt==1)
-                query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (HomeTeam='" +rs.getString(1) + "')" ;
-            else if(tabela_ligowa_button_akt==2)
-                query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (AWAYTEAM='"+rs.getString(1) + "')" ;
-           
+            
             ResultSet rs2 = stat2.executeQuery(query);
             while (rs2.next()) {
                 Mecze = Mecze + 1;
@@ -217,16 +224,16 @@ public class z2_Tabele extends JLayeredPane{
                         Przegrane = Przegrane + 1;
                     }
                 } 
-            }
+            }*/
             row.addElement(new Integer(dr));
             row.addElement(rs.getString(1));
-            row.addElement(new Integer(Mecze));
-            row.addElement(new Integer(Wygrane));
-            row.addElement(new Integer(Remisy));
-            row.addElement(new Integer(Przegrane));
-            row.addElement(new Integer(Gole_strzelone));
-            row.addElement(new Integer(Gole_strzelone-Gole_stracone));
-            row.addElement(new Integer(Punkty));       
+            row.addElement(new Integer(rs.getInt(2)));
+            row.addElement(new Integer(rs.getInt(3)));
+            row.addElement(new Integer(rs.getInt(4)));
+            row.addElement(new Integer(rs.getInt(5)));
+            row.addElement(new Integer(rs.getInt(6)));
+            row.addElement(new Integer(rs.getInt(7)));
+            row.addElement(new Integer(rs.getInt(8)));       
             data.addElement(row);
             row = new Vector(columnCount);
             dr = dr + 1;
