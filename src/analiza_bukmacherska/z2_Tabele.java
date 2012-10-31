@@ -170,14 +170,24 @@ public class z2_Tabele extends JLayeredPane{
         //ResultSet rs = stat.executeQuery(query2);
         Integer dr = 1;
         if(tabela_ligowa_button_akt==0){
-            query = "SELECT  HomeTeam AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS POR,SUM(FTHG) AS GOL ,SUM(FTHG)-SUM(FTAG)  AS ROZ, sum(CASE WHEN FTR = 'H' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN  FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND length(DATA) = 8 GROUP BY  HomeTeam ORDER BY PUN DESC";
-           
-            //query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (HomeTeam='" +rs.getString(1) + "' OR AWAYTEAM='"+rs.getString(1) + "')" ;
+            query = "SELECT DRU,SUM(MEC),SUM(ZWY),SUM(REM),SUM(POR),SUM(GOL),SUM(ROZ),SUM(PUN) AS PUNN "+
+            "FROM( "+
+            "SELECT  HomeTeam AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS POR,SUM(FTHG) AS GOL ,SUM(FTHG)-SUM(FTAG)  AS ROZ, sum(CASE WHEN FTR = 'H' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN "+
+            "FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "'AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND length(DATA) = 8 "+
+            "GROUP BY  HomeTeam "+
+            "UNION "+
+            "SELECT  AwayTeam  AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS POR,SUM(FTAG) AS GOL ,SUM(FTAG)-SUM(FTHG)  AS ROZ, sum(CASE WHEN FTR = 'A' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN "+
+            "FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND length(DATA) = 8 "+
+            "GROUP BY  AwayTeam "+
+            ") "+
+            "GROUP BY DRU "+
+            "ORDER BY PUNN DESC ";//query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (HomeTeam='" +rs.getString(1) + "' OR AWAYTEAM='"+rs.getString(1) + "')" ;
+            System.out.println(query);
         }else if(tabela_ligowa_button_akt==1){
             query = "SELECT  HomeTeam AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS POR,SUM(FTHG) AS GOL ,SUM(FTHG)-SUM(FTAG)  AS ROZ, sum(CASE WHEN FTR = 'H' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN  FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND length(DATA) = 8 GROUP BY  HomeTeam ORDER BY PUN DESC";
             //query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (HomeTeam='" +rs.getString(1) + "')" ;
         }else if(tabela_ligowa_button_akt==2){
-            query = "SELECT  AwayTeam AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS POR,SUM(FTHG) AS GOL ,SUM(FTHG)-SUM(FTAG)  AS ROZ, sum(CASE WHEN FTR = 'A' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN  FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND length(DATA) = 8 GROUP BY  AwayTeam ORDER BY PUN DESC";
+            query = "SELECT  AwayTeam AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS POR,SUM(FTAG) AS GOL ,SUM(FTAG)-SUM(FTHG)  AS ROZ, sum(CASE WHEN FTR = 'A' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN  FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND length(DATA) = 8 GROUP BY  AwayTeam ORDER BY PUN DESC";
             //query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (AWAYTEAM='"+rs.getString(1) + "')" ;
         }
         ResultSet rs = stat.executeQuery(query);
