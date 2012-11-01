@@ -15,9 +15,9 @@ public class z1_Baza extends JLayeredPane{
     JLayeredPane panel2;
     JLabel jL_OdswiezBaze;
     JLabel baza3;
-    m1_okienko  jP_OknoAktualizujBaze;
+    m1_okienko jP_OknoAktualizujBaze;
     
-    private void RefreshDataBase(java.awt.event.MouseEvent evt) throws Exception { 
+    private void RefreshDataBase(java.awt.event.MouseEvent evt) throws Exception {
        // try {
             String ligi[]={"P1","I1","G1","D1","D2","E0","E1","E2","E3","EC","F1","F2","B1","I2","N1","SC0","SC1","SC2","SC3","SP1","SP2","T1"};
             String kolumny[]={"Div","Date","HomeTeam","AwayTeam","FTHG","FTAG","FTR","HTHG","HTAG","HTR","HS","AS","HST","AST","HHW","AHW","HC","AC","HF","AF","HO","AO","HY","AY","HR","AR"};
@@ -28,8 +28,10 @@ public class z1_Baza extends JLayeredPane{
             int gdzie_size=0;
             
             SQL sql = new SQL();
+                    //sql.createDB();
+
             for(int i=0;i<ligi.length;i++){
-                for(int j = 100;j<113;j++){
+                for(int j = 111;j<113;j++){
                     String data="";
                     String data_od="";
                     String data_do="";
@@ -38,7 +40,7 @@ public class z1_Baza extends JLayeredPane{
                     data_od=data_od+Integer.toString(j%100);
                     data_do=data_do+Integer.toString((j+1)%100);
                     data=data_od+data_do;
-                    URL url  = new URL("http://www.football-data.co.uk/mmz4281/"+data+"/" + ligi[i]+".csv" );
+                    URL url = new URL("http://www.football-data.co.uk/mmz4281/"+data+"/" + ligi[i]+".csv" );
                     URLConnection con = url.openConnection();
                     InputStreamReader inStream = new InputStreamReader(con.getInputStream());
                     BufferedReader buff= new BufferedReader(inStream);
@@ -87,13 +89,14 @@ public class z1_Baza extends JLayeredPane{
                                 m_s.zmien(mecz);
                                 sql.insert_do_statystyk(m_s);
                             }
-                            content2 = buff.readLine(); 
+                            content2 = buff.readLine();
                             
                         }
                     }
                 }
             }
        // }
+            sql.con.close();
        
     }
     public z1_Baza(){
@@ -105,7 +108,7 @@ public class z1_Baza extends JLayeredPane{
         jP_OknoAktualizujBaze.dodajOdswiez();
         jP_OknoAktualizujBaze.jL_Odswiez.addMouseListener(new java.awt.event.MouseAdapter() {
             //public void mouseEntered(java.awt.event.MouseEvent evt) {jButton4MouseEntered(evt);}
-            //public void mouseExited(java.awt.event.MouseEvent evt)  {jButton4MouseExited(evt);}
+            //public void mouseExited(java.awt.event.MouseEvent evt) {jButton4MouseExited(evt);}
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 try {
                     RefreshDataBase(evt);

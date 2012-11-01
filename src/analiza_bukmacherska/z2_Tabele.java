@@ -156,85 +156,33 @@ public class z2_Tabele extends JLayeredPane{
     public void Tabelka_dane(String liga) throws SQLException, ClassNotFoundException{
         database =new SQL();
         Statement stat;
-        Statement stat2;
-        //database.createDB();
         String query="";
-        //String query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga +"'  AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7";
-        //String query2="SELECT DISTINCT(HomeTeam)FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 ORDER BY HOMETEAM";
         Integer columnCount=10;
         Vector data = new Vector(columnCount);
         Vector row = new Vector(columnCount);
         Vector columnNames = new Vector(columnCount);
         stat = database.con.createStatement(); 
-        stat2 = database.con.createStatement(); 
-        //ResultSet rs = stat.executeQuery(query2);
         Integer dr = 1;
         if(tabela_ligowa_button_akt==0){
             query = "SELECT DRU,SUM(MEC),SUM(ZWY),SUM(REM),SUM(POR),SUM(GOL),SUM(ROZ),SUM(PUN) AS PUNN "+
             "FROM( "+
             "SELECT  HomeTeam AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS POR,SUM(FTHG) AS GOL ,SUM(FTHG)-SUM(FTAG)  AS ROZ, sum(CASE WHEN FTR = 'H' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN "+
-            "FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "'AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND length(DATA) = 8 "+
+            "FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND DATA>'20120701' "+
             "GROUP BY  HomeTeam "+
             "UNION "+
             "SELECT  AwayTeam  AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS POR,SUM(FTAG) AS GOL ,SUM(FTAG)-SUM(FTHG)  AS ROZ, sum(CASE WHEN FTR = 'A' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN "+
-            "FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND length(DATA) = 8 "+
+            "FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND DATA>'20120701' "+
             "GROUP BY  AwayTeam "+
             ") "+
             "GROUP BY DRU "+
-            "ORDER BY PUNN DESC ";//query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (HomeTeam='" +rs.getString(1) + "' OR AWAYTEAM='"+rs.getString(1) + "')" ;
-            System.out.println(query);
+            "ORDER BY PUNN DESC ";
         }else if(tabela_ligowa_button_akt==1){
-            query = "SELECT  HomeTeam AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS POR,SUM(FTHG) AS GOL ,SUM(FTHG)-SUM(FTAG)  AS ROZ, sum(CASE WHEN FTR = 'H' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN  FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND length(DATA) = 8 GROUP BY  HomeTeam ORDER BY PUN DESC";
-            //query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (HomeTeam='" +rs.getString(1) + "')" ;
+            query = "SELECT  HomeTeam AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS POR,SUM(FTHG) AS GOL ,SUM(FTHG)-SUM(FTAG)  AS ROZ, sum(CASE WHEN FTR = 'H' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN  FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND DATA>'20120701' GROUP BY  HomeTeam ORDER BY PUN DESC";
         }else if(tabela_ligowa_button_akt==2){
-            query = "SELECT  AwayTeam AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS POR,SUM(FTAG) AS GOL ,SUM(FTAG)-SUM(FTHG)  AS ROZ, sum(CASE WHEN FTR = 'A' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN  FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND length(DATA) = 8 GROUP BY  AwayTeam ORDER BY PUN DESC";
-            //query="SELECT FTHG,FTAG,FTR,HomeTeam,AwayTeam, DATA FROM MECZE_STATYSTYKI3 WHERE DIV = '"+ liga +"'  AND length(DATA) = 8 AND substr(DATA,4,2)+ substr(DATA,7,2)*2012  >2012*12+7 AND (AWAYTEAM='"+rs.getString(1) + "')" ;
+            query = "SELECT  AwayTeam AS DRU,COUNT(FTR) AS MEC , sum(CASE WHEN FTR = 'A' THEN 1 ELSE 0 END) AS ZWY ,sum(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS REM,sum(CASE WHEN FTR = 'H' THEN 1 ELSE 0 END) AS POR,SUM(FTAG) AS GOL ,SUM(FTAG)-SUM(FTHG)  AS ROZ, sum(CASE WHEN FTR = 'A' THEN 3 ELSE 0 END) +SUM(CASE WHEN FTR = 'D' THEN 1 ELSE 0 END) AS PUN  FROM MECZE_STATYSTYKI WHERE DIV = '"+ liga + "' AND DATA>'20120701' GROUP BY  AwayTeam ORDER BY PUN DESC";
         }
         ResultSet rs = stat.executeQuery(query);
         while (rs.next()) {
-            /*Integer Punkty = 0;
-            Integer Mecze = 0;
-            Integer Wygrane = 0;
-            Integer Remisy = 0;
-            Integer Przegrane = 0;
-            Integer Gole_strzelone = 0;
-            Integer Gole_stracone = 0;
-            Integer d1,d2;
-            
-            ResultSet rs2 = stat2.executeQuery(query);
-            while (rs2.next()) {
-                Mecze = Mecze + 1;
-                if (rs2.getString(4).contentEquals(rs.getString(1))==true){
-                    d1 = rs2.getInt(1);
-                    d2 = rs2.getInt(2);
-                    Gole_strzelone = Gole_strzelone + d1;
-                    Gole_stracone = Gole_stracone + d2;
-                    if(rs2.getString(3).contentEquals("H")){
-                        Wygrane = Wygrane + 1;
-                        Punkty = Punkty + 3;
-                    }else if(rs2.getString(3).contentEquals("D")){
-                        Remisy = Remisy + 1;
-                        Punkty = Punkty + 1;
-                    }else{
-                        Przegrane = Przegrane + 1;
-                    }
-                }else{
-                    d1 = rs2.getInt(2);
-                    d2 = rs2.getInt(1);
-                    Gole_strzelone = Gole_strzelone + d1;
-                    Gole_stracone = Gole_stracone + d2;
-                    if(rs2.getString(3).contentEquals("A")){
-                        Wygrane = Wygrane + 1;
-                        Punkty = Punkty + 3;
-                    }
-                    else if(rs2.getString(3).contentEquals("D")){
-                        Remisy = Remisy + 1;
-                        Punkty = Punkty + 1;
-                    }else{
-                        Przegrane = Przegrane + 1;
-                    }
-                } 
-            }*/
             row.addElement(new Integer(dr));
             row.addElement(rs.getString(1));
             row.addElement(new Integer(rs.getInt(2)));
@@ -254,7 +202,6 @@ public class z2_Tabele extends JLayeredPane{
         }
         DefaultTableModel model = new DefaultTableModel(data, columnNames);
         jTable1.setModel( model ); 
-        
         jTable1.setFocusable(false);
         jTable1.setGridColor(new java.awt.Color(207, 205, 205));
         jTable1.setRequestFocusEnabled(false);
@@ -277,16 +224,9 @@ public class z2_Tabele extends JLayeredPane{
         }
         jTable1.setAutoCreateRowSorter(false);
         Dodaj_Paski();
-
-        /*jTable1.setAutoCreateColumnsFromModel(false);
-        sortAllRowsBy(model, 8, false);
-        jTable1.setAutoCreateRowSorter(true);*/
         stat.close();
-        stat2.close();
         database.con.close();
-        
     }
-    
     ListSelectionListener listSelectionListener = new ListSelectionListener() {
         public void valueChanged(ListSelectionEvent listSelectionEvent) {
             boolean adjust = listSelectionEvent.getValueIsAdjusting();
@@ -399,7 +339,7 @@ public class z2_Tabele extends JLayeredPane{
                 return canEdit [columnIndex];
             }
         });
-        Tabelka_dane("I1");
+       // Tabelka_dane("I1");
         jTable1.setFocusable(false);
         jTable1.setGridColor(new java.awt.Color(207, 205, 205));
         jTable1.setRequestFocusEnabled(false);

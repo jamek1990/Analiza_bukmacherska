@@ -2,7 +2,7 @@ public class Mecz_stat {
     //ARRAY
     
     String div;
-    String date;
+    Integer date;
     String hometeam;
     String awayteam;
     Integer fthg;
@@ -39,8 +39,12 @@ public class Mecz_stat {
             div = null;
         }
         if(st[1]!=null) {
-            date=st[1];
-        }
+            //date=st[1];
+            if(st[1].length()==8)
+                date=Integer.parseInt(st[1].substring(0, 2))+Integer.parseInt(st[1].substring(3, 5))*100+(Integer.parseInt(st[1].substring(6, 8))+2000)*10000;
+            else
+                date=Integer.parseInt(st[1].substring(0, 2))+Integer.parseInt(st[1].substring(3, 5))*100+(Integer.parseInt(st[1].substring(8, 10))+2000)*10000; 
+       }
         else {
             date=null;
         }

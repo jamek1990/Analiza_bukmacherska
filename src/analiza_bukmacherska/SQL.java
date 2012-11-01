@@ -10,47 +10,50 @@ import javax.swing.JFrame;
 
 public class SQL {
     public static Connection con;
-    public  Statement stat;
+    public Statement stat;
     
     public SQL() throws SQLException, ClassNotFoundException{
         Class.forName("org.sqlite.JDBC");
-        con = DriverManager.getConnection("jdbc:sqlite:mydb.db");
-        con.setAutoCommit(false);
+        con = DriverManager.getConnection("jdbc:sqlite:D:/Users/User/Documents/NetBeansProjects/A_B/Analiza_bukmacherska/mydb.db");
+        /*con.setAutoCommit(false);
         con.commit();
+        Statement stat = con.createStatement();
+        stat.executeUpdate("drop table if exists MECZE_STATYSTYKI");
+        createDB*/
     }
     
-    public void createDB() throws SQLException{        
-        stat = con.createStatement();        
+    public void createDB() throws SQLException{
+        stat = con.createStatement();
         stat.executeUpdate("CREATE TABLE MECZE_STATYSTYKI("
-	+"Div		TEXT,"
-	+"DATA		NUMERIC,"
-	+"HomeTeam 	TEXT,"
-	+"AwayTeam	TEXT,"
-	+"FTHG		Integer,"
-	+"FTAG		INTEGER,"
-	+"FTR		INTEGER,"
-	+"HTHG		INTEGER,"
-	+"HTAG		INTEGER,"
-	+"HTR		INTEGER,"
-	+"HSH		INTEGER,"
-	+"ASH		INTEGER,"
-	+"HST		INTEGER,"
-	+"AST		INTEGER,"
-	+"HHW		INTEGER,"
-	+"AHW		INTEGER,"
-	+"HC		INTEGER,"
-	+"AC		INTEGER,"
-	+"HF		INTEGER,"
-	+"AF		INTEGER,"
-	+"HO		INTEGER,"
-	+"AO		INTEGER,"
-	+"HY		INTEGER,"
-	+"AY		INTEGER,"
-	+"HR		INTEGER,"
-	+"AR		INTEGER,"
-	+"K1		REAL,"
-	+"KX		REAL,"
-	+"K2		REAL");
++"Div TEXT,"
++"DATA NUMERIC,"
++"HomeTeam TEXT,"
++"AwayTeam TEXT,"
++"FTHG Integer,"
++"FTAG INTEGER,"
++"FTR INTEGER,"
++"HTHG INTEGER,"
++"HTAG INTEGER,"
++"HTR INTEGER,"
++"HSH INTEGER,"
++"ASH INTEGER,"
++"HST INTEGER,"
++"AST INTEGER,"
++"HHW INTEGER,"
++"AHW INTEGER,"
++"HC INTEGER,"
++"AC INTEGER,"
++"HF INTEGER,"
++"AF INTEGER,"
++"HO INTEGER,"
++"AO INTEGER,"
++"HY INTEGER,"
++"AY INTEGER,"
++"HR INTEGER,"
++"AR INTEGER,"
++"K1 REAL,"
++"KX REAL,"
++"K2 REAL);");
     }
     
     public void insert_do_statystyk(Mecz_stat MS) throws SQLException{
@@ -58,13 +61,14 @@ public class SQL {
           .prepareStatement("INSERT INTO MECZE_STATYSTYKI VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
         if(MS.div!=null){
             prep.setString(1, MS.div);
+            System.out.println(MS.div);
         }else{
             prep.setNull(1,java.sql.Types.VARCHAR);
         }
         if(MS.date!=null){
-            prep.setString(2, MS.date);
+            prep.setInt(2, MS.date);
         }else{
-            prep.setNull(2,java.sql.Types.VARCHAR);
+            prep.setNull(2,java.sql.Types.INTEGER);
         }
         if(MS.hometeam!=null){
             prep.setString(3, MS.hometeam);
@@ -206,7 +210,10 @@ public class SQL {
         }else{
             prep.setNull(29, java.sql.Types.DOUBLE);
         }
+        //prep.addBatch();
+        //prep.executeBatch();
         boolean rows = prep.execute();
+       // prep.cancel();
     }
     
     
@@ -218,6 +225,8 @@ public class SQL {
         prep.setString(2, home);
         prep.setString(3, away);
         prep.setString(4, wynik);
+        prep.addBatch();
+        prep.executeBatch();
         boolean rows = prep.execute();
         System.out.println("update tabeli!");
     }
