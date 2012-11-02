@@ -1,3 +1,4 @@
+import analiza_bukmacherska.z2_Tabele_Forma.Forma;
 import java.awt.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,13 +25,17 @@ public class z2_Tabele extends JLayeredPane{
     JLabel jButton4;
     JLabel jButton5;
     JLabel jButton6;
+    JLabel forma;
+    JLabel forma2;
     m1_okienko jP_OknoTabela;
     m1_okienko  jP_OknoWybierzLige;
     m1_okienko  jP_WskaznikiFormy;
+    m1_okienko  jP_StatystykiMeczow;
     m1_okienko  jP_OstatnieWyniki;
     m1_okienko  jP_Archiwum;
     JLabel jLabel3;
     String wybrana_liga;
+    Forma form;
     
     private int[] tabela_ligowa_button;
     private int tabela_ligowa_button_akt;
@@ -248,7 +253,9 @@ public class z2_Tabele extends JLayeredPane{
                 if(ind == 10)s="I1";
                 wybrana_liga = s;
                 try {
+                  //  jTable1.setRowSelectionAllowed(false);
                     Tabelka_dane(s);
+                    //jTable1.setRowSelectionAllowed(false);
                 } catch (SQLException ex) {
                     Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {
@@ -257,6 +264,35 @@ public class z2_Tabele extends JLayeredPane{
             }
         }
     };
+    class RowListener implements ListSelectionListener{  
+        public void valueChanged(ListSelectionEvent e){  
+            if(!e.getValueIsAdjusting()){  
+                ListSelectionModel model = jTable1.getSelectionModel();  
+                 try { 
+                     int lead = model.getLeadSelectionIndex();  
+                
+                    try {
+                        if(lead!=-1)
+                            displayRowValues(lead);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(z2_Tabele.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }  
+        }
+        private void displayRowValues(int rowIndex) throws SQLException, ClassNotFoundException{  
+            SQL database =new SQL();
+            Statement stat;
+            stat = database.con.createStatement();
+            String team =jTable1.getValueAt(rowIndex, 1).toString();
+            String query = "SELECT   HOMETEAM, AWAYTEAM ,FTR,FTHG,FTAG, DATA FROM MECZE_STATYSTYKI  WHERE DIV ='" + wybrana_liga + "' AND (HOMETEAM = '" + team + "' OR AWAYTEAM = '" + team +"') ORDER BY DATA DESC LIMIT 6";
+            ResultSet rs = stat.executeQuery(query);
+            form.update_data(rs,team);
+            stat.close();
+        }  
+    }  
     
     public z2_Tabele() throws SQLException, ClassNotFoundException{
         wybrana_liga="E0";
@@ -270,13 +306,22 @@ public class z2_Tabele extends JLayeredPane{
         
         jP_OknoTabela = new  m1_okienko(770,371,3,3,"TABELA LIGOWA");
         jP_OknoWybierzLige = new  m1_okienko(230,371,780,3,"LIGA");
-        jP_WskaznikiFormy = new  m1_okienko(500,371,3,375,"WSKAŹNIKI FORMY");
-        jP_OstatnieWyniki= new  m1_okienko(500,371,510,375,"OSTATNIE WYNIKI");
         jP_Archiwum= new  m1_okienko(230,371,780,235,"ARCHIWUM");
         jButton4 =new  JLabel();
         jButton5 =new  JLabel();
         jButton6 =new  JLabel();
-        jTable1 = new JTable();
+        jTable1 = new JTable(){
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column){
+        Component returnComp = super.prepareRenderer(renderer, row, column);
+        Color alternateColor = new Color(232,232,236);
+        Color alternateColor2 = new Color(242,245,255);
+        if (!returnComp.getBackground().equals(getSelectionBackground())){
+            Color bg = (row % 2 == 0 ? alternateColor : alternateColor2);
+            returnComp .setBackground(bg);
+            bg = null;
+        }
+        return returnComp;
+        }};
         JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
         jButton4.setIcon(new javax.swing.ImageIcon("images/btok.jpg"));
         jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -339,7 +384,8 @@ public class z2_Tabele extends JLayeredPane{
                 return canEdit [columnIndex];
             }
         });
-       // Tabelka_dane("I1");
+      //  Tabelka_dane("I1");
+        
         jTable1.setFocusable(false);
         jTable1.setGridColor(new java.awt.Color(207, 205, 205));
         jTable1.setRequestFocusEnabled(false);
@@ -354,17 +400,53 @@ public class z2_Tabele extends JLayeredPane{
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(120);
         jTable1.getColumnModel().getColumn(6).setPreferredWidth(40);
         jTable1.getColumnModel().getColumn(9).setPreferredWidth(100);
-        
         jP_OknoTabela.add(jScrollPane1);
         jScrollPane1.setBounds(0, 30, 770, 350);
+        jTable1.setBackground(new java.awt.Color(209, 210, 211));
+        jTable1.setOpaque(true);
+        ListSelectionModel selectionModel = jTable1.getSelectionModel();  
+        selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);  
+        selectionModel.addListSelectionListener(new RowListener()); 
+        jP_OknoTabela.setBackground(new java.awt.Color(209, 210, 211));
+        jP_OknoTabela.setOpaque(true);
+        jScrollPane1.setBackground(new java.awt.Color(209, 210, 211));
+        jScrollPane1.setOpaque(true);
         Dodaj_Paski();
+       // jTable1.setRowSelectionInterval(0, 1);
         //setLocation(0,0);
-        setBounds(0, 0, 1024, 500);
-        add(jP_OknoTabela);
+        setBounds(0, 0, 1024, 530);
+        jP_WskaznikiFormy = new  m1_okienko(400,201,3,375,"WSKAŹNIKI FORMY");
+        jP_StatystykiMeczow = new  m1_okienko(250,201,410,375,"WSKAŹNIKI FORMY");
+        jP_OstatnieWyniki= new  m1_okienko(344,201,667,375,"OSTATNIE WYNIKI");
+        
+       // forma = new JLabel();
+        forma2 = new JLabel();
+        //forma.setIcon(new javax.swing.ImageIcon("images/forma.png"));
+        forma2.setIcon(new javax.swing.ImageIcon("images/forma2.png"));
+        jP_StatystykiMeczow.add(forma2);
+
+        forma2.setBounds(0, 20, 261, 125);
+        
+        
+        form = new Forma();
+        jP_WskaznikiFormy.add(form);
+        jP_WskaznikiFormy.dodajPodzial();
+        form.setBounds(0, 0, 541, 150);
+        jP_WskaznikiFormy.setBackground(new java.awt.Color(209, 210, 211));
+        jP_WskaznikiFormy.setOpaque(true);
         add(jP_WskaznikiFormy);
+        
+        add(jP_OknoTabela);
+        
+        
+        add(jP_StatystykiMeczow);
+        
         jP_OstatnieWyniki.dodajPodzial();
         add(jP_OstatnieWyniki);
+        
         add(jP_Archiwum);
+        
+        
         
         JList list = new JList(new Object[] {"Anglia", "Belgia", "Francja", "Grecja", "Hiszpania", "Holandia","Niemcy", "Portugalia", "Szkocja", "Turcja" , "Włochy"});
         Map<Object, Icon> icons = new HashMap<Object, Icon>();
@@ -384,6 +466,9 @@ public class z2_Tabele extends JLayeredPane{
         jP_OknoWybierzLige.add(list);
         list.setBounds(0, 30, 230, 198);
         add(jP_OknoWybierzLige);
+        
+        setBackground(new java.awt.Color(209, 210, 211));
+        setOpaque(true);
         
     }
 }

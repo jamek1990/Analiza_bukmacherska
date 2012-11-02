@@ -14,7 +14,7 @@ public class SQL {
     
     public SQL() throws SQLException, ClassNotFoundException{
         Class.forName("org.sqlite.JDBC");
-        con = DriverManager.getConnection("jdbc:sqlite:D:/Users/User/Documents/NetBeansProjects/A_B/Analiza_bukmacherska/mydb.db");
+        con = DriverManager.getConnection("jdbc:sqlite:mydb.db");
         /*con.setAutoCommit(false);
         con.commit();
         Statement stat = con.createStatement();
