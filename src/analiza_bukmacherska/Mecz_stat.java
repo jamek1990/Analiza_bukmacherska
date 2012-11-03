@@ -1,3 +1,4 @@
+package analiza_bukmacherska;
 public class Mecz_stat {
     //ARRAY
     

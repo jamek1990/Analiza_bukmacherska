@@ -1,3 +1,4 @@
+package analiza_bukmacherska;
 import java.awt.*;
 import java.sql.*;
 import javax.swing.*;

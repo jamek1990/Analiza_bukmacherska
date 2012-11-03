@@ -1,3 +1,4 @@
+package analiza_bukmacherska;
 import java.awt.*;
 import java.sql.*;
 import java.util.logging.Level;

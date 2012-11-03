@@ -1,3 +1,4 @@
+package analiza_bukmacherska;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,7 +11,7 @@ public class m1_okienko extends JLayeredPane{
     Integer polozenie_x;
     Integer polozenie_y;
     String tytyl;
-    JLabel jL_tytul;
+    public JLabel jL_tytul;
     JLabel jL_tloGorne;
     JLabel jL_Odswiez;
     JLabel kolo1;
