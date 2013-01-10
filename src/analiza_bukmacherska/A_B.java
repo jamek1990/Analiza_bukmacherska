@@ -13,10 +13,7 @@ public class A_B{
         JFrame f=new JFrame();
         f.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         f.setTitle("Analiza Bukmacherska");
-        
         f.setBackground(new java.awt.Color(123, 83, 53));
-       
-        //f.setForeground(Color.red);
         f.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         f.setExtendedState(1);
         f.setIconImages(null);
@@ -26,7 +23,6 @@ public class A_B{
         z3_TeamVsTeam team = new z3_TeamVsTeam();
         z4_Prognozy prognozy = new z4_Prognozy();
         MenuDolne menu = new MenuDolne(baza,tabele,team,prognozy);
-        //MenuDolne menu = new MenuDolne(baza,tabele,team,prognozy);
         JLayeredPane p2 = new JLayeredPane();
         p2.add(baza,1);
         p2.add(tabele,2);
