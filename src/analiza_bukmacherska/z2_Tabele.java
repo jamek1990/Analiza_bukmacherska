@@ -40,7 +40,6 @@ public class z2_Tabele extends JLayeredPane{
     SQL database;
    
     public z2_Tabele() throws SQLException, ClassNotFoundException{
-        JLabel  jLabel2 =new  JLabel();
         jLabel3 =new  JLabel();
         jP_Archiwum= new  m1_okienko(230,371,780,235,"ARCHIWUM");
         setBounds(0, 0, 1024, 530);
@@ -55,7 +54,7 @@ public class z2_Tabele extends JLayeredPane{
         
         //mwybierzLige.setBounds(780,3,230,371);
         
-        WybranaLiga  wybranaLiga = new WybranaLiga();
+        WybranaLiga  wybranaLiga = new WybranaLiga("E0");
         WybranaDruzyna wybranaDruzyna = new WybranaDruzyna();
         
         form = new Forma(wybranaDruzyna);
