@@ -37,7 +37,7 @@ public class A_B{
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     }
-    public static void main(String[] args) throws SQLException, ClassNotFoundException, Exception {
+    /*public static void main(String[] args) throws SQLException, ClassNotFoundException, Exception {
         rysuj();
-    }
+    }*/
 }
