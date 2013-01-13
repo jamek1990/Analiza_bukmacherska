@@ -3,7 +3,6 @@ package analiza_bukmacherska;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -12,30 +11,27 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayer;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.plaf.LayerUI;
 
-
 public class Intro {//implements ActionListener {
     
-    private JButton jB_aktualizacja;
-    private JButton jB_program;
+    private JLabel jB_aktualizacja;
+    private JLabel jB_program;
     private JButton mOrderButton;
+    private JLabel jB_exit;
     private JFrame f;
     public void createUI() throws IOException
     {
@@ -43,6 +39,9 @@ public class Intro {//implements ActionListener {
         f.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         f.setTitle("Analiza Bukmacherska");
         f.setLayout(null);
+        
+        
+        f.setUndecorated(true);
         
         final WaitLayerUI layerUI = new WaitLayerUI();
         ImagePanel panel = createPanel();
@@ -55,57 +54,59 @@ public class Intro {//implements ActionListener {
         });
         stopper.setRepeats(false);
         
-        jB_aktualizacja.addActionListener(
-            new ActionListener() {
-                public void actionPerformed(ActionEvent ae) {
-                    layerUI.start();
-                    if (!stopper.isRunning()) {
-                        stopper.start();
-                    }
+        jB_aktualizacja.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jB_aktualizacja.setVisible(false);
+                jB_program.setVisible(false);
+                jB_exit.setVisible(false);
+                layerUI.start();
+                if (!stopper.isRunning()) {
+                    stopper.start();
                 }
+                jB_aktualizacja.setVisible(true);
+                jB_program.setVisible(true);
+                jB_exit.setVisible(true);
             }
-        );
+        });
         
-        jB_program.addActionListener(
-            new ActionListener() {
-                public void actionPerformed(ActionEvent ae) {
-                    
-                        try {
-                            A_B.rysuj();
-                        } catch (Exception ex) {
-                            Logger.getLogger(Intro.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    
-                    f.dispose();
-                }
+        jB_program.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+               
+                    try {
+                        A_B.rysuj();
+                    } catch (Exception ex) {
+                        Logger.getLogger(Intro.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+              
+                f.dispose();
             }
-        );
+        });
+        
+        jB_exit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                f.dispose();
+            }
+        });
         
         f.add(jlayer);
         jlayer.setBounds(0,0,500,300);
         f.setSize(new Dimension(500,300));
         f.setResizable(false);
+        f.setLocationRelativeTo(null);
         f.setVisible(true);
     }
     
-    private JPanel createPanel1() {
-        JPanel p = new JPanel();
-        p.setLayout(null);
-        mOrderButton = new JButton("Place Order");
-        mOrderButton.setBounds(0, 0, 100,100);
-        p.add(mOrderButton);
-
-        return p;
-    }
     private ImagePanel createPanel() throws IOException {
         ImagePanel p = new ImagePanel(new ImageIcon("images/tlo.jpg").getImage());
         
         p.setLayout(null);
-        jB_aktualizacja = new JButton("Aktualizacja bazy");
-        jB_program = new JButton("Uruchom program");
-        jB_aktualizacja.setBounds(300, 170, 190, 50);
-        jB_program.setBounds(300, 222, 190, 50);
-
+        jB_aktualizacja = new JLabel("Aktualizacja bazy");
+        jB_program = new JLabel("Uruchom program");
+        jB_exit = new JLabel("Zamknij program");
+        
+        jB_aktualizacja.setBounds(300, 195, 190, 30);
+        jB_program.setBounds(300, 230, 190, 30);
+        jB_exit.setBounds(300, 265, 190, 30);
         //jB_program.addActionListener(this);
         //jB_program.setActionCommand("open");
 
@@ -114,7 +115,7 @@ public class Intro {//implements ActionListener {
         
         p.add(jB_aktualizacja);
         p.add(jB_program);
-        
+        p.add(jB_exit);
         return p;
     
     }
@@ -142,6 +143,7 @@ public class Intro {//implements ActionListener {
         n.createUI();
     }
 }
+
 class Background extends JComponent {
     private Image image;
     
