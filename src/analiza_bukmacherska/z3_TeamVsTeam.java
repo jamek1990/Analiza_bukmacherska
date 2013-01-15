@@ -14,11 +14,15 @@ import java.net.URLConnection;
 
 public class z3_TeamVsTeam extends JLayeredPane{
     m1_okienko  jP_TeamVsTeam;
+    m1_okienko  jP_TeamVsTeam2;
     public z3_TeamVsTeam(){
-        jP_TeamVsTeam = new m1_okienko(400,200,0,3,"TEAM VS TEAM");
+        jP_TeamVsTeam = new m1_okienko(400,200,0,30,"TEAM VS TEAM");
         jP_TeamVsTeam.dodajPodzial();
+        jP_TeamVsTeam2 = new m1_okienko(400,200,405,30,"TEAM VS TEAM2");
+        jP_TeamVsTeam2.dodajPodzial();
         setLocation(0,0);
         setBounds(0, 0, 1024, 300);
         add(jP_TeamVsTeam);
+        add(jP_TeamVsTeam2);
     }
 }

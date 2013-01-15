@@ -1,4 +1,5 @@
 package analiza_bukmacherska.z2_Tabele_Forma;
+import analiza_bukmacherska.z2_Tabele_Forma.Spotkanie;
 import analiza_bukmacherska.SQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;

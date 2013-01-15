@@ -9,6 +9,7 @@ public class WybranaDruzyna extends Observable{
         notifyObservers();
     }
     public WybranaDruzyna(){}
+    
     public void setWybranaliga(String wybranaliga){
         this.wybranaliga = wybranaliga;
     }

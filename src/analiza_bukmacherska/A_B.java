@@ -9,7 +9,7 @@ public class A_B{
     z3_TeamVsTeam team;
     z4_Prognozy prognozy;
     MenuDolne menu ;
-    static void rysuj() throws SQLException, ClassNotFoundException {
+    static void rysuj() throws SQLException, ClassNotFoundException, Exception {
         JFrame f=new JFrame();
         f.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         f.setTitle("Analiza Bukmacherska");
@@ -37,7 +37,7 @@ public class A_B{
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     }
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    /*public static void main(String[] args) throws SQLException, ClassNotFoundException, Exception {
         rysuj();
-    }
+    }*/
 }

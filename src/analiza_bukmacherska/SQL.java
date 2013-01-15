@@ -56,7 +56,50 @@ public class SQL {
 +"KX REAL,"
 +"K2 REAL);");
     }
-    
+    public void insert_do_kursy(Kurs_Baza KB) throws SQLException{
+        PreparedStatement prep = con
+          .prepareStatement("INSERT INTO Kursy VALUES(?,?,?,?,?,?,?);");
+        if(KB.div!=null){
+            prep.setString(1, KB.div);
+            System.out.println(KB.div);
+        }else{
+            prep.setNull(1,java.sql.Types.VARCHAR);
+        }
+        if(KB.date!=null){
+            prep.setInt(2, KB.date);
+        }else{
+            prep.setNull(2,java.sql.Types.INTEGER);
+        }
+        if(KB.hometeam!=null){
+            prep.setString(3, KB.hometeam);
+        }else{
+            prep.setNull(3,java.sql.Types.VARCHAR);
+        }
+        if(KB.awayteam!=null){
+            prep.setString(4, KB.awayteam);
+        }else{
+            prep.setNull(4,java.sql.Types.VARCHAR);
+        }
+        if(KB.k1!=null){
+            prep.setDouble(5, KB.k1);
+        }else{
+            prep.setNull(5, java.sql.Types.DOUBLE);
+        }
+        if(KB.kx!=null){
+            prep.setDouble(6, KB.kx);
+        }else{
+            prep.setNull(6, java.sql.Types.DOUBLE);
+        }
+        if(KB.k2!=null){
+            prep.setDouble(7, KB.k2);
+        }else{
+            prep.setNull(7, java.sql.Types.DOUBLE);
+        }
+        //prep.addBatch();
+        //prep.executeBatch();
+        boolean rows = prep.execute();
+       
+    }
     public void insert_do_statystyk(Mecz_stat MS) throws SQLException{
         PreparedStatement prep = con
           .prepareStatement("INSERT INTO MECZE_STATYSTYKI VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
