@@ -3,7 +3,7 @@ public class Kurs_Baza {
     String div;
     Integer date;
     String hometeam;
-    String awayteam;
+    String awayteam; 
     Double k1;
     Double kx;
     Double k2;
