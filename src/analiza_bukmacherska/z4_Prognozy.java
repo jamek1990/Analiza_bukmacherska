@@ -13,6 +13,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.math.*;
 import java.util.Vector;
+import java.util.Random;
         
 
 public class z4_Prognozy extends JLayeredPane{
@@ -36,11 +37,29 @@ public class z4_Prognozy extends JLayeredPane{
     JLabel buttonOM;
     JLabel buttonAM;
     int money;
+    
+    SQL database;
+    Vector<String> hometeam = new Vector<String>();
+    Vector<String> awayteam = new Vector<String>();
+    Vector<String> ligue = new Vector<String>();
+    Vector<Double> H_A = new Vector<Double>();
+    Vector<Double> A_H = new Vector<Double>();
+    Vector<String> hometeam1 = new Vector<String>();
+    Vector<String> awayteam1 = new Vector<String>();
+    Vector<Date> data1 = new Vector<Date>();
+    Vector<String> ligue1 = new Vector<String>();
+    Vector<Integer> H = new Vector<Integer>();
+    Vector<Integer> A = new Vector<Integer>();  
+    
     public z4_Prognozy(){      
         setLocation(0,0);
         setBounds(0, 0, 1024, 600);
-        
-        //generate();
+        try{
+        generate();
+        }
+        catch(Exception ex){}
+        setWindows();
+        /*
         String[] names = {"Borusia","Dortmundt","Real","Madrit"};
         double[] courses = {2.6, 2.7, 2.9, 2.68};
         double[] preView = {0.6, 0.7, 0.9, 0.68};
@@ -52,8 +71,8 @@ public class z4_Prognozy extends JLayeredPane{
             this.names[i] = names[i];
             this.courses[i] = courses[i];
             this.preView[i] = preView[i];
-        }
-        setWindows();
+        }*/
+
     }    
     public z4_Prognozy(String[] namesBis, double[] coursesBis, double[] preViewBis) {
         //if (namesBis.length == coursesBis.length && coursesBis.length == preViewBis.length){
@@ -279,7 +298,160 @@ public class z4_Prognozy extends JLayeredPane{
         return p*k-1.0;
     }
 
-    private void generate(){
+    private void generate() throws SQLException, ClassNotFoundException{
+        database = new SQL();
+        Statement stat;
+        stat = database.con.createStatement(); 
+        String query = "";
+        //String today = System.
+        query = "select div, hometeam, awayteam, k1, k2 from Kursy where data > curdate() and (k1 > 1.8 or k2 > 1.8)";
+        ResultSet rs = stat.executeQuery(query);
+
+        while (rs.next()) {
+            hometeam.add(rs.getString(2));
+            awayteam.add(rs.getString(3));
+            ligue.add(rs.getString(1));
+            H_A.add(Double.parseDouble(rs.getString(4)));
+            A_H.add(Double.parseDouble(rs.getString(5)));
+        }
+        rs.deleteRow();       
+                   
+        query = "select Div, DATA, HomeTeam as HT, AwayTeam as AT, FTHG, FTAG from (select top 3 Div, DATA, HomeTeam, AwayTeam, FTHG, FTAG from MECZE_STATYSTYKI where HomeTeam = HT or AwayTeam  = HT or AwayTeam = AT or HomeTeam = AT ordered by data desc) ordered by data desc";
+        ResultSet rs1 = stat.executeQuery(query);
+        while (rs1.next()) {
+            hometeam1.add(rs1.getString(3));
+            awayteam1.add(rs1.getString(4));
+            ligue1.add(rs1.getString(1));
+            data1.add(Date.valueOf(rs1.getString(2)));
+            H.add(Integer.parseInt(rs1.getString(5)));
+            A.add(Integer.parseInt(rs1.getString(6)));
+        }
+        rs1.deleteRow();
+        stat.close();
+        int q1 = hometeam.size();        
+        String[] names = new String[q1];
+        double[] courses = new double[q1];
+        double[] preView = new double[q1];        
         
+        int k = 0;
+        for(int i = 0; i < q1; ++i)
+        {
+            if(H_A.get(i) > 1.8){
+                int rangeH = hRange(i);
+                int rangeA = aRange(i);                
+                if (H_A.get(i)*(rangeH - rangeA)/100 > 0.1){
+                    names[k] = hometeam.get(i) + ".vs." + awayteam.get(i);
+                    courses[k] = H_A.get(i);
+                    preView[k] = (rangeH - rangeA)/100;
+                }
+                k++;
+            }
+            else if(A_H.get(i) > 1.8){
+                int rangeH = hRange(i);
+                int rangeA = aRange(i);                
+                if (H_A.get(i)*(rangeA - rangeH)/100 > 0.1){
+                    names[k] = awayteam.get(i) + ".vs." + hometeam.get(i);
+                    courses[k] = A_H.get(i);
+                    preView[k] = (rangeA - rangeH)/100;
+                }                
+                k++;
+            }
+        }
+        if(k!=0){
+            this.names = new String[k];
+            this.courses = new double[k];
+            this.preView = new double[k]; 
+            while (k > 0){
+            this.names[k] = names[k];
+            this.courses[k] = courses[k];
+            this.preView[k] = preView[k]; 
+            }
+        }
+    }
+    
+    int hRange(int i){
+        int q2 = hometeam1.size();        
+        int rangeH = 0;
+        boolean a,b,c;        
+        int j = 0;
+        for(; j < q2; ++j){
+            if(hometeam.get(i).equals(hometeam1.get(j))){
+                a = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(hometeam.get(i).equals(awayteam1.get(j))){
+                a = (H.get(j) > A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(hometeam.get(i).equals(hometeam1.get(j))){
+                b = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(hometeam.get(i).equals(awayteam1.get(j))){
+                b = (H.get(j) > A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(hometeam.get(i).equals(hometeam1.get(j))){
+                c = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(hometeam.get(i).equals(awayteam1.get(j))){
+                c = (H.get(j) > A.get(j));
+                break;
+            }
+            else continue;
+        }
+        Random rand = new Random();
+        return (int)rand.nextInt()%100;
+        //return rangeH;
+    }
+    int aRange(int i){
+        int rangeA = 0;
+        int q2 = hometeam1.size(); 
+        boolean a,b,c;
+        int k = 0;
+        int j = 0;
+        for(; j < q2; ++j){
+            if(awayteam.get(i).equals(hometeam1.get(j))){
+                a = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(awayteam.get(i).equals(awayteam1.get(j))){
+                a = (H.get(j) > A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(awayteam.get(i).equals(hometeam1.get(j))){
+                b = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(awayteam.get(i).equals(awayteam1.get(j))){
+                b = (H.get(j) > A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(awayteam.get(i).equals(hometeam1.get(j))){
+                c = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(awayteam.get(i).equals(awayteam1.get(j))){
+                c = (H.get(j) > A.get(j));
+                break;
+            }
+            else continue;
+        } 
+        Random rand = new Random();
+        return (int)rand.nextInt()%100;
+        //return rangeA;
     }
 }
