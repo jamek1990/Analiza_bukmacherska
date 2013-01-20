@@ -101,11 +101,38 @@ public class z4_Prognozy extends JLayeredPane{
         }); 
         buttonAM.addMouseListener(new java.awt.event.MouseAdapter(){
             public void mouseClicked(java.awt.event.MouseEvent evt) {agresiveMethode();}
-        });  
-        
-        buttonLM.setIcon(new javax.swing.ImageIcon("images/low.jpg"));          
-        buttonOM.setIcon(new javax.swing.ImageIcon("images/opt.jpg"));
-        buttonAM.setIcon(new javax.swing.ImageIcon("images/agr.jpg"));
+        });          
+        buttonLM.addMouseListener(new java.awt.event.MouseAdapter(){
+            public void mouseEntered(java.awt.event.MouseEvent evt) {buttonLM.setIcon(new javax.swing.ImageIcon("images/low1.jpg")); }
+        });   
+        buttonOM.addMouseListener(new java.awt.event.MouseAdapter(){
+            public void mouseEntered(java.awt.event.MouseEvent evt) {buttonOM.setIcon(new javax.swing.ImageIcon("images/opt1.jpg"));}
+        }); 
+        buttonAM.addMouseListener(new java.awt.event.MouseAdapter(){
+            public void mouseEntered(java.awt.event.MouseEvent evt) {buttonAM.setIcon(new javax.swing.ImageIcon("images/agr1.jpg"));}
+        });         
+        buttonLM.addMouseListener(new java.awt.event.MouseAdapter(){
+            public void mouseReleased(java.awt.event.MouseEvent evt) {buttonLM.setIcon(new javax.swing.ImageIcon("images/low2.jpg")); }
+        });   
+        buttonOM.addMouseListener(new java.awt.event.MouseAdapter(){
+            public void mouseReleased(java.awt.event.MouseEvent evt) {buttonOM.setIcon(new javax.swing.ImageIcon("images/opt2.jpg"));}
+        }); 
+        buttonAM.addMouseListener(new java.awt.event.MouseAdapter(){
+            public void mouseReleased(java.awt.event.MouseEvent evt) {buttonAM.setIcon(new javax.swing.ImageIcon("images/agr2.jpg"));}
+        });     
+        buttonLM.addMouseListener(new java.awt.event.MouseAdapter(){
+            public void mouseExited(java.awt.event.MouseEvent evt) {buttonLM.setIcon(new javax.swing.ImageIcon("images/low2.jpg")); }
+        });   
+        buttonOM.addMouseListener(new java.awt.event.MouseAdapter(){
+            public void mouseExited(java.awt.event.MouseEvent evt) {buttonOM.setIcon(new javax.swing.ImageIcon("images/opt2.jpg"));}
+        }); 
+        buttonAM.addMouseListener(new java.awt.event.MouseAdapter(){
+            public void mouseExited(java.awt.event.MouseEvent evt) {buttonAM.setIcon(new javax.swing.ImageIcon("images/agr2.jpg"));}
+        });         
+             
+        buttonLM.setIcon(new javax.swing.ImageIcon("images/low2.jpg"));          
+        buttonOM.setIcon(new javax.swing.ImageIcon("images/opt2.jpg"));
+        buttonAM.setIcon(new javax.swing.ImageIcon("images/agr2.jpg"));
         
         add(buttonLM);
         add(buttonOM);                
