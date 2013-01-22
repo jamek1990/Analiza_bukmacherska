@@ -33,6 +33,8 @@ public class Intro {//implements ActionListener {
     private JButton mOrderButton;
     private JLabel jB_exit;
     private JFrame f;
+    public SQL sql;
+    public Robot rob;
     public void createUI() throws IOException
     {
         f = new JFrame();
@@ -59,6 +61,12 @@ public class Intro {//implements ActionListener {
                 jB_aktualizacja.setVisible(false);
                 jB_program.setVisible(false);
                 jB_exit.setVisible(false);
+                rob = new Robot();
+                try {
+                    rob.RefreshNewKurs();
+                } catch (Exception ex) {
+                    Logger.getLogger(Intro.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 layerUI.start();
                 if (!stopper.isRunning()) {
                     stopper.start();
@@ -97,7 +105,7 @@ public class Intro {//implements ActionListener {
     }
     
     private ImagePanel createPanel() throws IOException {
-        ImagePanel p = new ImagePanel(new ImageIcon("images/tlo.jpg").getImage());
+        ImagePanel p = new ImagePanel(new ImageIcon("images/intro.png").getImage());
         
         p.setLayout(null);
         jB_aktualizacja = new JLabel("Aktualizacja bazy");

@@ -84,6 +84,7 @@ public class Robot {
     }
     public void RefreshNewKurs() throws Exception {
         SQL sql = new SQL();
+        sql.clear_stare_kursy();
         URL url = new URL("http://www.football-data.co.uk/fixtures.csv" );
         String kur[]= new String[7];
         URLConnection con = url.openConnection();
@@ -91,22 +92,12 @@ public class Robot {
         BufferedReader buff= new BufferedReader(inStream);
         String content2 = buff.readLine();
         content2 = buff.readLine();
-        content2 = buff.readLine();
-        content2 = buff.readLine();
-        content2 = buff.readLine();
-        content2 = buff.readLine();
-        content2 = buff.readLine();
-        content2 = buff.readLine();
-        content2 = buff.readLine();
-        content2 = buff.readLine();
         while (content2 !=null){
-            
             content2=content2.replaceAll(", ", "").replaceAll("\\s+","\\s");
             String[] kol2 = content2.split(",",-1);
             int j=0;
             for(int i=0;i<4;i++){
                 kur[j]=kol2[i];j++;
-                
             }
             for(int i=10;i<13;i++){
                 kur[j]=kol2[i];j++;
@@ -116,8 +107,8 @@ public class Robot {
             }
             Kurs_Baza k_b=new Kurs_Baza();
             k_b.zmien(kur);
+            
             sql.insert_do_kursy(k_b);
-            //
             content2 = buff.readLine();       
         }
         sql.con.close(); 

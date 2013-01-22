@@ -1,10 +1,14 @@
 package analiza_bukmacherska;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -55,6 +59,22 @@ public class SQL {
 +"K1 REAL,"
 +"KX REAL,"
 +"K2 REAL);");
+    }
+
+    public void clear_stare_kursy()throws SQLException{
+        DateFormat dateFormat = new SimpleDateFormat("dd");
+        DateFormat dateFormat2 = new SimpleDateFormat("MM");
+        DateFormat dateFormat3 = new SimpleDateFormat("yy");
+        Calendar cal = Calendar.getInstance();
+        String s =dateFormat.format(cal.getTime());
+        String s2 =dateFormat2.format(cal.getTime());
+        String s3 =dateFormat3.format(cal.getTime());
+        Integer date2=Integer.parseInt(s)+Integer.parseInt(s2)*100+(Integer.parseInt(s3)+2000)*10000;
+        System.out.println(date2);
+        PreparedStatement prep = con
+          .prepareStatement("Delete From Kursy;");// Where Data<'"+date2+"';");
+        boolean rows = prep.execute();
+        
     }
     public void insert_do_kursy(Kurs_Baza KB) throws SQLException{
         PreparedStatement prep = con
