@@ -55,7 +55,17 @@ public class Kursy extends JLayeredPane implements Observer{
         while (rs.next()) {
             rs.getString(1);
             i++;
-            Kurs kurs = new Kurs("2012-12-27",rs.getString(2),rs.getString(3),Double.toString(rs.getDouble(4)),Double.toString(rs.getDouble(5)),Double.toString(rs.getDouble(6)));
+            String d = rs.getString(1);
+            String d2=d.substring(0, 4)+"-";
+            if(d.substring(4, 6).length()==1){
+                d2+="0";
+            }
+            d2+=d.substring(4, 6)+"-";
+            if(d.substring(6, 8).length()==1){
+                d2+="0";
+            }
+            d2+=d.substring(6, 8);
+            Kurs kurs = new Kurs(d2,rs.getString(2),rs.getString(3),Double.toString(rs.getDouble(4)),Double.toString(rs.getDouble(5)),Double.toString(rs.getDouble(6)));
             kurs.setBounds(8,i*33+3, 758, 30);
             add(kurs);
         }
