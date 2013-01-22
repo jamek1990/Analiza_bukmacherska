@@ -105,16 +105,16 @@ public class Intro {//implements ActionListener {
     }
     
     private ImagePanel createPanel() throws IOException {
-        ImagePanel p = new ImagePanel(new ImageIcon("images/intro.png").getImage());
+        ImagePanel p = new ImagePanel(new ImageIcon("images/intro2.png").getImage());
         
         p.setLayout(null);
         jB_aktualizacja = new JLabel("Aktualizacja bazy");
         jB_program = new JLabel("Uruchom program");
         jB_exit = new JLabel("Zamknij program");
-        
-        jB_aktualizacja.setBounds(300, 195, 190, 30);
-        jB_program.setBounds(300, 230, 190, 30);
-        jB_exit.setBounds(300, 265, 190, 30);
+        jB_aktualizacja.setBounds(160, 195, 230, 30);
+        //jB_aktualizacja.setBounds(360, 195, 230, 30);
+        jB_program.setBounds(360, 230, 230, 30);
+        jB_exit.setBounds(360, 265, 230, 30);
         //jB_program.addActionListener(this);
         //jB_program.setActionCommand("open");
 
