@@ -108,13 +108,15 @@ public class Intro {//implements ActionListener {
         ImagePanel p = new ImagePanel(new ImageIcon("images/intro2.png").getImage());
         
         p.setLayout(null);
-        jB_aktualizacja = new JLabel("Aktualizacja bazy");
-        jB_program = new JLabel("Uruchom program");
-        jB_exit = new JLabel("Zamknij program");
-        jB_aktualizacja.setBounds(160, 195, 230, 30);
+        jB_aktualizacja = new JLabel("           ");
+        jB_program = new JLabel("          ");
+        jB_exit = new JLabel("        ");
+        jB_exit.setBounds(90, 155, 230, 30);
+        jB_aktualizacja.setBounds(200, 155, 100, 30);
+        jB_program.setBounds(320, 155, 230, 30);
         //jB_aktualizacja.setBounds(360, 195, 230, 30);
-        jB_program.setBounds(360, 230, 230, 30);
-        jB_exit.setBounds(360, 265, 230, 30);
+        //jB_program.setBounds(360, 230, 230, 30);
+        //jB_exit.setBounds(360, 265, 230, 30);
         //jB_program.addActionListener(this);
         //jB_program.setActionCommand("open");
 
