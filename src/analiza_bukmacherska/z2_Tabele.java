@@ -43,12 +43,12 @@ public class z2_Tabele extends JLayeredPane{
         jLabel3 =new  JLabel();
         jP_Archiwum= new  m1_okienko(230,371,780,235,"ARCHIWUM");
         setBounds(0, 0, 1024, 530);
-        jP_StatystykiMeczow = new  m1_okienko(250,201,410,375,"WSKAŹNIKI FORMY");
-        jP_OstatnieWyniki= new  m1_okienko(344,201,667,375,"OSTATNIE WYNIKI");
+        //jP_StatystykiMeczow = new  m1_okienko(250,201,410,375,"WSKAŹNIKI FORMY");
+        jP_OstatnieWyniki= new  m1_okienko(364,201,410,388,"OSTATNIE WYNIKI");
         forma2 = new JLabel();
-        forma2.setIcon(new javax.swing.ImageIcon("images/forma2.png"));
-        jP_StatystykiMeczow.add(forma2);
-        forma2.setBounds(0, 20, 261, 125);
+        //forma2.setIcon(new javax.swing.ImageIcon("images/forma2.png"));
+       // jP_StatystykiMeczow.add(forma2);
+       // forma2.setBounds(0, 20, 261, 125);
         
         setBounds(0, 0, 1024, 530);
         
@@ -65,15 +65,15 @@ public class z2_Tabele extends JLayeredPane{
        // mtabelaLigowa = new TabelaLigowa(wybranaLiga);//,wybranaDruzyna);
         add(mwybierzLige);
         add(mtabelaLigowa);
-        add(jP_StatystykiMeczow);
+       // add(jP_StatystykiMeczow);
         jP_OstatnieWyniki.dodajPodzial();
         add(jP_OstatnieWyniki);
         add(jP_Archiwum);
         
-        jP_WskaznikiFormy = new  m1_okienko(400,201,3,375,"WSKAŹNIKI FORMY");
+        jP_WskaznikiFormy = new  m1_okienko(400,181,3,388,"WSKAŹNIKI FORMY");
         jP_WskaznikiFormy.add(form);
         jP_WskaznikiFormy.dodajPodzial();
-        form.setBounds(0, 0, 541, 150);
+        form.setBounds(0, 0, 541, 130);
         jP_WskaznikiFormy.setBackground(new java.awt.Color(209, 210, 211));
         jP_WskaznikiFormy.setOpaque(true);
         add(jP_WskaznikiFormy);

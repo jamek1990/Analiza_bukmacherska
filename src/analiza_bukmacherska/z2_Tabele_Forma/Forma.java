@@ -66,7 +66,7 @@ public class Forma extends JLabel implements Observer{
             String wyn = rs.getString(4) + "-" + rs.getString(5);
             Spotkanie spot2 = new Spotkanie(wyn,team2,66+5*i,wygrana);
             add(spot2);
-            spot2.setBounds(12+62*i, 77-5*i, 59, 66+5*i);
+            spot2.setBounds(12+62*i, 60-5*i, 59, 66+5*i);
             add(spot2);
         }
     }

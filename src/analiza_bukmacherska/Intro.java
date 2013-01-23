@@ -64,6 +64,7 @@ public class Intro {//implements ActionListener {
                 rob = new Robot();
                 try {
                     rob.RefreshNewKurs();
+                    rob.RefreshDataBase();
                 } catch (Exception ex) {
                     Logger.getLogger(Intro.class.getName()).log(Level.SEVERE, null, ex);
                 }

@@ -6,7 +6,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class Robot {
-    private void RefreshDataBase(java.awt.event.MouseEvent evt) throws Exception {
+    public void RefreshDataBase() throws Exception {
         String ligi[]={"P1","I1","G1","D1","D2","E0","E1","E2","E3","EC","F1","F2","B1","I2","N1","SC0","SC1","SC2","SC3","SP1","SP2","T1"};
         String kolumny[]={"Div","Date","HomeTeam","AwayTeam","FTHG","FTAG","FTR","HTHG","HTAG","HTR","HS","AS","HST","AST","HHW","AHW","HC","AC","HF","AF","HO","AO","HY","AY","HR","AR"};
         String kolumny2[]={"***","***","HT","AT"};
@@ -15,8 +15,9 @@ public class Robot {
         int[] gdzie = new int[29];
         int gdzie_size=0;
         SQL sql = new SQL();
+        sql.clear_stare_mecze();
         for(int i=0;i<ligi.length;i++){
-            for(int j = 111;j<113;j++){
+            for(int j = 112;j<113;j++){
                 String data="";
                 String data_od="";
                 String data_do="";

@@ -37,7 +37,7 @@ public class TabelaLigowa extends JLayeredPane implements Observer{
         observable.addObserver(this);
         this.wybranaDruzyna = wybranaDruzyna;
         
-        jP_OknoTabela = new  m1_okienko(770,371,3,3,"TABELA LIGOWA");
+        jP_OknoTabela = new  m1_okienko(770,381,3,3,"TABELA LIGOWA");
         jP_OknoTabela.dodajPodzial();
  
         
@@ -119,7 +119,8 @@ public class TabelaLigowa extends JLayeredPane implements Observer{
         Dodaj_Paski();
         add(jP_OknoTabela);
         //770,371,3,3,
-        setBounds(3, 3, 770, 371);
+        setBounds(3, 3, 770, 391);
+        Tabelka_dane("E0");
     }
     
     public void update(Observable obs, Object arg) {

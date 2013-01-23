@@ -74,7 +74,11 @@ public class SQL {
         PreparedStatement prep = con
           .prepareStatement("Delete From Kursy;");// Where Data<'"+date2+"';");
         boolean rows = prep.execute();
-        
+    }
+    public void clear_stare_mecze()throws SQLException{
+        PreparedStatement prep = con
+          .prepareStatement("Delete From MECZE_STATYSTYKI Where Data>'20120701';");
+        boolean rows = prep.execute();
     }
     public void insert_do_kursy(Kurs_Baza KB) throws SQLException{
         PreparedStatement prep = con
