@@ -14,6 +14,10 @@ import java.net.URLConnection;
 import java.math.*;
 import java.util.Vector;
 import java.util.Random;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.util.Calendar;
+
         
 
 public class z4_Prognozy extends JLayeredPane{
@@ -46,7 +50,7 @@ public class z4_Prognozy extends JLayeredPane{
     Vector<Double> A_H = new Vector<Double>();
     Vector<String> hometeam1 = new Vector<String>();
     Vector<String> awayteam1 = new Vector<String>();
-    Vector<Date> data1 = new Vector<Date>();
+    Vector<Integer> data1 = new Vector<Integer>();
     Vector<String> ligue1 = new Vector<String>();
     Vector<Integer> H = new Vector<Integer>();
     Vector<Integer> A = new Vector<Integer>();  
@@ -57,7 +61,7 @@ public class z4_Prognozy extends JLayeredPane{
         try{
         generate();
         }
-        catch(Exception ex){}
+        catch(Exception ex){System.out.println(ex.getMessage());}
         setWindows();
         /*
         String[] names = {"Borusia","Dortmundt","Real","Madrit"};
@@ -198,8 +202,13 @@ public class z4_Prognozy extends JLayeredPane{
         text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option));
         textFrame.setText(text);
     }
+    private void setResult(){
+        String text = "Przykro nam, ale zespoły, które tej chwili grają nie pozostawiają możliwości prognozowania wyników.";
+        textFrame.setText(text);
+    }
     
-    private void lameMethode(){   
+    private void lameMethode(){  
+        if(names.length == 0) setResult();
         countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
@@ -225,6 +234,7 @@ public class z4_Prognozy extends JLayeredPane{
         setResult(table);
     }
     private void optimalMethode(){        
+        if(names.length == 0) setResult();        
         double max = 0.3*countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
@@ -246,6 +256,7 @@ public class z4_Prognozy extends JLayeredPane{
         setResult(table);
     }
     private void agresiveMethode(){        
+        if(names.length == 0) setResult();
         double max = 0.75*countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
@@ -330,10 +341,16 @@ public class z4_Prognozy extends JLayeredPane{
         Statement stat;
         stat = database.con.createStatement(); 
         String query = "";
-        //String today = System.
-        query = "select div, hometeam, awayteam, k1, k2 from Kursy where data > curdate() and (k1 > 1.8 or k2 > 1.8)";
+        DateFormat dateFormat = new SimpleDateFormat("dd");
+        DateFormat dateFormat2 = new SimpleDateFormat("MM");
+        DateFormat dateFormat3 = new SimpleDateFormat("yy");
+        Calendar cal = Calendar.getInstance();
+        String s =dateFormat.format(cal.getTime());
+        String s2 =dateFormat2.format(cal.getTime());
+        String s3 =dateFormat3.format(cal.getTime());
+        Integer date2=Integer.parseInt(s)+Integer.parseInt(s2)*100+(Integer.parseInt(s3)+2000)*10000;
+        query = "select div, hometeam, awayteam, k1, k2 from Kursy where data > '" + date2 + "' and (k1 > '1.8' or k2 > '1.8')";
         ResultSet rs = stat.executeQuery(query);
-
         while (rs.next()) {
             hometeam.add(rs.getString(2));
             awayteam.add(rs.getString(3));
@@ -341,19 +358,16 @@ public class z4_Prognozy extends JLayeredPane{
             H_A.add(Double.parseDouble(rs.getString(4)));
             A_H.add(Double.parseDouble(rs.getString(5)));
         }
-        rs.deleteRow();       
-                   
-        query = "select Div, DATA, HomeTeam as HT, AwayTeam as AT, FTHG, FTAG from (select top 3 Div, DATA, HomeTeam, AwayTeam, FTHG, FTAG from MECZE_STATYSTYKI where HomeTeam = HT or AwayTeam  = HT or AwayTeam = AT or HomeTeam = AT ordered by data desc) ordered by data desc";
-        ResultSet rs1 = stat.executeQuery(query);
-        while (rs1.next()) {
+        query = "select DIV, DATA, HomeTeam, AwayTeam, FTHG, FTAG from MECZE_STATYSTYKI order by data desc";
+        ResultSet rs1 = stat.executeQuery(query);   
+        while (rs1.next()) {          
             hometeam1.add(rs1.getString(3));
             awayteam1.add(rs1.getString(4));
             ligue1.add(rs1.getString(1));
-            data1.add(Date.valueOf(rs1.getString(2)));
+            data1.add(Integer.parseInt(rs1.getString(2)));
             H.add(Integer.parseInt(rs1.getString(5)));
             A.add(Integer.parseInt(rs1.getString(6)));
         }
-        rs1.deleteRow();
         stat.close();
         int q1 = hometeam.size();        
         String[] names = new String[q1];
@@ -363,10 +377,11 @@ public class z4_Prognozy extends JLayeredPane{
         int k = 0;
         for(int i = 0; i < q1; ++i)
         {
-            if(H_A.get(i) > 1.8){
+            if(H_A.get(i) > 1.8 && H_A.get(i) > A_H.get(i)){
                 int rangeH = hRange(i);
-                int rangeA = aRange(i);                
-                if (H_A.get(i)*(rangeH - rangeA)/100 > 0.1){
+                int rangeA = aRange(i);
+                System.out.println(rangeH + " " + rangeA);
+                if (H_A.get(i)*(double)(rangeH - rangeA)/100.0 > 0.1){
                     names[k] = hometeam.get(i) + ".vs." + awayteam.get(i);
                     courses[k] = H_A.get(i);
                     preView[k] = (rangeH - rangeA)/100;
@@ -375,8 +390,9 @@ public class z4_Prognozy extends JLayeredPane{
             }
             else if(A_H.get(i) > 1.8){
                 int rangeH = hRange(i);
-                int rangeA = aRange(i);                
-                if (H_A.get(i)*(rangeA - rangeH)/100 > 0.1){
+                int rangeA = aRange(i); 
+                System.out.println(rangeH + " " + rangeA);                
+                if (H_A.get(i)*(double)(rangeA - rangeH)/100.0 > 0.1){
                     names[k] = awayteam.get(i) + ".vs." + hometeam.get(i);
                     courses[k] = A_H.get(i);
                     preView[k] = (rangeA - rangeH)/100;
@@ -394,12 +410,16 @@ public class z4_Prognozy extends JLayeredPane{
             this.preView[k] = preView[k]; 
             }
         }
+        q1 = names.length;
+        for(int i = 0; i < q1; i++){
+            System.out.println(names[i] + " " + preView[i] + " " + courses[i]);
+        }       
     }
     
     int hRange(int i){
         int q2 = hometeam1.size();        
-        int rangeH = 0;
-        boolean a,b,c;        
+        int rangeH = 50;
+        boolean a = false,b = false,c = false;        
         int j = 0;
         for(; j < q2; ++j){
             if(hometeam.get(i).equals(hometeam1.get(j))){
@@ -407,9 +427,52 @@ public class z4_Prognozy extends JLayeredPane{
                 break;
             }
             else if(hometeam.get(i).equals(awayteam1.get(j))){
+                a = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(hometeam.get(i).equals(hometeam1.get(j))){
+                b = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(hometeam.get(i).equals(awayteam1.get(j))){
+                b = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(hometeam.get(i).equals(hometeam1.get(j))){
+                c = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(hometeam.get(i).equals(awayteam1.get(j))){
+                c = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        if(a) rangeH+=5;
+        else  rangeH-=5;
+        if(b) rangeH+=5;
+        else  rangeH-=5;
+        if(c) rangeH+=5;
+        else  rangeH-=5;
+        if(a && b && c) rangeH+=20;
+        else if(a && b && !c) rangeH+=25;
+        else if(!a && !b && c) rangeH-=15;
+        else if(!a && !b && !c) rangeH-=25; //kiedyś będzie trzeba się temu przyjrzeć dokłądniej. 
+        for(j = 0; j < q2; ++j){
+            if(hometeam.get(i).equals(hometeam1.get(j)) && awayteam.get(i).equals(awayteam1.get(j))){
                 a = (H.get(j) > A.get(j));
                 break;
             }
+            else if(hometeam.get(i).equals(awayteam1.get(j)) && awayteam.get(i).equals(hometeam1.get(j))){
+                a = (H.get(j) < A.get(j));
+                break;
+            }
             else continue;
         }
         for(; j < q2; ++j){
@@ -418,7 +481,7 @@ public class z4_Prognozy extends JLayeredPane{
                 break;
             }
             else if(hometeam.get(i).equals(awayteam1.get(j))){
-                b = (H.get(j) > A.get(j));
+                b = (H.get(j) < A.get(j));
                 break;
             }
             else continue;
@@ -429,20 +492,22 @@ public class z4_Prognozy extends JLayeredPane{
                 break;
             }
             else if(hometeam.get(i).equals(awayteam1.get(j))){
-                c = (H.get(j) > A.get(j));
+                c = (H.get(j) < A.get(j));
                 break;
             }
             else continue;
         }
-        Random rand = new Random();
-        return (int)rand.nextInt()%100;
-        //return rangeH;
+        int p = 0;
+        if(a) p++; 
+        if(b) p++;
+        if(c) p++;
+        if(p>=2) rangeH+=10;
+        return rangeH;
     }
     int aRange(int i){
-        int rangeA = 0;
-        int q2 = hometeam1.size(); 
-        boolean a,b,c;
-        int k = 0;
+        int q2 = hometeam1.size();        
+        int rangeA = 50;
+        boolean a = false,b = false,c = false;        
         int j = 0;
         for(; j < q2; ++j){
             if(awayteam.get(i).equals(hometeam1.get(j))){
@@ -450,35 +515,81 @@ public class z4_Prognozy extends JLayeredPane{
                 break;
             }
             else if(awayteam.get(i).equals(awayteam1.get(j))){
+                a = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(awayteam.get(i).equals(hometeam1.get(j))){
+                b = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(awayteam.get(i).equals(awayteam1.get(j))){
+                b = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(awayteam.get(i).equals(hometeam1.get(j))){
+                c = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(awayteam.get(i).equals(awayteam1.get(j))){
+                c = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        if(a) rangeA+=5;
+        else  rangeA-=5;
+        if(b) rangeA+=5;
+        else  rangeA-=5;
+        if(c) rangeA+=5;
+        else  rangeA-=5;
+        if(a && b && c) rangeA+=20;
+        else if(a && b && !c) rangeA+=25;
+        else if(!a && !b && c) rangeA-=15;
+        else if(!a && !b && !c) rangeA-=25; //kiedyś będzie trzeba się temu przyjrzeć dokłądniej. 
+        for(j = 0; j < q2; ++j){
+            if(awayteam.get(i).equals(hometeam1.get(j)) && hometeam.get(i).equals(awayteam1.get(j))){
                 a = (H.get(j) > A.get(j));
                 break;
             }
-            else continue;
-        }
-        for(; j < q2; ++j){
-            if(awayteam.get(i).equals(hometeam1.get(j))){
-                b = (H.get(j) > A.get(j));
-                break;
-            }
-            else if(awayteam.get(i).equals(awayteam1.get(j))){
-                b = (H.get(j) > A.get(j));
+            else if(awayteam.get(i).equals(awayteam1.get(j)) && hometeam.get(i).equals(hometeam1.get(j))){
+                a = (H.get(j) < A.get(j));
                 break;
             }
             else continue;
         }
         for(; j < q2; ++j){
-            if(awayteam.get(i).equals(hometeam1.get(j))){
-                c = (H.get(j) > A.get(j));
+            if(awayteam.get(i).equals(hometeam1.get(j)) && hometeam.get(i).equals(awayteam1.get(j))){
+                b = (H.get(j) > A.get(j));
                 break;
             }
-            else if(awayteam.get(i).equals(awayteam1.get(j))){
-                c = (H.get(j) > A.get(j));
+            else if(awayteam.get(i).equals(awayteam1.get(j)) && hometeam.get(i).equals(hometeam1.get(j))){
+                b = (H.get(j) < A.get(j));
                 break;
             }
             else continue;
-        } 
-        Random rand = new Random();
-        return (int)rand.nextInt()%100;
-        //return rangeA;
+        }
+        for(; j < q2; ++j){
+            if(awayteam.get(i).equals(hometeam1.get(j)) && hometeam.get(i).equals(awayteam1.get(j))){
+                c = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(awayteam.get(i).equals(awayteam1.get(j)) && hometeam.get(i).equals(hometeam1.get(j))){
+                c = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        int p = 0;
+        if(a) p++; 
+        if(b) p++;
+        if(c) p++;
+        if(p>=2) rangeA+=10;
+        return rangeA;
     }
 }
