@@ -1,4 +1,5 @@
 package analiza_bukmacherska;
+import OstatnieWyniki.Ostatnie;
 import analiza_bukmacherska.z2_Tabele_Forma.Forma;
 import tabela_ligowa.*;
 import wybierz_lige.*;
@@ -31,18 +32,15 @@ public class z2_Tabele extends JLayeredPane{
     WybierzLige mwybierzLige;
     TabelaLigowa mtabelaLigowa;
     m1_okienko  jP_WskaznikiFormy;
-    m1_okienko  jP_StatystykiMeczow;
     m1_okienko  jP_OstatnieWyniki;
-    m1_okienko  jP_Archiwum;
     JLabel jLabel3;
     String wybrana_liga;
     Forma form;
+    Ostatnie ostatnie;
     SQL database;
    
     public z2_Tabele() throws SQLException, ClassNotFoundException{
         jLabel3 =new  JLabel();
-        jP_Archiwum= new  m1_okienko(230,371,780,235,"ARCHIWUM");
-        setBounds(0, 0, 1024, 530);
         //jP_StatystykiMeczow = new  m1_okienko(250,201,410,375,"WSKAŹNIKI FORMY");
         jP_OstatnieWyniki= new  m1_okienko(364,201,410,388,"OSTATNIE WYNIKI");
         forma2 = new JLabel();
@@ -58,6 +56,7 @@ public class z2_Tabele extends JLayeredPane{
         WybranaDruzyna wybranaDruzyna = new WybranaDruzyna();
         
         form = new Forma(wybranaDruzyna);
+        ostatnie = new Ostatnie(wybranaDruzyna);
         mtabelaLigowa = new TabelaLigowa(wybranaLiga,wybranaDruzyna);
         mwybierzLige = new WybierzLige(wybranaLiga);
        
@@ -66,13 +65,18 @@ public class z2_Tabele extends JLayeredPane{
         add(mwybierzLige);
         add(mtabelaLigowa);
        // add(jP_StatystykiMeczow);
-        jP_OstatnieWyniki.dodajPodzial();
+        //jP_OstatnieWyniki.dodajPodzial();
+        jP_OstatnieWyniki.add(ostatnie);
+        ostatnie.setBounds(0, 0, 541, 130);
+        jP_OstatnieWyniki.setBackground(new java.awt.Color(209, 210, 211));
+        jP_OstatnieWyniki.setOpaque(true);
         add(jP_OstatnieWyniki);
-        add(jP_Archiwum);
+        
+
         
         jP_WskaznikiFormy = new  m1_okienko(400,181,3,388,"WSKAŹNIKI FORMY");
         jP_WskaznikiFormy.add(form);
-        jP_WskaznikiFormy.dodajPodzial();
+        //jP_WskaznikiFormy.dodajPodzial();
         form.setBounds(0, 0, 541, 130);
         jP_WskaznikiFormy.setBackground(new java.awt.Color(209, 210, 211));
         jP_WskaznikiFormy.setOpaque(true);
