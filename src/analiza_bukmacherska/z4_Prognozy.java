@@ -30,7 +30,7 @@ public class z4_Prognozy extends JLayeredPane{
     JPanel myResults;
     m1_okienko samplePathUp; 
     m1_okienko samplePathDown;
-            
+    boolean X = true;
     String[] names;
     double[] courses;
     double[] preView;
@@ -144,7 +144,7 @@ public class z4_Prognozy extends JLayeredPane{
         
         /////////////////////////////////////////////////////////////Czesc druga
         
-        jP_Prognozy = new m1_okienko(400,200,0,3,"Prognozy");
+        jP_Prognozy = new m1_okienko(400,200,10,10,"Prognozy");
         add(jP_Prognozy);
         /*
         JLabel chooseMyLeagueText = new JLabel();
@@ -158,57 +158,73 @@ public class z4_Prognozy extends JLayeredPane{
         add(chooseMyLeague);
         */
         JLabel myMoneyText = new JLabel();
-        myMoneyText.setText("Posiadana kwota");  
-        myMoneyText.setBounds(0, 80, 100, 35);
+        myMoneyText.setText("Posiadana kwota:");
+        myMoneyText.setBounds(10, 80, 100, 35);
         add(myMoneyText);
         
         myMoney = new JTextField();
         myMoney.setText("Tu wpisz kwote przeznaczona na gre");
-        myMoney.setBounds(105, 75, 300, 35);
+        myMoney.setBounds(115, 75, 290, 35);
         add(myMoney);
         
         myResults = new JPanel();
         textFrame = new JTextArea();
+        textFrame.setLineWrap(true);
+        textFrame.setWrapStyleWord(true);
+        textFrame.setSize(460, 300);
         textFrame.setBackground(new Color(209,210,211));
         myResults.add(textFrame);
         myResults.setBackground(new Color(209, 210, 211));
-        myResults.setBounds(0, 360, 400, 300);
+        myResults.setBounds(0, 360, 460, 300);
         add(myResults);
         ///////////////////////////////////////////////////////////czesc trzecia
         
-        okienko = new m1_okienko(400,200,0,206,"Wybierz strategię gry");
+        okienko = new m1_okienko(400,200,10,206,"Wybierz strategię gry");
         add(okienko);      
+        
+        JLabel pict1 = new JLabel(new ImageIcon("images/mp.jpg"));
+        pict1.setBounds(460,10,500,260);
+        add(pict1);
+        
+        JLabel pict2 = new JLabel(new ImageIcon("images/zp.jpg"));
+        pict2.setBounds(460,285,500,238);
+        add(pict2);
         
         buttonLM.setBounds(50,250,80,80);                
         buttonOM.setBounds(150,250,80,80);        
         buttonAM.setBounds(250,250,80,80); 
         
-        samplePathUp = new m1_okienko(500,270,410,3,""); 
-        samplePathDown = new m1_okienko(500,270,410,273,"");
-        add(samplePathUp);
-        add(samplePathDown);
+        //samplePathUp = new m1_okienko(500,270,410,3,""); 
+        //samplePathDown = new m1_okienko(500,270,410,273,"");
+        //add(samplePathUp);
+        //add(samplePathDown);
         
     }
     private void setResult(int[] table){
 
         int[] option = next(table[0]+1);
-        String text = "";
+        String text = "   ";
         for(int i = 0; i < option.length; i++){
             text += names[option[i]];
             text += ",";
         }
         text += '\n';
         text += "Szansa wygranej wynosi: " + Double.toString(getChance(option))+'\n';
-        text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option));
+        try{
+            double cash = Double.valueOf(myMoney.getText());
+            text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option)*cash) + "zl";
+        }
+        catch(Exception ex)
+        {text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option))+ " zainwestowanej kwoty.";}
         textFrame.setText(text);
     }
     private void setResult(){
-        String text = "Przykro nam, ale zespoły, które tej chwili grają nie pozostawiają możliwości prognozowania wyników.";
+        String text = "   Przykro nam, ale zespoły, które tej chwili grają nie pozostawiają możliwości prognozowania wyników.";
         textFrame.setText(text);
     }
     
     private void lameMethode(){  
-        if(names.length == 0) setResult();
+        if(X) {setResult();return;}
         countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
@@ -234,7 +250,7 @@ public class z4_Prognozy extends JLayeredPane{
         setResult(table);
     }
     private void optimalMethode(){        
-        if(names.length == 0) setResult();        
+        if(X) {setResult();return;}       
         double max = 0.3*countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
@@ -256,7 +272,7 @@ public class z4_Prognozy extends JLayeredPane{
         setResult(table);
     }
     private void agresiveMethode(){        
-        if(names.length == 0) setResult();
+        if(X) {setResult();return;}
         double max = 0.75*countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
@@ -323,7 +339,6 @@ public class z4_Prognozy extends JLayeredPane{
         //System.out.println('\n');        
         return result2;
     }    
-    //na podstawie tabeli 
     private double expectedValueOf(int[] table){
         int n = table.length;
         double k = 1.0;
@@ -370,6 +385,7 @@ public class z4_Prognozy extends JLayeredPane{
         }
         stat.close();
         int q1 = hometeam.size();        
+        if(q1 > 0) X = false;
         String[] names = new String[q1];
         double[] courses = new double[q1];
         double[] preView = new double[q1];        
