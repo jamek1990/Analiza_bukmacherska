@@ -66,6 +66,10 @@ public class z4_Prognozy extends JLayeredPane{
         }
         catch(Exception ex){System.out.println(ex.getMessage());}
         setWindows();
+        Vector<mecz> strategie = getStrategy(2,4);
+        for(int i = 0; i<strategie.size(); i++){
+            System.out.println(strategie.get(i).getTeam1() + " " + strategie.get(i).getTeam2() + " " + strategie.get(i).getTeam1R() + " " + strategie.get(i).getTeam2R() + " " + strategie.get(i).getData() + " " + strategie.get(i).getStawka() + " ");
+        }
         /*
         String[] names = {"Borusia","Dortmundt","Real","Madrit"};
         double[] courses = {2.6, 2.7, 2.9, 2.68};
@@ -228,6 +232,7 @@ public class z4_Prognozy extends JLayeredPane{
     
     public Vector<mecz> getStrategy(int Time1, int Time2){        
         Vector<mecz> strategy = new Vector<mecz>();
+        for(int i = 0; i<5; i++) strategy.add(new mecz());
         return strategy;
     }
             
