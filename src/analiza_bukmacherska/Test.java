@@ -20,7 +20,7 @@ import java.util.Calendar;
 
         
 
-public class z4_Prognozy extends JLayeredPane{
+public class Test{
     m1_okienko jP_Prognozy;
     m1_okienko okienko;
     
@@ -41,8 +41,7 @@ public class z4_Prognozy extends JLayeredPane{
     JLabel buttonOM;
     JLabel buttonAM;
     int money;
-    
-    Test test;
+     Test test;
     
     
     SQL database;
@@ -58,182 +57,21 @@ public class z4_Prognozy extends JLayeredPane{
     Vector<Integer> H = new Vector<Integer>();
     Vector<Integer> A = new Vector<Integer>();  
     
-    public z4_Prognozy(){      
-        setLocation(0,0);
-        setBounds(0, 0, 1024, 600);
+    public Test(){      
         try{
         start();
         }
         catch(Exception ex){System.out.println(ex.getMessage());}
-        setWindows();
-        /*
-        String[] names = {"Borusia","Dortmundt","Real","Madrit"};
-        double[] courses = {2.6, 2.7, 2.9, 2.68};
-        double[] preView = {0.6, 0.7, 0.9, 0.68};
-        int length = names.length;
-        this.names = new String[length];
-        this.courses = new double[length];
-        this.preView = new double[length];
-        for (int i = 0 ; i< length; i++){
-            this.names[i] = names[i];
-            this.courses[i] = courses[i];
-            this.preView[i] = preView[i];
-        }*/
-
+//        setWindows();
     }    
-    public z4_Prognozy(String[] namesBis, double[] coursesBis, double[] preViewBis) {
-        //if (namesBis.length == coursesBis.length && coursesBis.length == preViewBis.length){
-        names = namesBis;
-        courses = coursesBis;
-        preView = preViewBis;
-        //}else{throw new}
-        jP_Prognozy = new m1_okienko(400,200,0,3,"Prognozy");
-        setLocation(0,0);
-        setBounds(0, 0, 1024, 300);
-        add(jP_Prognozy);
-        setWindows();
-        
-    }
-    
-    private void setWindows(){
-        buttonLM = new JLabel();
-        buttonOM = new JLabel();
-        buttonAM = new JLabel();
-        
-        buttonLM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseClicked(java.awt.event.MouseEvent evt) {lameMethode();}
-        });   
-        buttonOM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseClicked(java.awt.event.MouseEvent evt) {optimalMethode();}
-        }); 
-        buttonAM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseClicked(java.awt.event.MouseEvent evt) {agresiveMethode();}
-        });          
-        buttonLM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseEntered(java.awt.event.MouseEvent evt) {buttonLM.setIcon(new javax.swing.ImageIcon("images/low1.jpg")); }
-        });   
-        buttonOM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseEntered(java.awt.event.MouseEvent evt) {buttonOM.setIcon(new javax.swing.ImageIcon("images/opt1.jpg"));}
-        }); 
-        buttonAM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseEntered(java.awt.event.MouseEvent evt) {buttonAM.setIcon(new javax.swing.ImageIcon("images/agr1.jpg"));}
-        });         
-        buttonLM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseReleased(java.awt.event.MouseEvent evt) {buttonLM.setIcon(new javax.swing.ImageIcon("images/low2.jpg")); }
-        });   
-        buttonOM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseReleased(java.awt.event.MouseEvent evt) {buttonOM.setIcon(new javax.swing.ImageIcon("images/opt2.jpg"));}
-        }); 
-        buttonAM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseReleased(java.awt.event.MouseEvent evt) {buttonAM.setIcon(new javax.swing.ImageIcon("images/agr2.jpg"));}
-        });     
-        buttonLM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseExited(java.awt.event.MouseEvent evt) {buttonLM.setIcon(new javax.swing.ImageIcon("images/low2.jpg")); }
-        });   
-        buttonOM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseExited(java.awt.event.MouseEvent evt) {buttonOM.setIcon(new javax.swing.ImageIcon("images/opt2.jpg"));}
-        }); 
-        buttonAM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseExited(java.awt.event.MouseEvent evt) {buttonAM.setIcon(new javax.swing.ImageIcon("images/agr2.jpg"));}
-        });         
-             
-        buttonLM.setIcon(new javax.swing.ImageIcon("images/low2.jpg"));          
-        buttonOM.setIcon(new javax.swing.ImageIcon("images/opt2.jpg"));
-        buttonAM.setIcon(new javax.swing.ImageIcon("images/agr2.jpg"));
-        
-        add(buttonLM);
-        add(buttonOM);                
-        add(buttonAM);                    
-        
-        /////////////////////////////////////////////////////////////Czesc druga
-        
-        jP_Prognozy = new m1_okienko(400,200,10,10,"Prognozy");
-        add(jP_Prognozy);
-        /*
-        JLabel chooseMyLeagueText = new JLabel();
-        chooseMyLeagueText.setBounds(0, 40, 100, 35);
-        chooseMyLeagueText.setText("Wybierz lige");
-        add(chooseMyLeagueText);
-        
-        chooseMyLeague = new JTextField();
-        chooseMyLeague.setText("To jest miejsce na rozwijane menu z ligami");
-        chooseMyLeague.setBounds(105, 40, 40, 35);
-        add(chooseMyLeague);
-        */
-        JLabel myMoneyText = new JLabel();
-        myMoneyText.setText("Posiadana kwota:");
-        myMoneyText.setBounds(10, 80, 100, 35);
-        add(myMoneyText);
-        
-        myMoney = new JTextField();
-        myMoney.setText("Tu wpisz kwote przeznaczona na gre");
-        myMoney.setBounds(115, 75, 290, 35);
-        add(myMoney);
-        
-        myResults = new JPanel();
-        textFrame = new JTextArea();
-        textFrame.setLineWrap(true);
-        textFrame.setWrapStyleWord(true);
-        textFrame.setSize(460, 300);
-        textFrame.setBackground(new Color(209,210,211));
-        myResults.add(textFrame);
-        myResults.setBackground(new Color(209, 210, 211));
-        myResults.setBounds(0, 360, 460, 300);
-        add(myResults);
-        ///////////////////////////////////////////////////////////czesc trzecia
-        
-        okienko = new m1_okienko(400,200,10,206,"Wybierz strategię gry");
-        add(okienko);      
-        
-        JLabel pict1 = new JLabel(new ImageIcon("images/mp.jpg"));
-        pict1.setBounds(460,10,500,260);
-        add(pict1);
-        
-        JLabel pict2 = new JLabel(new ImageIcon("images/zp.jpg"));
-        pict2.setBounds(460,285,500,238);
-        add(pict2);
-        
-        buttonLM.setBounds(50,250,80,80);                
-        buttonOM.setBounds(150,250,80,80);        
-        buttonAM.setBounds(250,250,80,80); 
-        
-        //samplePathUp = new m1_okienko(500,270,410,3,""); 
-        //samplePathDown = new m1_okienko(500,270,410,273,"");
-        //add(samplePathUp);
-        //add(samplePathDown);
-        
-    }
-    private void setResult(int[] table){
-
-        int[] option = next(table[0]+1);
-        String text = "   ";
-        for(int i = 0; i < option.length; i++){
-            text += names[option[i]];
-            text += ",";
-        }
-        text += '\n';
-        text += "Szansa wygranej wynosi: " + Double.toString(getChance(option))+'\n';
-        try{
-            double cash = Double.valueOf(myMoney.getText());
-            text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option)*cash) + "zl";
-        }
-        catch(Exception ex)
-        {text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option))+ " zainwestowanej kwoty.";}
-        textFrame.setText(text);
-    }
-    private void setResult(){
-        String text = "   Przykro nam, ale zespoły, które tej chwili grają nie pozostawiają możliwości prognozowania wyników.";
-        textFrame.setText(text);
-    }
     
     public Vector<mecz> getStrategy(int Time1, int Time2){        
         Vector<mecz> strategy = new Vector<mecz>();
         return strategy;
-    }
-            
+    }            
     
     private void lameMethode(){  
-        if(X) {setResult();return;}
+//        if(X) {setResult();return;}
         countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
@@ -256,10 +94,10 @@ public class z4_Prognozy extends JLayeredPane{
         //System.out.println(i);
         //System.out.println(optionsNumber.get(i));
         int[] table = {optionsNumber.get(i)};
-        setResult(table);
+//        setResult(table);
     }
     private void optimalMethode(){        
-        if(X) {setResult();return;}       
+//        if(X) {setResult();return;}       
         double max = 0.3*countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
@@ -278,10 +116,10 @@ public class z4_Prognozy extends JLayeredPane{
             i++;
         }
         int[] table = {optionsNumber.get(i)};
-        setResult(table);
+//        setResult(table);
     }
     private void agresiveMethode(){        
-        if(X) {setResult();return;}
+//        if(X) {setResult();return;}
         double max = 0.75*countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
@@ -300,7 +138,7 @@ public class z4_Prognozy extends JLayeredPane{
             i++;
         }
         int[] table = {optionsNumber.get(i)};
-        setResult(table);
+//        setResult(table);
     }
     
     private double getChance(int[] table){
