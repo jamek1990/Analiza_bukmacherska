@@ -63,7 +63,7 @@ public class Intro {//implements ActionListener {
                 jB_exit.setVisible(false);
                 rob = new Robot();
                 try {
-                    rob.RefreshNewKurs();
+                    //rob.RefreshNewKurs();
                     rob.RefreshDataBase();
                 } catch (Exception ex) {
                     Logger.getLogger(Intro.class.getName()).log(Level.SEVERE, null, ex);

@@ -20,16 +20,8 @@ import java.util.Calendar;
 
         
 
-public class z4_Prognozy extends JLayeredPane{
-    m1_okienko jP_Prognozy;
-    m1_okienko okienko;
-    
-    JTextField myMoney;
-    JTextField chooseMyLeague;
-    
-    JPanel myResults;
-    m1_okienko samplePathUp; 
-    m1_okienko samplePathDown;
+public class Test{
+    boolean Y = true;
     boolean X = true;
     String[] names;
     double[] courses;
@@ -41,11 +33,10 @@ public class z4_Prognozy extends JLayeredPane{
     JLabel buttonOM;
     JLabel buttonAM;
     int money;
+     Test test;
     
-    Test test;
     
-    
-/*    SQL database;
+    SQL database;
     Vector<String> hometeam = new Vector<String>();
     Vector<String> awayteam = new Vector<String>();
     Vector<String> ligue = new Vector<String>();
@@ -57,189 +48,94 @@ public class z4_Prognozy extends JLayeredPane{
     Vector<String> ligue1 = new Vector<String>();
     Vector<Integer> H = new Vector<Integer>();
     Vector<Integer> A = new Vector<Integer>();  
-  */  
-    public z4_Prognozy(){      
-        setLocation(0,0);
-        setBounds(0, 0, 1024, 600);
-    /*    try{
+    
+    int TIME;
+    public Test(){      
+        try{
         start();
         }
-        catch(Exception ex){System.out.println(ex.getMessage());}*/
-        test = new Test();
-        setWindows();
-        //Vector<mecz> strategie = getStrategy(2,4);
-        //for(int i = 0; i<strategie.size(); i++){
-        //    System.out.println(strategie.get(i).getTeam1() + " " + strategie.get(i).getTeam2() + " " + strategie.get(i).getTeam1R() + " " + strategie.get(i).getTeam2R() + " " + strategie.get(i).getData() + " " + strategie.get(i).getStawka() + " ");
-        //}
+        catch(Exception ex){System.out.println(ex.getMessage());}
     }    
-    public z4_Prognozy(String[] namesBis, double[] coursesBis, double[] preViewBis) {
-        //if (namesBis.length == coursesBis.length && coursesBis.length == preViewBis.length){
-        names = namesBis;
-        courses = coursesBis;
-        preView = preViewBis;
-        //}else{throw new}
-        jP_Prognozy = new m1_okienko(400,200,0,3,"Prognozy");
-        setLocation(0,0);
-        setBounds(0, 0, 1024, 300);
-        add(jP_Prognozy);
-        setWindows();
-        
-    }
     
-    private void setWindows(){
-        buttonLM = new JLabel();
-        buttonOM = new JLabel();
-        buttonAM = new JLabel();
-        
-        buttonLM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseClicked(java.awt.event.MouseEvent evt) {lameMethode();}
-        });   
-        buttonOM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseClicked(java.awt.event.MouseEvent evt) {optimalMethode();}
-        }); 
-        buttonAM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseClicked(java.awt.event.MouseEvent evt) {agresiveMethode();}
-        });          
-        buttonLM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseEntered(java.awt.event.MouseEvent evt) {buttonLM.setIcon(new javax.swing.ImageIcon("images/low1.jpg")); }
-        });   
-        buttonOM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseEntered(java.awt.event.MouseEvent evt) {buttonOM.setIcon(new javax.swing.ImageIcon("images/opt1.jpg"));}
-        }); 
-        buttonAM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseEntered(java.awt.event.MouseEvent evt) {buttonAM.setIcon(new javax.swing.ImageIcon("images/agr1.jpg"));}
-        });         
-        buttonLM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseReleased(java.awt.event.MouseEvent evt) {buttonLM.setIcon(new javax.swing.ImageIcon("images/low2.jpg")); }
-        });   
-        buttonOM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseReleased(java.awt.event.MouseEvent evt) {buttonOM.setIcon(new javax.swing.ImageIcon("images/opt2.jpg"));}
-        }); 
-        buttonAM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseReleased(java.awt.event.MouseEvent evt) {buttonAM.setIcon(new javax.swing.ImageIcon("images/agr2.jpg"));}
-        });     
-        buttonLM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseExited(java.awt.event.MouseEvent evt) {buttonLM.setIcon(new javax.swing.ImageIcon("images/low2.jpg")); }
-        });   
-        buttonOM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseExited(java.awt.event.MouseEvent evt) {buttonOM.setIcon(new javax.swing.ImageIcon("images/opt2.jpg"));}
-        }); 
-        buttonAM.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseExited(java.awt.event.MouseEvent evt) {buttonAM.setIcon(new javax.swing.ImageIcon("images/agr2.jpg"));}
-        });         
-             
-        buttonLM.setIcon(new javax.swing.ImageIcon("images/low2.jpg"));          
-        buttonOM.setIcon(new javax.swing.ImageIcon("images/opt2.jpg"));
-        buttonAM.setIcon(new javax.swing.ImageIcon("images/agr2.jpg"));
-        
-        add(buttonLM);
-        add(buttonOM);                
-        add(buttonAM);                    
-        
-        /////////////////////////////////////////////////////////////Czesc druga
-        
-        jP_Prognozy = new m1_okienko(400,200,10,10,"Prognozy");
-        add(jP_Prognozy);
-        /*
-        JLabel chooseMyLeagueText = new JLabel();
-        chooseMyLeagueText.setBounds(0, 40, 100, 35);
-        chooseMyLeagueText.setText("Wybierz lige");
-        add(chooseMyLeagueText);
-        
-        chooseMyLeague = new JTextField();
-        chooseMyLeague.setText("To jest miejsce na rozwijane menu z ligami");
-        chooseMyLeague.setBounds(105, 40, 40, 35);
-        add(chooseMyLeague);
-        */
-        JLabel myMoneyText = new JLabel();
-        myMoneyText.setText("Posiadana kwota:");
-        myMoneyText.setBounds(10, 80, 100, 35);
-        add(myMoneyText);
-        
-        myMoney = new JTextField();
-        myMoney.setText("Tu wpisz kwote przeznaczona na gre");
-        myMoney.setBounds(115, 75, 290, 35);
-        add(myMoney);
-        
-        myResults = new JPanel();
-        textFrame = new JTextArea();
-        textFrame.setLineWrap(true);
-        textFrame.setWrapStyleWord(true);
-        textFrame.setSize(460, 300);
-        textFrame.setBackground(new Color(209,210,211));
-        myResults.add(textFrame);
-        myResults.setBackground(new Color(209, 210, 211));
-        myResults.setBounds(0, 360, 460, 300);
-        add(myResults);
-        ///////////////////////////////////////////////////////////czesc trzecia
-        
-        okienko = new m1_okienko(400,200,10,206,"Wybierz strategię gry");
-        add(okienko);      
-        
-        JLabel pict1 = new JLabel(new ImageIcon("images/mp.jpg"));
-        pict1.setBounds(460,10,500,260);
-        add(pict1);
-        
-        JLabel pict2 = new JLabel(new ImageIcon("images/zp.jpg"));
-        pict2.setBounds(460,285,500,238);
-        add(pict2);
-        
-        buttonLM.setBounds(50,250,80,80);                
-        buttonOM.setBounds(150,250,80,80);        
-        buttonAM.setBounds(250,250,80,80); 
-        
-        //samplePathUp = new m1_okienko(500,270,410,3,""); 
-        //samplePathDown = new m1_okienko(500,270,410,273,"");
-        //add(samplePathUp);
-        //add(samplePathDown);
-        
-    }
-/*    private void setResult(int[] table){
-
-        int[] option = next(table[0]+1);
-        String text = "   ";
-        for(int i = 0; i < option.length; i++){
-            text += names[option[i]];
-            text += ",";
-        }
-        text += '\n';
-        text += "Szansa wygranej wynosi: " + Double.toString(getChance(option))+'\n';
+    public Vector<mecz> getStrategy(int Time1, int Time2){      
         try{
-            double cash = Double.valueOf(myMoney.getText());
-            text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option)*cash) + "zl";
+            if(Y) generate();
         }
-        catch(Exception ex)
-        {text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option))+ " zainwestowanej kwoty.";}
-        textFrame.setText(text);
-    }*/
-    /*private void setResult(){
-        String text = "   Przykro nam, ale zespoły, które tej chwili grają nie pozostawiają możliwości prognozowania wyników.";
-        textFrame.setText(text);
-    }*/
-    private void setResult(Vector<mecz> strategy){
-        String text = "";
-        for (int i  = 0; i < strategy.size(); i++){
-            text+=strategy.get(i).wypisz()+"\n";
-        }
-        textFrame.setText(text);
+        catch(Exception ex){}
+        TIME = Time1;
+        Vector<mecz> strategy = new Vector<mecz>();
+        while (TIME <= Time2) strategy.addAll(getOptimalStrategy(Time1, true));       
+        return strategy;
+    }            
+    public Vector<mecz> getStrategy(){
+        Vector<mecz> strategy = new Vector<mecz>();
+        return strategy;
     }
+    public Vector<mecz> getStrategy(int time){
+        Vector<mecz> strategy = new Vector<mecz>();
+        return strategy;
+    }
+        
+    public Vector<mecz> getLameStrategy(){
+        DateFormat dateFormat = new SimpleDateFormat("dd");
+        DateFormat dateFormat2 = new SimpleDateFormat("MM");
+        DateFormat dateFormat3 = new SimpleDateFormat("yy");
+        Calendar cal = Calendar.getInstance();
+        String s =dateFormat.format(cal.getTime());
+        String s2 =dateFormat2.format(cal.getTime());
+        String s3 =dateFormat3.format(cal.getTime());
+        Integer date2=Integer.parseInt(s)+Integer.parseInt(s2)*100+(Integer.parseInt(s3)+2000)*10000;
+        return getLameStrategy(date2);
+        }
+        
+    public Vector<mecz> getOptimalStrategy(){
+        DateFormat dateFormat = new SimpleDateFormat("dd");
+        DateFormat dateFormat2 = new SimpleDateFormat("MM");
+        DateFormat dateFormat3 = new SimpleDateFormat("yy");
+        Calendar cal = Calendar.getInstance();
+        String s =dateFormat.format(cal.getTime());
+        String s2 =dateFormat2.format(cal.getTime());
+        String s3 =dateFormat3.format(cal.getTime());
+        Integer date2=Integer.parseInt(s)+Integer.parseInt(s2)*100+(Integer.parseInt(s3)+2000)*10000;
+        return getOptimalStrategy(date2, false);
+    }
+
+    public Vector<mecz> getAgresiveStrategy(){
+        DateFormat dateFormat = new SimpleDateFormat("dd");
+        DateFormat dateFormat2 = new SimpleDateFormat("MM");
+        DateFormat dateFormat3 = new SimpleDateFormat("yy");
+        Calendar cal = Calendar.getInstance();
+        String s =dateFormat.format(cal.getTime());
+        String s2 =dateFormat2.format(cal.getTime());
+        String s3 =dateFormat3.format(cal.getTime());
+        Integer date2=Integer.parseInt(s)+Integer.parseInt(s2)*100+(Integer.parseInt(s3)+2000)*10000;
+        return getAgresiveStartegy(date2);
+    }
+
     
-    public Vector<mecz> getStrategy(int Time1, int Time2){                
-        return test.getStrategy(Time1, Time2);
-    }
-            
-    public void lameMethode(){                 
-        setResult(test.getLameStrategy());
-    }  
-    public void optimalMethode(){         
-        setResult(test.getOptimalStrategy());
-    } 
-    public void agresiveMethode(){         
-        setResult(test.getAgresiveStrategy());
-    } 
-    /*
-    private void lameMethode(){  
-        if(X) {setResult();return;}
+    private Vector<mecz> getOptimalStrategy(int time, boolean wyniki){
+        double max = 0.3*countMaxOfExpectedValue();
+        Vector<Integer> optionsNumber = new Vector<Integer>(0);
+        int n = expectedValues.length;
+        for (int i = 0; i < n; i++){
+            if(expectedValues[i]>max){
+                optionsNumber.add(i);
+            }
+        }
+        double[] antyRisk = new double[optionsNumber.size()];
+        for (int i = 0; i < optionsNumber.size(); i++){
+            antyRisk[i] = getChance(next(optionsNumber.get(i)+1));
+        }
+        double maksimum = max(antyRisk);
+        int i = 0;
+        while(antyRisk[i] != maksimum){
+            i++;
+        }
+        int[] table = {optionsNumber.get(i)};
+//        return mmV();
+        return new Vector<mecz>();
+    }        
+    private Vector<mecz> getLameStrategy(int time){
         countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
@@ -261,33 +157,11 @@ public class z4_Prognozy extends JLayeredPane{
         //System.out.println("");
         //System.out.println(i);
         //System.out.println(optionsNumber.get(i));
-        int[] table = {optionsNumber.get(i)};
-        setResult(table);
-    }
-    private void optimalMethode(){        
-        if(X) {setResult();return;}       
-        double max = 0.3*countMaxOfExpectedValue();
-        Vector<Integer> optionsNumber = new Vector<Integer>(0);
-        int n = expectedValues.length;
-        for (int i = 0; i < n; i++){
-            if(expectedValues[i]>max){
-                optionsNumber.add(i);
-            }
-        }
-        double[] antyRisk = new double[optionsNumber.size()];
-        for (int i = 0; i < optionsNumber.size(); i++){
-            antyRisk[i] = getChance(next(optionsNumber.get(i)+1));
-        }
-        double maksimum = max(antyRisk);
-        int i = 0;
-        while(antyRisk[i] != maksimum){
-            i++;
-        }
-        int[] table = {optionsNumber.get(i)};
-        setResult(table);
-    }
-    private void agresiveMethode(){        
-        if(X) {setResult();return;}
+        int[] table = {optionsNumber.get(i)};   
+        return new Vector<mecz>();
+    }        
+    private Vector<mecz> getAgresiveStartegy(int time){
+//        if(X) {setResult();return;}
         double max = 0.75*countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
@@ -306,9 +180,12 @@ public class z4_Prognozy extends JLayeredPane{
             i++;
         }
         int[] table = {optionsNumber.get(i)};
-        setResult(table);
+//        setResult(table);
+    return new Vector<mecz>();
     }
-    *//*
+
+
+    
     private double getChance(int[] table){
         int n = table.length;
         double p = 1.0;
@@ -384,7 +261,80 @@ public class z4_Prognozy extends JLayeredPane{
         throw new ClassNotFoundException(ex.getMessage());
         }
     }
+
+    private void generate() throws SQLException, ClassNotFoundException{
+        database = new SQL();
+        Statement stat;
+        stat = database.con.createStatement(); 
+        String query = "";
+        query = "select div, hometeam, awayteam, k1, k2 from Kursy (k1 > '1.8' or k2 > '1.8')";//where data > '" + date2 + "' and
+        ResultSet rs = stat.executeQuery(query);
+        while (rs.next()) {
+            hometeam.add(rs.getString(2));
+            awayteam.add(rs.getString(3));
+            ligue.add(rs.getString(1));
+            H_A.add(Double.parseDouble(rs.getString(4)));
+            A_H.add(Double.parseDouble(rs.getString(5)));
+        }
+        query = "select DIV, DATA, HomeTeam, AwayTeam, FTHG, FTAG from MECZE_STATYSTYKI order by data desc";
+        ResultSet rs1 = stat.executeQuery(query);   
+        while (rs1.next()) {          
+            hometeam1.add(rs1.getString(3));
+            awayteam1.add(rs1.getString(4));
+            ligue1.add(rs1.getString(1));
+            data1.add(Integer.parseInt(rs1.getString(2)));
+            H.add(Integer.parseInt(rs1.getString(5)));
+            A.add(Integer.parseInt(rs1.getString(6)));
+        }
+        stat.close();
+        int q1 = hometeam.size();        
+        if(q1 > 0) X = false;
+        String[] names = new String[q1];
+        double[] courses = new double[q1];
+        double[] preView = new double[q1];        
         
+        int k = 0;
+        for(int i = 0; i < q1; ++i)
+        {
+            if(H_A.get(i) > 1.8 && H_A.get(i) > A_H.get(i)){
+                int rangeH = hRange(i);
+                int rangeA = aRange(i);
+                System.out.println(rangeH + " " + rangeA);
+                if (H_A.get(i)*(double)(rangeH - rangeA)/100.0 > 0.1){
+                    names[k] = hometeam.get(i) + ".vs." + awayteam.get(i);
+                    courses[k] = H_A.get(i);
+                    preView[k] = (rangeH - rangeA)/100;
+                }
+                k++;
+            }
+            else if(A_H.get(i) > 1.8){
+                int rangeH = hRange(i);
+                int rangeA = aRange(i); 
+                System.out.println(rangeH + " " + rangeA);                
+                if (H_A.get(i)*(double)(rangeA - rangeH)/100.0 > 0.1){
+                    names[k] = awayteam.get(i) + ".vs." + hometeam.get(i);
+                    courses[k] = A_H.get(i);
+                    preView[k] = (rangeA - rangeH)/100;
+                }                
+                k++;
+            }
+        }
+        if(k!=0){
+            this.names = new String[k];
+            this.courses = new double[k];
+            this.preView = new double[k]; 
+            while (k > 0){
+            this.names[k] = names[k];
+            this.courses[k] = courses[k];
+            this.preView[k] = preView[k]; 
+            }
+        }
+        q1 = names.length;
+        for(int i = 0; i < q1; i++){
+            System.out.println(names[i] + " " + preView[i] + " " + courses[i]);
+        }       
+    }
+
     
     private void generate(int date2) throws SQLException, ClassNotFoundException{
         database = new SQL();
@@ -635,5 +585,5 @@ public class z4_Prognozy extends JLayeredPane{
         if(p>=2) rangeA+=10;
         return rangeA;
     }
-    */
+
 }
