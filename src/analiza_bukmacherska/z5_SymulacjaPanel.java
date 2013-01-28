@@ -244,7 +244,7 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
         range.setTickUnit(new NumberTickUnit(1));
         
         //Zmiana backgroundu
-        CategoryPlot catplot = (CategoryPlot) chart.getPlot();
+        //CategoryPlot catplot = (CategoryPlot) chart.getPlot();
         //catplot.setBackgroundPaint(Color.LIGHT_GRAY);
         //catplot.setRangeGridlinePaint(Color.DARK_GRAY);
         
