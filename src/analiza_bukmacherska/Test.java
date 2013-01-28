@@ -57,20 +57,24 @@ public class Test{
         catch(Exception ex){System.out.println(ex.getMessage());}
     }    
     
-    public Vector<mecz> getStrategy(int Time1, int Time2){      
-        try{
-            if(Y) {
-                generate();
-            }
+     public Vector<mecz> getStrategy(int Time1, int Time2){      
+        /*try{
+            if(Y) generate();
         }
         catch(Exception ex){}
         TIME = Time1;
         Vector<mecz> strategy = new Vector<mecz>();
-        while (TIME <= Time2) {
-            strategy.addAll(getOptimalStrategy(Time1, true));
-        }       
+        while (TIME <= Time2) strategy.addAll(getOptimalStrategy(Time1, true));       
+        return strategy;*/
+        Vector<mecz> strategy = new Vector<mecz>();
+        strategy.add(new mecz());
+        strategy.add(new mecz());
+        strategy.add(new mecz());
+        strategy.add(new mecz());
+        strategy.add(new mecz());
         return strategy;
-    }            
+    }     
+     
     public Vector<mecz> getStrategy(){
         Vector<mecz> strategy = new Vector<mecz>();
         return strategy;

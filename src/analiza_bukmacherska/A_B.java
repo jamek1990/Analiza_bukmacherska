@@ -8,6 +8,7 @@ public class A_B{
     z2_Tabele tabele;
     z3_TeamVsTeam team;
     z4_Prognozy prognozy;
+    z5_Symulacja symulacja;
     MenuDolne menu ;
     static void rysuj() throws SQLException, ClassNotFoundException, Exception {
         JFrame f=new JFrame();
@@ -22,12 +23,14 @@ public class A_B{
         z2_Tabele tabele = new z2_Tabele();
         z3_TeamVsTeam team = new z3_TeamVsTeam();
         z4_Prognozy prognozy = new z4_Prognozy();
-        MenuDolne menu = new MenuDolne(baza,tabele,team,prognozy);
+        z5_Symulacja symulacja = new z5_Symulacja();
+        MenuDolne menu = new MenuDolne(baza,tabele,team,prognozy,symulacja);
         JLayeredPane p2 = new JLayeredPane();
         p2.add(baza,1);
         p2.add(tabele,2);
         p2.add(team,3);
         p2.add(prognozy,4);
+        p2.add(symulacja,5);
         p2.add(menu,1);
         f.add(p2);
         tabele.setVisible(false);
