@@ -1,5 +1,7 @@
 package analiza_bukmacherska;
 
+import java.awt.Color;
+import java.text.DecimalFormat;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -8,6 +10,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.general.SeriesException;
@@ -228,6 +231,10 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
             }
         }
         
+        //ustawiamy na jlabelu
+        DecimalFormat df = new DecimalFormat("#.##");
+        jLabel5.setText(df.format(stanKonta));
+        
         System.out.println("stanKonta: " + stanKonta);
         XYDataset dataset = new XYSeriesCollection(xy);
         chart = createChart(dataset);
@@ -235,6 +242,12 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
         XYPlot plot = chart.getXYPlot();
         NumberAxis range = (NumberAxis) plot.getDomainAxis();
         range.setTickUnit(new NumberTickUnit(1));
+        
+        //Zmiana backgroundu
+        CategoryPlot catplot = (CategoryPlot) chart.getPlot();
+        //catplot.setBackgroundPaint(Color.LIGHT_GRAY);
+        //catplot.setRangeGridlinePaint(Color.DARK_GRAY);
+        
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new java.awt.Dimension(1004, 232));
         chartPanel.setMouseZoomable(true, false);
