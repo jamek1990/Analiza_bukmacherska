@@ -8,7 +8,7 @@ import java.net.URLConnection;
 public class Robot {
     public void RefreshDataBase() throws Exception {
         String ligi[]={"P1","I1","G1","D1","D2","E0","E1","E2","E3","EC","F1","F2","B1","I2","N1","SC0","SC1","SC2","SC3","SP1","SP2","T1"};
-        String kolumny[]={"Div","Date","HomeTeam","AwayTeam","FTHG","FTAG","FTR","HTHG","HTAG","HTR","HS","AS","HST","AST","HHW","AHW","HC","AC","HF","AF","HO","AO","HY","AY","HR","AR"};
+        String kolumny[]={"Div","Date","HomeTeam","AwayTeam","FTHG","FTAG","FTR","HTHG","HTAG","HTR","HS","AS","HST","AST","HHW","AHW","HC","AC","HF","AF","HO","AO","HY","AY","HR","AR","GBH","GBD","GBA"};
         String kolumny2[]={"***","***","HT","AT"};
         String mecz[]= new String[29];
         int[] hash = new int[29];

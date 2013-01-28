@@ -218,19 +218,31 @@ public class Mecz_stat {
             ar=null;
         }
         if(st[26]!=null) {
-            k1=Double.parseDouble(st[26]);
+            try {
+                k1=Double.parseDouble(st[26]);
+            } catch (NumberFormatException e) {
+                k1=null;
+            }
         }
         else {
             k1=null;
         }
         if(st[27]!=null) {
-            kx=Double.parseDouble(st[27]);
+            try {
+                kx=Double.parseDouble(st[27]);
+            } catch (NumberFormatException e) {
+                kx=null;
+            }
         }
         else {
             kx=null;
         }
         if(st[28]!=null) {
-            k2=Double.parseDouble(st[28]);
+            try {
+                k2=Double.parseDouble(st[28]);
+            } catch (NumberFormatException e) {
+                k2=null;
+            }
         }
         else {
             k2=null;

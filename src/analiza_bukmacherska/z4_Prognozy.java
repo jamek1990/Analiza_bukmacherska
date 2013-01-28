@@ -45,7 +45,7 @@ public class z4_Prognozy extends JLayeredPane{
     Test test;
     
     
-    SQL database;
+/*    SQL database;
     Vector<String> hometeam = new Vector<String>();
     Vector<String> awayteam = new Vector<String>();
     Vector<String> ligue = new Vector<String>();
@@ -57,33 +57,20 @@ public class z4_Prognozy extends JLayeredPane{
     Vector<String> ligue1 = new Vector<String>();
     Vector<Integer> H = new Vector<Integer>();
     Vector<Integer> A = new Vector<Integer>();  
-    
+  */  
     public z4_Prognozy(){      
         setLocation(0,0);
         setBounds(0, 0, 1024, 600);
-        try{
+    /*    try{
         start();
         }
-        catch(Exception ex){System.out.println(ex.getMessage());}
+        catch(Exception ex){System.out.println(ex.getMessage());}*/
+        test = new Test();
         setWindows();
-        Vector<mecz> strategie = getStrategy(2,4);
-        for(int i = 0; i<strategie.size(); i++){
-            System.out.println(strategie.get(i).getTeam1() + " " + strategie.get(i).getTeam2() + " " + strategie.get(i).getTeam1R() + " " + strategie.get(i).getTeam2R() + " " + strategie.get(i).getData() + " " + strategie.get(i).getStawka() + " ");
-        }
-        /*
-        String[] names = {"Borusia","Dortmundt","Real","Madrit"};
-        double[] courses = {2.6, 2.7, 2.9, 2.68};
-        double[] preView = {0.6, 0.7, 0.9, 0.68};
-        int length = names.length;
-        this.names = new String[length];
-        this.courses = new double[length];
-        this.preView = new double[length];
-        for (int i = 0 ; i< length; i++){
-            this.names[i] = names[i];
-            this.courses[i] = courses[i];
-            this.preView[i] = preView[i];
-        }*/
-
+        //Vector<mecz> strategie = getStrategy(2,4);
+        //for(int i = 0; i<strategie.size(); i++){
+        //    System.out.println(strategie.get(i).getTeam1() + " " + strategie.get(i).getTeam2() + " " + strategie.get(i).getTeam1R() + " " + strategie.get(i).getTeam2R() + " " + strategie.get(i).getData() + " " + strategie.get(i).getStawka() + " ");
+        //}
     }    
     public z4_Prognozy(String[] namesBis, double[] coursesBis, double[] preViewBis) {
         //if (namesBis.length == coursesBis.length && coursesBis.length == preViewBis.length){
@@ -207,7 +194,7 @@ public class z4_Prognozy extends JLayeredPane{
         //add(samplePathDown);
         
     }
-    private void setResult(int[] table){
+/*    private void setResult(int[] table){
 
         int[] option = next(table[0]+1);
         String text = "   ";
@@ -224,19 +211,33 @@ public class z4_Prognozy extends JLayeredPane{
         catch(Exception ex)
         {text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option))+ " zainwestowanej kwoty.";}
         textFrame.setText(text);
-    }
-    private void setResult(){
+    }*/
+    /*private void setResult(){
         String text = "   Przykro nam, ale zespoły, które tej chwili grają nie pozostawiają możliwości prognozowania wyników.";
+        textFrame.setText(text);
+    }*/
+    private void setResult(Vector<mecz> strategy){
+        String text = "";
+        for (int i  = 0; i < strategy.size(); i++){
+            text+=strategy.get(i).wypisz()+"\n";
+        }
         textFrame.setText(text);
     }
     
-    public Vector<mecz> getStrategy(int Time1, int Time2){        
-        Vector<mecz> strategy = new Vector<mecz>();
-        for(int i = 0; i<5; i++) strategy.add(new mecz());
-        return strategy;
+    public Vector<mecz> getStrategy(int Time1, int Time2){                
+        return test.getStrategy(Time1, Time2);
     }
             
-    
+    public void lameMethode(){                 
+        setResult(test.getLameStrategy());
+    }  
+    public void optimalMethode(){         
+        setResult(test.getOptimalStrategy());
+    } 
+    public void agresiveMethode(){         
+        setResult(test.getAgresiveStrategy());
+    } 
+    /*
     private void lameMethode(){  
         if(X) {setResult();return;}
         countMaxOfExpectedValue();
@@ -307,7 +308,7 @@ public class z4_Prognozy extends JLayeredPane{
         int[] table = {optionsNumber.get(i)};
         setResult(table);
     }
-    
+    *//*
     private double getChance(int[] table){
         int n = table.length;
         double p = 1.0;
@@ -634,4 +635,5 @@ public class z4_Prognozy extends JLayeredPane{
         if(p>=2) rangeA+=10;
         return rangeA;
     }
+    */
 }

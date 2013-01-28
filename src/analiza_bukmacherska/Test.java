@@ -21,15 +21,7 @@ import java.util.Calendar;
         
 
 public class Test{
-    m1_okienko jP_Prognozy;
-    m1_okienko okienko;
-    
-    JTextField myMoney;
-    JTextField chooseMyLeague;
-    
-    JPanel myResults;
-    m1_okienko samplePathUp; 
-    m1_okienko samplePathDown;
+    boolean Y = true;
     boolean X = true;
     String[] names;
     double[] courses;
@@ -57,21 +49,93 @@ public class Test{
     Vector<Integer> H = new Vector<Integer>();
     Vector<Integer> A = new Vector<Integer>();  
     
+    int TIME;
     public Test(){      
         try{
         start();
         }
         catch(Exception ex){System.out.println(ex.getMessage());}
-//        setWindows();
     }    
     
-    public Vector<mecz> getStrategy(int Time1, int Time2){        
+    public Vector<mecz> getStrategy(int Time1, int Time2){      
+        try{
+            if(Y) generate();
+        }
+        catch(Exception ex){}
+        TIME = Time1;
         Vector<mecz> strategy = new Vector<mecz>();
+        while (TIME <= Time2) strategy.addAll(getOptimalStrategy(Time1, true));       
         return strategy;
     }            
+    public Vector<mecz> getStrategy(){
+        Vector<mecz> strategy = new Vector<mecz>();
+        return strategy;
+    }
+    public Vector<mecz> getStrategy(int time){
+        Vector<mecz> strategy = new Vector<mecz>();
+        return strategy;
+    }
+        
+    public Vector<mecz> getLameStrategy(){
+        DateFormat dateFormat = new SimpleDateFormat("dd");
+        DateFormat dateFormat2 = new SimpleDateFormat("MM");
+        DateFormat dateFormat3 = new SimpleDateFormat("yy");
+        Calendar cal = Calendar.getInstance();
+        String s =dateFormat.format(cal.getTime());
+        String s2 =dateFormat2.format(cal.getTime());
+        String s3 =dateFormat3.format(cal.getTime());
+        Integer date2=Integer.parseInt(s)+Integer.parseInt(s2)*100+(Integer.parseInt(s3)+2000)*10000;
+        return getLameStrategy(date2);
+        }
+        
+    public Vector<mecz> getOptimalStrategy(){
+        DateFormat dateFormat = new SimpleDateFormat("dd");
+        DateFormat dateFormat2 = new SimpleDateFormat("MM");
+        DateFormat dateFormat3 = new SimpleDateFormat("yy");
+        Calendar cal = Calendar.getInstance();
+        String s =dateFormat.format(cal.getTime());
+        String s2 =dateFormat2.format(cal.getTime());
+        String s3 =dateFormat3.format(cal.getTime());
+        Integer date2=Integer.parseInt(s)+Integer.parseInt(s2)*100+(Integer.parseInt(s3)+2000)*10000;
+        return getOptimalStrategy(date2, false);
+    }
+
+    public Vector<mecz> getAgresiveStrategy(){
+        DateFormat dateFormat = new SimpleDateFormat("dd");
+        DateFormat dateFormat2 = new SimpleDateFormat("MM");
+        DateFormat dateFormat3 = new SimpleDateFormat("yy");
+        Calendar cal = Calendar.getInstance();
+        String s =dateFormat.format(cal.getTime());
+        String s2 =dateFormat2.format(cal.getTime());
+        String s3 =dateFormat3.format(cal.getTime());
+        Integer date2=Integer.parseInt(s)+Integer.parseInt(s2)*100+(Integer.parseInt(s3)+2000)*10000;
+        return getAgresiveStartegy(date2);
+    }
+
     
-    private void lameMethode(){  
-//        if(X) {setResult();return;}
+    private Vector<mecz> getOptimalStrategy(int time, boolean wyniki){
+        double max = 0.3*countMaxOfExpectedValue();
+        Vector<Integer> optionsNumber = new Vector<Integer>(0);
+        int n = expectedValues.length;
+        for (int i = 0; i < n; i++){
+            if(expectedValues[i]>max){
+                optionsNumber.add(i);
+            }
+        }
+        double[] antyRisk = new double[optionsNumber.size()];
+        for (int i = 0; i < optionsNumber.size(); i++){
+            antyRisk[i] = getChance(next(optionsNumber.get(i)+1));
+        }
+        double maksimum = max(antyRisk);
+        int i = 0;
+        while(antyRisk[i] != maksimum){
+            i++;
+        }
+        int[] table = {optionsNumber.get(i)};
+//        return mmV();
+        return new Vector<mecz>();
+    }        
+    private Vector<mecz> getLameStrategy(int time){
         countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
@@ -93,32 +157,10 @@ public class Test{
         //System.out.println("");
         //System.out.println(i);
         //System.out.println(optionsNumber.get(i));
-        int[] table = {optionsNumber.get(i)};
-//        setResult(table);
-    }
-    private void optimalMethode(){        
-//        if(X) {setResult();return;}       
-        double max = 0.3*countMaxOfExpectedValue();
-        Vector<Integer> optionsNumber = new Vector<Integer>(0);
-        int n = expectedValues.length;
-        for (int i = 0; i < n; i++){
-            if(expectedValues[i]>max){
-                optionsNumber.add(i);
-            }
-        }
-        double[] antyRisk = new double[optionsNumber.size()];
-        for (int i = 0; i < optionsNumber.size(); i++){
-            antyRisk[i] = getChance(next(optionsNumber.get(i)+1));
-        }
-        double maksimum = max(antyRisk);
-        int i = 0;
-        while(antyRisk[i] != maksimum){
-            i++;
-        }
-        int[] table = {optionsNumber.get(i)};
-//        setResult(table);
-    }
-    private void agresiveMethode(){        
+        int[] table = {optionsNumber.get(i)};   
+        return new Vector<mecz>();
+    }        
+    private Vector<mecz> getAgresiveStartegy(int time){
 //        if(X) {setResult();return;}
         double max = 0.75*countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
@@ -139,7 +181,10 @@ public class Test{
         }
         int[] table = {optionsNumber.get(i)};
 //        setResult(table);
+    return new Vector<mecz>();
     }
+
+
     
     private double getChance(int[] table){
         int n = table.length;
@@ -216,7 +261,80 @@ public class Test{
         throw new ClassNotFoundException(ex.getMessage());
         }
     }
+
+    private void generate() throws SQLException, ClassNotFoundException{
+        database = new SQL();
+        Statement stat;
+        stat = database.con.createStatement(); 
+        String query = "";
+        query = "select div, hometeam, awayteam, k1, k2 from Kursy (k1 > '1.8' or k2 > '1.8')";//where data > '" + date2 + "' and
+        ResultSet rs = stat.executeQuery(query);
+        while (rs.next()) {
+            hometeam.add(rs.getString(2));
+            awayteam.add(rs.getString(3));
+            ligue.add(rs.getString(1));
+            H_A.add(Double.parseDouble(rs.getString(4)));
+            A_H.add(Double.parseDouble(rs.getString(5)));
+        }
+        query = "select DIV, DATA, HomeTeam, AwayTeam, FTHG, FTAG from MECZE_STATYSTYKI order by data desc";
+        ResultSet rs1 = stat.executeQuery(query);   
+        while (rs1.next()) {          
+            hometeam1.add(rs1.getString(3));
+            awayteam1.add(rs1.getString(4));
+            ligue1.add(rs1.getString(1));
+            data1.add(Integer.parseInt(rs1.getString(2)));
+            H.add(Integer.parseInt(rs1.getString(5)));
+            A.add(Integer.parseInt(rs1.getString(6)));
+        }
+        stat.close();
+        int q1 = hometeam.size();        
+        if(q1 > 0) X = false;
+        String[] names = new String[q1];
+        double[] courses = new double[q1];
+        double[] preView = new double[q1];        
         
+        int k = 0;
+        for(int i = 0; i < q1; ++i)
+        {
+            if(H_A.get(i) > 1.8 && H_A.get(i) > A_H.get(i)){
+                int rangeH = hRange(i);
+                int rangeA = aRange(i);
+                System.out.println(rangeH + " " + rangeA);
+                if (H_A.get(i)*(double)(rangeH - rangeA)/100.0 > 0.1){
+                    names[k] = hometeam.get(i) + ".vs." + awayteam.get(i);
+                    courses[k] = H_A.get(i);
+                    preView[k] = (rangeH - rangeA)/100;
+                }
+                k++;
+            }
+            else if(A_H.get(i) > 1.8){
+                int rangeH = hRange(i);
+                int rangeA = aRange(i); 
+                System.out.println(rangeH + " " + rangeA);                
+                if (H_A.get(i)*(double)(rangeA - rangeH)/100.0 > 0.1){
+                    names[k] = awayteam.get(i) + ".vs." + hometeam.get(i);
+                    courses[k] = A_H.get(i);
+                    preView[k] = (rangeA - rangeH)/100;
+                }                
+                k++;
+            }
+        }
+        if(k!=0){
+            this.names = new String[k];
+            this.courses = new double[k];
+            this.preView = new double[k]; 
+            while (k > 0){
+            this.names[k] = names[k];
+            this.courses[k] = courses[k];
+            this.preView[k] = preView[k]; 
+            }
+        }
+        q1 = names.length;
+        for(int i = 0; i < q1; i++){
+            System.out.println(names[i] + " " + preView[i] + " " + courses[i]);
+        }       
+    }
+
     
     private void generate(int date2) throws SQLException, ClassNotFoundException{
         database = new SQL();
@@ -467,4 +585,5 @@ public class Test{
         if(p>=2) rangeA+=10;
         return rangeA;
     }
+
 }

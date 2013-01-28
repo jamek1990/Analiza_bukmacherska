@@ -43,5 +43,7 @@ public class mecz {
     public int getTeam2R(){
         return R2;
     }
-    
+    public String wypisz(){
+        return "W meczu " + team1 + " przeciwko " + team2 + " dnia " + data + " postaw na " + team1 + " " + stawka + "posiadanej kwoty.";
+    }
 }
