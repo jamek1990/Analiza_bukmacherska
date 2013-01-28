@@ -19,8 +19,12 @@ public class mecz {
         Random rand = new Random();
         team1 = "" + rand.nextInt(999999);
         team2 = "" + rand.nextInt(999999);
-        if(rand.nextBoolean()) data = 20100101;
-        else data = 20100102;
+        if(rand.nextBoolean()) {
+            data = 20100101;
+        }
+        else {
+            data = 20100102;
+        }
         R1 = rand.nextInt(6);
         R2 = rand.nextInt(6);
         stawka = rand.nextDouble();

@@ -149,10 +149,10 @@ public class Intro {//implements ActionListener {
         }
     */
     
-    public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
+   /* public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
         Intro n = new Intro();
         n.createUI();
-    }
+    }*/
 }
 
 class Background extends JComponent {
