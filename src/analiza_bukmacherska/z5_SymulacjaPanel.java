@@ -8,6 +8,7 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
 
     private Test test; //generuje strategie
     private Vector<mecz> mecze; //mecze do obstawienia
+    private double stanKonta;
     public z5_SymulacjaPanel() {
         initComponents();
         
@@ -177,8 +178,11 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
         {
             JOptionPane.showMessageDialog(this, "Sprawdz daty");
         }
+        
+        stanKonta = Double.parseDouble(jTextField1.getText());
         int intData1 = Integer.parseInt(data1);
         int intData2 = Integer.parseInt(data2);
+        
         //Strategia dla danych dat
         mecze = test.getStrategy(intData1, intData2);
         for(mecz i : mecze)
