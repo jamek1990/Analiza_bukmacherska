@@ -24,8 +24,8 @@ import javax.net.ssl.SSLSocketFactory;
 public class Ceneo_tab {
     String info="";
     static void pobierz(String url) throws Exception {
-        URL pogoda = new URL(url);
-        BufferedReader in = new BufferedReader(new InputStreamReader(pogoda.openStream()));
+        URL adress = new URL(url);
+        BufferedReader in = new BufferedReader(new InputStreamReader(adress.openStream()));
         String inputLine;
         int C=0;
         int c=0;
