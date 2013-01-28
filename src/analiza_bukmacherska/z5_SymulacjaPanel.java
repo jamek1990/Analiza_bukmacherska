@@ -3,12 +3,25 @@ package analiza_bukmacherska;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.general.SeriesException;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 public class z5_SymulacjaPanel extends javax.swing.JPanel {
 
     private Test test; //generuje strategie
     private Vector<mecz> mecze; //mecze do obstawienia
     private double stanKonta;
+    JFreeChart chart;
     public z5_SymulacjaPanel() {
         initComponents();
         
@@ -99,9 +112,9 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -153,7 +166,7 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
                             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -179,20 +192,73 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Sprawdz daty");
         }
         
-        stanKonta = Double.parseDouble(jTextField1.getText());
+        try
+        {
+            stanKonta = Double.parseDouble(jTextField1.getText());
+        }
+        catch(NumberFormatException ex)
+        {
+            JOptionPane.showMessageDialog(this, "Sprawdz początkowe saldo");
+        }
         int intData1 = Integer.parseInt(data1);
         int intData2 = Integer.parseInt(data2);
         
         //Strategia dla danych dat
         mecze = test.getStrategy(intData1, intData2);
+        //do wykresu TimeSeries
+        XYSeries xy = new XYSeries("Saldo");
+        xy.add(0, stanKonta);
+        int counter = 1;
         for(mecz i : mecze)
         {
-            System.out.println(i.wypisz() + "");
+            if(i.R1 > i.R2)
+            {
+                stanKonta = (1 + i.stawka)*stanKonta;
+            }
+            else
+            {
+                stanKonta = (1 - i.stawka)*stanKonta;
+            }
+            try {
+                xy.add(counter, stanKonta);
+                counter++;
+            }
+            catch (SeriesException e) {
+                System.err.println("Error adding to series");
+            }
         }
         
+        System.out.println("stanKonta: " + stanKonta);
+        XYDataset dataset = new XYSeriesCollection(xy);
+        chart = createChart(dataset);
         
+        XYPlot plot = chart.getXYPlot();
+        NumberAxis range = (NumberAxis) plot.getDomainAxis();
+        range.setTickUnit(new NumberTickUnit(1));
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setPreferredSize(new java.awt.Dimension(1004, 232));
+        chartPanel.setMouseZoomable(true, false);
+        
+        jPanel1.add(chartPanel);
+        chartPanel.setBounds(0,0,1004,232);
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
+    private JFreeChart createChart(XYDataset dataset)
+    {
+        final JFreeChart chart = ChartFactory.createXYLineChart(
+            "Stan konta gracza po każdej kolejce",          // chart title
+            "Stan konta",               // domain axis label
+            "Kolejka",                  // range axis label
+            dataset,                  // data
+            PlotOrientation.VERTICAL,
+            false,                     // include legend
+            true,
+            false
+        );
+        
+        return chart;
+    }
+    
     private boolean sprawdzDate(String data)
     {
         return (Integer.parseInt(data) > 19800000 && Integer.parseInt(data) < 20130000) ? true : false;
