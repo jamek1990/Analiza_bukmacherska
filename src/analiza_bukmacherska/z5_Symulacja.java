@@ -2,11 +2,31 @@ package analiza_bukmacherska;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.general.SeriesException;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
@@ -29,7 +49,14 @@ public class z5_Symulacja extends JLayeredPane{
     JLabel jLSaldo;
     JLabel jLStan;
     //z5_SymulacjaPanel z5;    
+    
+    private Test test; //generuje strategie
+    private Vector<mecz> mecze; //mecze do obstawienia
+    private double stanKonta;
+    JFreeChart chart;
     public z5_Symulacja(){
+        stanKonta = 0;
+        test = new Test();
         //z5 = new z5_SymulacjaPanel();
         //add(z5);
         //z5.setBounds(0, 0, 1024, 530);
@@ -81,6 +108,106 @@ public class z5_Symulacja extends JLayeredPane{
         jBSymulacja.setBackground(Color.GRAY);
         jBSymulacja.setBounds(10, 345, 160, 40);
         
+        //action listener
+        jBSymulacja.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                    System.out.println("ActionPerformed");
+                    String data1 = jTFData1.getText();
+                    String data2 = jTFData2.getText();
+
+
+                    int intData1 = 20080701;
+                    int intData2 = 20080801;
+                    try
+                    {
+                        intData1 = Integer.parseInt(data1);
+                        intData2 = Integer.parseInt(data2);
+
+
+
+                    System.out.println(data1 + "\n" + data2);
+                    if(!sprawdzDate(data1) || !sprawdzDate(data2) || intData1 >= intData2)
+                    {
+                        JOptionPane.showMessageDialog(jPPreferencje, "Sprawdz daty");
+                    }
+
+                    try
+                    {
+                        stanKonta = Double.parseDouble(jTFSaldo.getText());
+                    }
+                    catch(NumberFormatException ex)
+                    {
+                        JOptionPane.showMessageDialog(jPPreferencje, "Sprawdz początkowe saldo");
+                    }
+
+                    //Strategia dla danych dat
+                    mecze = test.getStrategy(intData1, intData2);
+                    //do tabeli
+                    //do wykresu TimeSeries
+                    XYSeries xy = new XYSeries("Saldo");
+                    xy.add(0, stanKonta);
+                    int counter = 1;
+                    for(mecz i : mecze)
+                    {
+                        if(i.R1 > i.R2)
+                        {
+                            stanKonta += i.stawka*stanKonta*i.kurs;
+                        }
+                        else
+                        {
+                            stanKonta = (1 - i.stawka)*stanKonta;
+                        }
+                        try {
+                            xy.add(counter, stanKonta);
+                            counter++;
+                        }
+                        catch (SeriesException ex) {
+                            System.err.println("Error adding to series");
+                        }
+                    }
+
+                    XYSeries xy2 = new XYSeries("Saldo Koncowe");
+                    int counter2 = 0;
+                    while(counter-- > 0)
+                    {
+                        xy2.add(counter2, stanKonta);
+                        counter2++;
+                    }
+                    //ustawiamy na jlabelu
+                    DecimalFormat df = new DecimalFormat("#.##");
+                    jLStan.setText(df.format(stanKonta) + "PLN");
+
+                    System.out.println("stanKonta: " + stanKonta);
+                    XYSeriesCollection dataset = new XYSeriesCollection(xy);
+                    dataset.addSeries(xy2);
+                    chart = createChart(dataset);
+                    chart.setBackgroundPaint(Color.LIGHT_GRAY);
+
+
+                    XYPlot plot = chart.getXYPlot();
+                    NumberAxis range = (NumberAxis) plot.getDomainAxis();
+                    range.setTickUnit(new NumberTickUnit(1));
+
+                    //Zmiana backgroundu
+                    //CategoryPlot catplot = (CategoryPlot) chart.getPlot();
+                    //catplot.setBackgroundPaint(Color.LIGHT_GRAY);
+                    //catplot.setRangeGridlinePaint(Color.DARK_GRAY);
+
+                    ChartPanel chartPanel = new ChartPanel(chart);
+                    chartPanel.setPreferredSize(new java.awt.Dimension(825, 218));
+
+                    //825, 228, 190, 290
+                    chartPanel.setBounds(190, 300, 825, 218);
+                    jPWykres.add(chartPanel);
+                }
+                catch (NumberFormatException ex)
+                {
+                    JOptionPane.showMessageDialog(jPPreferencje, "Sprawdz daty");   
+                }
+            }
+        });
+        
         jPPreferencje.add(jLData1);
         jPPreferencje.add(jTFData1);
         jPPreferencje.add(jLData2);
@@ -93,5 +220,42 @@ public class z5_Symulacja extends JLayeredPane{
         add(jPPreferencje);
         add(jPWykres);
         add(jPTabela);
+    }
+
+    private JTable createTable()
+    {
+        String[] columnNames = {"Team1",
+                        "Team2",
+                        "Kurs",
+                        "Wynik 1",
+                        "Wynik 2",
+                        "Stawka",
+                        "Aktualna kwota"};
+        //Object[][] values = {"", "", "","",""};
+        JTable t = null;
+        //t = new JTable(columnNames);
+        
+        return t;
+    }
+    
+    private JFreeChart createChart(XYDataset dataset)
+    {
+        final JFreeChart chart = ChartFactory.createXYLineChart(
+            "STAN KONTA",          // chart title
+            "Kolejka",               // domain axis label
+            "",                  // range axis label
+            dataset,                  // data
+            PlotOrientation.VERTICAL,
+            true,                     // include legend
+            true,
+            false
+        );
+        
+        return chart;
+    }
+    
+    private boolean sprawdzDate(String data)
+    {
+        return (Integer.parseInt(data) > 19800000 && Integer.parseInt(data) < 20130000) ? true : false;
     }
 }
