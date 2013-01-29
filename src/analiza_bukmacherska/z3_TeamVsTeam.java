@@ -43,7 +43,6 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.util.Rotation;
 import tabela_ligowa.TabelaLigowa;
-import tabela_ligowa.WybranaDruzyna;
 import wybierz_lige.WybierzLige;
 import wybierz_lige.WybranaLiga;
 
@@ -404,7 +403,7 @@ public class z3_TeamVsTeam extends JLayeredPane{
         );
         
         chart.setTitle(
-            new org.jfree.chart.title.TextTitle("FORMA DRUŻYNY " + team,
+            new org.jfree.chart.title.TextTitle("FORMA DRUŻYNY " + team.toUpperCase(),
             new Font("Arial Black", 1, 10))
         );
         
@@ -463,7 +462,7 @@ public class z3_TeamVsTeam extends JLayeredPane{
     {
         //*SQL STUFF
         String stringQuery = "SELECT HomeTeam, FTAG, FTHG FROM MECZE_STATYSTYKI WHERE AwayTeam = '" + 
-                             team + "' ORDER BY DATA LIMIT " + Integer.toString(n) + ";";
+                             team.toUpperCase() + "' ORDER BY DATA LIMIT " + Integer.toString(n) + ";";
         //  
         ResultSet r = stat.executeQuery(stringQuery);
         
@@ -491,7 +490,7 @@ public class z3_TeamVsTeam extends JLayeredPane{
     private JFreeChart createPieChart(String team, PieDataset dataset) {
         
         final JFreeChart chart = ChartFactory.createPieChart3D(
-            "SKUTECZNOŚĆ " + team,  // chart title
+            "SKUTECZNOŚĆ " + team.toUpperCase(),  // chart title
             dataset,                // data
             true,                   // include legend
             false,
@@ -509,7 +508,7 @@ public class z3_TeamVsTeam extends JLayeredPane{
         renderer.setColor(plot, dataset); 
         
         chart.setTitle(
-            new org.jfree.chart.title.TextTitle("SKUTECZNOŚĆ " + team,
+            new org.jfree.chart.title.TextTitle("SKUTECZNOŚĆ " + team.toUpperCase(),
             new Font("Arial Black", 1, 10))
         );
         return chart;        
@@ -541,9 +540,17 @@ public class z3_TeamVsTeam extends JLayeredPane{
         renderer.setOutline(true);
         renderer.setSeriesOutlinePaint(0, Color.black);
         chart.setTitle(
-            new org.jfree.chart.title.TextTitle("FORMA DRUŻYNY " + team,
+            new org.jfree.chart.title.TextTitle("FORMA DRUŻYNY " + team.toUpperCase(),
             new Font("Arial Black", 1, 10))
         );
+        
+        ValueAxis yaxis = plot.getRangeAxis();
+        //yaxis.setTickLabelFont(new Font("Arial Black", 1, 10));
+        yaxis.setLabelFont(new Font("Arial Black", 1, 10));
+        ValueAxis xaxis = plot.getDomainAxis();
+        //yaxis.setTickLabelFont(new Font("Arial Black", 1, 10));
+        xaxis.setLabelFont(new Font("Arial Black", 1, 10));
+        
         
         return chart;
     }
