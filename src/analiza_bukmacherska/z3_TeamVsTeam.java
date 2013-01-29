@@ -1,5 +1,6 @@
 package analiza_bukmacherska;
 
+import WybierzDruzyny.WybranaDruzynaCombo;
 import analiza_bukmacherska.z2_Tabele_Forma.Forma;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,6 +19,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -46,7 +48,8 @@ import wybierz_lige.WybierzLige;
 import wybierz_lige.WybranaLiga;
 
 public class z3_TeamVsTeam extends JLayeredPane{
-    
+    m1_okienko  jP_Wykresy;
+    m1_okienko  jP_Druzyna;
     String currentTeam1;
     String currentTeam2;
     
@@ -82,15 +85,16 @@ public class z3_TeamVsTeam extends JLayeredPane{
     
     Connection conn;
     Statement stat;
+    WybranaDruzynaCombo wdc;
     public z3_TeamVsTeam() throws SQLException, ClassNotFoundException
     {
+        jP_Wykresy= new  m1_okienko(785,530,5,5,"WYKRESY");
+        //jP_Druzyna= new  m1_okienko(220,100,795,417,"DRUŻYNA");
         Class.forName("org.sqlite.JDBC");
         conn = DriverManager.getConnection("jdbc:sqlite:mydb.db");
         stat = conn.createStatement();
-        
         currentTeam1 = "Arsenal";
         currentTeam2 = "Liverpool";
-                        
         setBounds(0, 0, 1024, 530);
         
         chart1 = new JPanel(new BorderLayout());
@@ -98,29 +102,29 @@ public class z3_TeamVsTeam extends JLayeredPane{
         chart2 = new JPanel(new BorderLayout());
         
         chart2.setBackground(Color.LIGHT_GRAY);
-        chart1.setBounds(5, 5, 390, 350);
-        chart2.setBounds(400, 5, 390, 350);
+        chart1.setBounds(5, 30, 390, 350);
+        chart2.setBounds(400, 30, 390, 350);
         
-        add(chart1, BorderLayout.CENTER);
-        add(chart2, BorderLayout.CENTER);
+        jP_Wykresy.add(chart1, BorderLayout.CENTER);
+        jP_Wykresy.add(chart2, BorderLayout.CENTER);
         
         label1 = new JButton("LAST 5");
         label2 = new JButton("LAST 5");
         
-        label1.setBounds(5, 360, 127, 53);
-        label2.setBounds(400, 360, 127, 53);
+        label1.setBounds(5, 390, 127, 53);
+        label2.setBounds(400, 390, 127, 53);
         
         label3 = new JButton("LAST 10");
         label4 = new JButton("LAST 10");
         
-        label3.setBounds(137, 360, 127, 53);
-        label4.setBounds(532, 360, 127, 53);
+        label3.setBounds(137, 390, 127, 53);
+        label4.setBounds(532, 390, 127, 53);
         
         label5 = new JButton("LAST 15");
         label6 = new JButton("LAST 15");
         
-        label5.setBounds(269, 360, 127, 53);
-        label6.setBounds(664, 360, 127, 53);
+        label5.setBounds(269, 390, 127, 53);
+        label6.setBounds(664, 390, 127, 53);
         
         label1.setBackground(Color.LIGHT_GRAY);
         label2.setBackground(Color.GRAY);
@@ -131,15 +135,15 @@ public class z3_TeamVsTeam extends JLayeredPane{
         
         label7 = new JButton("% OF WON");
         label8 = new JButton("% OF WON");
-        label7.setBounds(5, 418, 127, 53);
-        label8.setBounds(400, 418, 127, 53);
+        label7.setBounds(5, 448, 127, 53);
+        label8.setBounds(400, 448, 127, 53);
         label7.setBackground(Color.GRAY);
         label8.setBackground(Color.LIGHT_GRAY);
         
         label9 = new JButton("SAVE AS PNG");
         label10 = new JButton("SAVE AS PNG");
-        label9.setBounds(269, 418, 127, 53);
-        label10.setBounds(664, 418, 127, 53);
+        label9.setBounds(269, 448, 127, 53);
+        label10.setBounds(664, 448, 127, 53);
         label9.setBackground(Color.GRAY);
         label10.setBackground(Color.LIGHT_GRAY);
         label9.setEnabled(false);
@@ -147,24 +151,17 @@ public class z3_TeamVsTeam extends JLayeredPane{
         
         label11 = new JButton("TIME SERIES");
         label12 = new JButton("TIME SERIES");
-        label11.setBounds(137, 418, 127, 53);
-        label12.setBounds(532, 418, 127, 53);
-        label11.setBackground(Color.LIGHT_GRAY);
-        label12.setBackground(Color.GRAY);
         
+        JComboBox team3 = new JComboBox();
         team1 = new JTextField("Arsenal");
         team2 = new JTextField("Liverpool");
-        currentTeam1 = team1.getText();
-        currentTeam2 = team2.getText();
-        
-        team1.setBounds(796, 418, 220, 24);
-        team2.setBounds(796, 446, 220, 24);
-                
+        //currentTeam1 = team1.getText();
+        //currentTeam2 = team2.getText();  
         label1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 try {
-                    drawFormChart(chart1, team1.getText(), 5);
+                    drawFormChart(chart1, wdc.team1.getSelectedItem().toString(), 5);
                 } catch (SQLException ex) {
                     Logger.getLogger(z3_TeamVsTeam.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(chart1, "Wybierz poprawną drużynę");
@@ -176,7 +173,7 @@ public class z3_TeamVsTeam extends JLayeredPane{
             public void actionPerformed(ActionEvent e)
             {
                 try {
-                    drawFormChart(chart2, team2.getText(), 5);
+                    drawFormChart(chart2, wdc.team2.getSelectedItem().toString(), 5);
                 } catch (SQLException ex) {
                     Logger.getLogger(z3_TeamVsTeam.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(chart2, "Wybierz poprawną drużynę");
@@ -188,7 +185,7 @@ public class z3_TeamVsTeam extends JLayeredPane{
             public void actionPerformed(ActionEvent e)
             {
                 try {
-                    drawFormChart(chart1, team1.getText(), 10);
+                    drawFormChart(chart1, wdc.team1.getSelectedItem().toString(), 10);
                 } catch (SQLException ex) {
                     Logger.getLogger(z3_TeamVsTeam.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(chart1, "Wybierz poprawną drużynę");
@@ -199,7 +196,7 @@ public class z3_TeamVsTeam extends JLayeredPane{
             public void actionPerformed(ActionEvent e)
             {
                 try {
-                    drawFormChart(chart2, team2.getText(), 10);
+                    drawFormChart(chart2, wdc.team2.getSelectedItem().toString(), 10);
                 } catch (SQLException ex) {
                     Logger.getLogger(z3_TeamVsTeam.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(chart2, "Wybierz poprawną drużynę");
@@ -210,7 +207,7 @@ public class z3_TeamVsTeam extends JLayeredPane{
             public void actionPerformed(ActionEvent e)
             {
                 try {
-                    drawFormChart(chart1, team1.getText(), 15);
+                    drawFormChart(chart1, wdc.team1.getSelectedItem().toString(), 15);
                 } catch (SQLException ex) {
                     Logger.getLogger(z3_TeamVsTeam.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(chart1, "Wybierz poprawną drużynę");
@@ -221,7 +218,7 @@ public class z3_TeamVsTeam extends JLayeredPane{
             public void actionPerformed(ActionEvent e)
             {
                 try {
-                    drawFormChart(chart2, team2.getText(), 15);
+                    drawFormChart(chart2, wdc.team2.getSelectedItem().toString(), 15);
                 } catch (SQLException ex) {
                     Logger.getLogger(z3_TeamVsTeam.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(chart2, "Wybierz poprawną drużynę");
@@ -233,7 +230,7 @@ public class z3_TeamVsTeam extends JLayeredPane{
             public void actionPerformed(ActionEvent e)
             {
                 try {
-                    drawPercOfWinChart(chart1, team1.getText(), 15);
+                    drawPercOfWinChart(chart1, wdc.team1.getSelectedItem().toString(), 15);
                 } catch (SQLException ex) {
                     Logger.getLogger(z3_TeamVsTeam.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(chart1, "Wybierz poprawną drużynę");
@@ -245,7 +242,7 @@ public class z3_TeamVsTeam extends JLayeredPane{
             public void actionPerformed(ActionEvent e)
             {
                 try {
-                    drawPercOfWinChart(chart2, team2.getText(), 15);
+                    drawPercOfWinChart(chart2, wdc.team2.getSelectedItem().toString(), 15);
                 } catch (SQLException ex) {
                     Logger.getLogger(z3_TeamVsTeam.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(chart2, "Wybierz poprawną drużynę");
@@ -285,7 +282,7 @@ public class z3_TeamVsTeam extends JLayeredPane{
             public void actionPerformed(ActionEvent e)
             {
                 try {
-                    drawXYChart(chart1, team1.getText(), 30);
+                    drawXYChart(chart1, wdc.team1.getSelectedItem().toString(), 30);
                 } catch (SQLException ex) {
                     Logger.getLogger(z3_TeamVsTeam.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(chart1, "Wybierz poprawną drużynę");
@@ -297,7 +294,7 @@ public class z3_TeamVsTeam extends JLayeredPane{
             public void actionPerformed(ActionEvent e)
             {
                 try {
-                    drawXYChart(chart2, team2.getText(), 30);
+                    drawXYChart(chart2, wdc.team2.getSelectedItem().toString(), 30);
                 } catch (SQLException ex) {
                     Logger.getLogger(z3_TeamVsTeam.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(chart2, "Wybierz poprawną drużynę");
@@ -305,27 +302,40 @@ public class z3_TeamVsTeam extends JLayeredPane{
             }
         }); 
         
-        add(label1);
-        add(label2);
-        add(label3);
-        add(label4);
-        add(label5);
-        add(label6);
-        add(label7);
-        add(label8);
-        add(label9);
-        add(label10);
-        add(label11);
-        add(label12);
-        
-        add(team1);
-        add(team2);
+        jP_Wykresy.add(label1);
+        jP_Wykresy.add(label2);
+        jP_Wykresy.add(label3);
+        jP_Wykresy.add(label4);
+        jP_Wykresy.add(label5);
+        jP_Wykresy.add(label6);
+        jP_Wykresy.add(label7);
+        jP_Wykresy.add(label8);
+        jP_Wykresy.add(label9);
+        jP_Wykresy.add(label10);
+        jP_Wykresy.add(label11);
+        jP_Wykresy.add(label12);
+        label11.setBounds(137, 448, 127, 53);
+        label12.setBounds(532, 448, 127, 53);
+        label11.setBackground(Color.LIGHT_GRAY);
+        label12.setBackground(Color.GRAY);
+        add(jP_Wykresy);
+        //add(jP_Druzyna);
+        //jP_Druzyna.add(team1);
+        //jP_Druzyna.add(team2);
+        //jP_Druzyna.add(team3);
         WybranaLiga  wybranaLiga = new WybranaLiga("E0");
-        WybranaDruzyna wybranaDruzyna = new WybranaDruzyna();
-        form = new Forma(wybranaDruzyna);
         mwybierzLige = new WybierzLige(wybranaLiga);
-        
         mwybierzLige.setBounds(795 ,5, 220, 530);
+        jP_Wykresy.setBackground(new java.awt.Color(209, 210, 211));
+        jP_Wykresy.setOpaque(true);
+        //jP_Druzyna.setBackground(new java.awt.Color(209, 210, 211));
+        //jP_Druzyna.setOpaque(true);
+ 
+        wdc = new WybranaDruzynaCombo(wybranaLiga);
+        wdc.team1.getSelectedItem();
+        add(wdc);
+        setLocation(0,0);
+        setBounds(0, 0, 1024, 520);
         add(mwybierzLige);
     }
     
@@ -537,28 +547,6 @@ public class z3_TeamVsTeam extends JLayeredPane{
         
         return chart;
     }
-    
-     /*private double[][] createSeriesFTAG(int MAX, String team) throws SQLException {
-        String stringQuery = "SELECT HomeTeam, FTAG, FTHG FROM MECZE_STATYSTYKI WHERE AwayTeam = '" + 
-                             team + "' ORDER BY DATA LIMIT " + Integer.toString(MAX) + ";";
-        //  
-        ResultSet r = stat.executeQuery(stringQuery);
-        double[][] series = new double[2][MAX];
-        XYSeries a = new 
-        int i = 0;
-        while(r.next())
-        {
-            dataset.add(i, Integer.parseInt(r.getString(3)));
-            i++;
-        }
-        
-            series[0][i] = (double) i;
-            series[1][i] = mean + random.nextGaussian() / 2;
-            
-        }
-        return series;
-    }*/
-    
     private XYSeries createXYDatasetFTHG(String team, int n) throws SQLException
     {
         //*SQL STUFF
