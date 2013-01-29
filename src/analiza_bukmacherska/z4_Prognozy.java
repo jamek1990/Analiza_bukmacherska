@@ -69,7 +69,7 @@ public class z4_Prognozy extends JLayeredPane{
         test = new Test();
         testT = new Test(true);
         setWindows();
-        setResult(testT.getStrategy(20110101, 20121231));
+        //setResult(testT.getStrategy(20110101, 20121231));
         //Vector<mecz> strategie = getStrategy(2,4);
         //for(int i = 0; i<strategie.size(); i++){
         //    System.out.println(strategie.get(i).getTeam1() + " " + strategie.get(i).getTeam2() + " " + strategie.get(i).getTeam1R() + " " + strategie.get(i).getTeam2R() + " " + strategie.get(i).getData() + " " + strategie.get(i).getStawka() + " ");

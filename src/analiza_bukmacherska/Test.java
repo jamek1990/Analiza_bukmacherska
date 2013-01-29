@@ -1,22 +1,10 @@
 package analiza_bukmacherska;
-import java.awt.*;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.*;
-import javax.swing.table.*;
-import java.awt.BorderLayout;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.math.*;
-import java.util.Vector;
-import java.util.Random;
-import java.text.SimpleDateFormat;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Vector;
+import javax.swing.*;
 
         
 
@@ -72,16 +60,24 @@ public class Test{
         catch(Exception ex){System.out.println(ex.getMessage());}
     }      
     
-    public Vector<mecz> getStrategy(int Time1, int Time2){      
-        try{
-            if(X) generate();
+     public Vector<mecz> getStrategy(int Time1, int Time2){      
+        /*try{
+            if(Y) generate();
         }
         catch(Exception ex){}
         TIME = Time1;
         Vector<mecz> strategy = new Vector<mecz>();
-        while (TIME <= Time2) {strategy.addAll(getStrategy(TIME));TIME +=7;}
+        while (TIME <= Time2) strategy.addAll(getOptimalStrategy(Time1, true));       
+        return strategy;*/
+        Vector<mecz> strategy = new Vector<mecz>();
+        strategy.add(new mecz());
+        strategy.add(new mecz());
+        strategy.add(new mecz());
+        strategy.add(new mecz());
+        strategy.add(new mecz());
         return strategy;
-    }            
+    }     
+    
     public Vector<mecz> getStrategy(int time){
         int s = 0, e = 0;
         do{

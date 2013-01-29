@@ -27,7 +27,6 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
     JFreeChart chart;
     public z5_SymulacjaPanel() {
         initComponents();
-        
         test = new Test();
     }
 
@@ -71,10 +70,13 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
         jLabel3.setText("Początek strategii");
 
         jTextField3.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        jTextField3.setToolTipText("RRRRMMDD");
 
         jLabel4.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLabel4.setText("Koniec strategii");
 
+        jTextField4.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        jTextField4.setToolTipText("RRRRMMDD");
         jTextField4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField4ActionPerformed(evt);
@@ -84,6 +86,9 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLabel1.setText("Saldo początkowe");
 
+        jTextField1.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        jTextField1.setToolTipText("#.##");
+
         jLabel2.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Saldo");
@@ -92,6 +97,7 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("0.00");
 
+        jButton1.setBackground(new java.awt.Color(128, 128, 128));
         jButton1.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
         jButton1.setText("SYMULUJ!");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -181,15 +187,21 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
         String data1 = jTextField3.getText();
         String data2 = jTextField4.getText();
        
-        if("".equals(data1)) {
-            data1 = "20080701";
+        
+        int intData1 = 20080701;
+        int intData2 = 20080801;
+        try
+        {
+            intData1 = Integer.parseInt(data1);
+            intData2 = Integer.parseInt(data2);
         }
-        if("".equals(data2)) {
-            data2 = "20080801";
+        catch (NumberFormatException ex)
+        {
+            JOptionPane.showMessageDialog(this, "Sprawdz daty");   
         }
         
         System.out.println(data1 + "\n" + data2);
-        if(!sprawdzDate(data1) || !sprawdzDate(data2))
+        if(!sprawdzDate(data1) || !sprawdzDate(data2) || intData1 >= intData2)
         {
             JOptionPane.showMessageDialog(this, "Sprawdz daty");
         }
@@ -202,8 +214,6 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
         {
             JOptionPane.showMessageDialog(this, "Sprawdz początkowe saldo");
         }
-        int intData1 = Integer.parseInt(data1);
-        int intData2 = Integer.parseInt(data2);
         
         //Strategia dla danych dat
         mecze = test.getStrategy(intData1, intData2);
