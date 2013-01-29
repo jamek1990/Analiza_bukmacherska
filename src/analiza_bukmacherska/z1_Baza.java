@@ -19,17 +19,13 @@ import wybierz_lige.WybierzLige;
 import wybierz_lige.WybranaLiga;
 
 public class z1_Baza extends JLayeredPane{
-  
     JLayeredPane panel2;
     JLabel jL_OdswiezBaze;
     JLabel baza3;
     m1_okienko jP_OknoAktualizujBaze;
     WybierzLige mwybierzLige;
     Kursy kursy;
-    
     public z1_Baza() throws Exception{
-       // Robot rob = new Robot();
-       // rob.RefreshNewKurs();
         WybranaLiga  wybranaLiga = new WybranaLiga("I1");
         mwybierzLige = new WybierzLige(wybranaLiga);
         kursy=new Kursy(wybranaLiga);
