@@ -104,20 +104,20 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 668, Short.MAX_VALUE)
+            .addGap(0, 688, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 270, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -139,8 +139,7 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,13 +230,23 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
             }
         }
         
+        XYSeries xy2 = new XYSeries("Saldo Koncowe");
+        int counter2 = 0;
+        while(counter-- > 0)
+        {
+            xy2.add(counter2, stanKonta);
+            counter2++;
+        }
         //ustawiamy na jlabelu
         DecimalFormat df = new DecimalFormat("#.##");
         jLabel5.setText(df.format(stanKonta));
         
         System.out.println("stanKonta: " + stanKonta);
-        XYDataset dataset = new XYSeriesCollection(xy);
+        XYSeriesCollection dataset = new XYSeriesCollection(xy);
+        dataset.addSeries(xy2);
         chart = createChart(dataset);
+        chart.setBackgroundPaint(Color.LIGHT_GRAY);
+        
         
         XYPlot plot = chart.getXYPlot();
         NumberAxis range = (NumberAxis) plot.getDomainAxis();
@@ -249,22 +258,20 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
         //catplot.setRangeGridlinePaint(Color.DARK_GRAY);
         
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(1004, 232));
-        chartPanel.setMouseZoomable(true, false);
-        
+        chartPanel.setPreferredSize(new java.awt.Dimension(1024, 232));
         jPanel1.add(chartPanel);
-        chartPanel.setBounds(0,0,1004,232);
+        chartPanel.setBounds(0,0,1024,232);
     }//GEN-LAST:event_jButton1ActionPerformed
     
     private JFreeChart createChart(XYDataset dataset)
     {
         final JFreeChart chart = ChartFactory.createXYLineChart(
-            "Stan konta gracza po każdej kolejce",          // chart title
-            "Stan konta",               // domain axis label
-            "Kolejka",                  // range axis label
+            "STAN KONTA",          // chart title
+            "Kolejka",               // domain axis label
+            "",                  // range axis label
             dataset,                  // data
             PlotOrientation.VERTICAL,
-            false,                     // include legend
+            true,                     // include legend
             true,
             false
         );
