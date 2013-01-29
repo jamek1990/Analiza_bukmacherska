@@ -5,6 +5,8 @@ import java.text.DecimalFormat;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -14,7 +16,6 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.general.SeriesException;
-import org.jfree.data.time.TimeSeries;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -25,6 +26,9 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
     private Vector<mecz> mecze; //mecze do obstawienia
     private double stanKonta;
     JFreeChart chart;
+    JTable tabela;
+    JScrollPane scrollpane;
+    
     public z5_SymulacjaPanel() {
         initComponents();
         test = new Test();
@@ -217,6 +221,7 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
         
         //Strategia dla danych dat
         mecze = test.getStrategy(intData1, intData2);
+        //do tabeli
         //do wykresu TimeSeries
         XYSeries xy = new XYSeries("Saldo");
         xy.add(0, stanKonta);
@@ -271,7 +276,25 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
         chartPanel.setPreferredSize(new java.awt.Dimension(1024, 232));
         jPanel1.add(chartPanel);
         chartPanel.setBounds(0,0,1024,232);
+        
+        //JTable
     }//GEN-LAST:event_jButton1ActionPerformed
+    
+    private JTable createTable()
+    {
+        String[] columnNames = {"Team1",
+                        "Team2",
+                        "Kurs",
+                        "Wynik 1",
+                        "Wynik 2",
+                        "Stawka",
+                        "Aktualna kwota"};
+        //Object[][] values = {"", "", "","",""};
+        JTable t = null;
+        //t = new JTable(columnNames);
+        
+        return t;
+    }
     
     private JFreeChart createChart(XYDataset dataset)
     {
