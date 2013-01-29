@@ -4,27 +4,26 @@ public class mecz {
     String team1, team2;
     int data;
     double stawka;
+    double kurs;
     int R1, R2;
     
-    public mecz(String teamA, String teamB, double stawkas, int datas, int RA, int RB)
+    public mecz(String teamA, String teamB, double kurss, double stawkas, int datas, int RA, int RB)
     {
         team1 = teamA;
         team2 = teamB;
         data = datas;
+        kurs = kurss;
         stawka = stawkas;
         R1 = RA;
         R2 = RB;
     }    
     public mecz(){
         Random rand = new Random();
-        team1 = "" + rand.nextInt(999999);
+        kurs = rand.nextDouble()*4;
+        team1 = "" + rand.nextInt(999999);                
         team2 = "" + rand.nextInt(999999);
-        if(rand.nextBoolean()) {
-            data = 20100101;
-        }
-        else {
-            data = 20100102;
-        }
+        if(rand.nextBoolean()) data = 20100101;
+        else data = 20100102;
         R1 = rand.nextInt(6);
         R2 = rand.nextInt(6);
         stawka = rand.nextDouble();
