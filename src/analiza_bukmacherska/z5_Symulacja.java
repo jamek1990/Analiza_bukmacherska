@@ -82,37 +82,37 @@ public class z5_Symulacja extends JLayeredPane{
         jLData1.setHorizontalAlignment(SwingConstants.CENTER);
         jLData1.setBounds(10, 30, 160, 20);
 
-        jTFData1 = new JTextField();
+        jTFData1 = new JTextField("20080101");
         jTFData1.setBounds(10, 55, 160, 20);
 
         jLData2 = new JLabel("DATA ZAKOŃCZENIA");
         jLData1.setHorizontalAlignment(SwingConstants.CENTER);
         jLData2.setBounds(10, 80, 160, 20);
 
-        jTFData2 = new JTextField();
+        jTFData2 = new JTextField("20090101");
         jTFData2.setBounds(10, 105, 160, 20);
 
         jLSaldo = new JLabel("SALDO POCZĄTKOWE");
         jLSaldo.setHorizontalAlignment(SwingConstants.CENTER);
         jLSaldo.setBounds(10, 130, 160, 20);
 
-        jTFSaldo = new JTextField();
+        jTFSaldo = new JTextField("100");
         jTFSaldo.setBounds(10, 155, 160, 20);
 
         jLStanPoczatkowy = new JLabel("0.00");
-        jLStanPoczatkowy.setBounds(10, 180, 160, 80);
+        jLStanPoczatkowy.setBounds(10, 180, 160, 40);
         jLStanPoczatkowy.setFont(new Font("Arial Black", 1, 28));
         jLStanPoczatkowy.setHorizontalAlignment(SwingConstants.CENTER);
         jLStanPoczatkowy.setVerticalAlignment(SwingConstants.CENTER);
         jLStan = new JLabel("0.00");
-        jLStan.setBounds(10, 265, 160, 80);
+        jLStan.setBounds(10, 225, 160, 40);
         jLStan.setFont(new Font("Arial Black", 1, 28));
         jLStan.setHorizontalAlignment(SwingConstants.CENTER);
         jLStan.setVerticalAlignment(SwingConstants.CENTER);
 
         jBSymulacja = new JButton("SYMULUJ");
         jBSymulacja.setBackground(Color.GRAY);
-        jBSymulacja.setBounds(10, 350, 160, 40);
+        jBSymulacja.setBounds(10, 270, 160, 40);
 
         //action listener
         jBSymulacja.addActionListener(new ActionListener() {
@@ -252,8 +252,8 @@ java.awt.Dimension(825, 188));
 
     private JFreeChart createChart(XYDataset dataset)
     {
-        final JFreeChart chart = ChartFactory.createXYLineChart(
-            "STAN KONTA",          // chart title
+        final JFreeChart output = ChartFactory.createXYLineChart(
+            "",          // chart title
             "Kolejka",               // domain axis label
             "",                  // range axis label
             dataset,                  // data
@@ -263,7 +263,7 @@ java.awt.Dimension(825, 188));
             false
         );
 
-        return chart;
+        return output;
     }
 
     private boolean sprawdzDate(String data)
