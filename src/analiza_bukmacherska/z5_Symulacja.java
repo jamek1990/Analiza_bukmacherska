@@ -45,7 +45,7 @@ public class z5_Symulacja extends JLayeredPane{
         jPWykres.setBackground(new java.awt.Color(209, 210, 211));
         jPWykres.setOpaque(true);
         
-        jPTabela = new m1_okienko(825, 285, 190, 5, "TABELA");
+        jPTabela = new m1_okienko(825, 280, 190, 5, "TABELA");
         jPTabela.setBackground(new java.awt.Color(209, 210, 211));
         jPTabela.setOpaque(true);
         
