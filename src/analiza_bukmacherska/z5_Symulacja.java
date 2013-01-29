@@ -54,6 +54,7 @@ public class z5_Symulacja extends JLayeredPane{
     private Vector<mecz> mecze; //mecze do obstawienia
     private double stanKonta;
     JFreeChart chart;
+    ChartPanel chartPanel;
     public z5_Symulacja(){
         stanKonta = 0;
         test = new Test();
@@ -63,6 +64,7 @@ public class z5_Symulacja extends JLayeredPane{
         setLocation(0,0);
         setBounds(0, 0, 1024, 530);
         
+        chartPanel = new ChartPanel(chart);
         //okienko z preferencjami
         jPPreferencje = new m1_okienko(180, 513, 5, 5, "PREFERENCJE");
         jPPreferencje.setBackground(new java.awt.Color(209, 210, 211));
@@ -193,13 +195,13 @@ public class z5_Symulacja extends JLayeredPane{
                     //CategoryPlot catplot = (CategoryPlot) chart.getPlot();
                     //catplot.setBackgroundPaint(Color.LIGHT_GRAY);
                     //catplot.setRangeGridlinePaint(Color.DARK_GRAY);
-
-                    ChartPanel chartPanel = new ChartPanel(chart);
+                    chartPanel.setChart(chart);
+                    //chartPanel = new ChartPanel(chart);
                     chartPanel.setPreferredSize(new java.awt.Dimension(825, 218));
 
                     //825, 228, 190, 290
-                    chartPanel.setBounds(190, 300, 825, 218);
-                    jPWykres.add(chartPanel);
+                    chartPanel.setBounds(0,0, 825, 218);
+                    //jPWykres.add(chartPanel);
                 }
                 catch (NumberFormatException ex)
                 {
@@ -207,7 +209,8 @@ public class z5_Symulacja extends JLayeredPane{
                 }
             }
         });
-        
+       // jLData1.
+        jPWykres.add(chartPanel);
         jPPreferencje.add(jLData1);
         jPPreferencje.add(jTFData1);
         jPPreferencje.add(jLData2);
@@ -219,6 +222,8 @@ public class z5_Symulacja extends JLayeredPane{
         
         add(jPPreferencje);
         add(jPWykres);
+        jPWykres.setBackground(new java.awt.Color(209, 210, 211));
+        jPWykres.setOpaque(true);
         add(jPTabela);
     }
 
