@@ -36,25 +36,25 @@ public class z5_Symulacja extends JLayeredPane{
     m1_okienko jPPreferencje;
     m1_okienko jPWykres;
     m1_okienko jPTabela;
-    
+
     //textfieldy, labele, buttony
     JTextField jTFData1;
     JTextField jTFData2;
     JTextField jTFSaldo;
-    
+
     JButton jBSymulacja;
-    
+
     JLabel jLData1;
     JLabel jLData2;
     JLabel jLSaldo;
+    JLabel jLStanPoczatkowy;
     JLabel jLStan;
-    //z5_SymulacjaPanel z5;    
-    
+    //z5_SymulacjaPanel z5;
+
     private Test test; //generuje strategie
     private Vector<mecz> mecze; //mecze do obstawienia
     private double stanKonta;
     JFreeChart chart;
-    ChartPanel chartPanel;
     public z5_Symulacja(){
         stanKonta = 0;
         test = new Test();
@@ -63,53 +63,57 @@ public class z5_Symulacja extends JLayeredPane{
         //z5.setBounds(0, 0, 1024, 530);
         setLocation(0,0);
         setBounds(0, 0, 1024, 530);
-        
-        chartPanel = new ChartPanel(chart);
+
         //okienko z preferencjami
         jPPreferencje = new m1_okienko(180, 513, 5, 5, "PREFERENCJE");
         jPPreferencje.setBackground(new java.awt.Color(209, 210, 211));
         jPPreferencje.setOpaque(true);
-        
+
         jPWykres = new m1_okienko(825, 228, 190, 290, "STAN KONTA");
         jPWykres.setBackground(new java.awt.Color(209, 210, 211));
         jPWykres.setOpaque(true);
-        
+
         jPTabela = new m1_okienko(825, 280, 190, 5, "TABELA");
         jPTabela.setBackground(new java.awt.Color(209, 210, 211));
         jPTabela.setOpaque(true);
-        
+
         //elementy preferencji
         jLData1 = new JLabel("DATA ROZPOCZĘCIA");
         jLData1.setHorizontalAlignment(SwingConstants.CENTER);
         jLData1.setBounds(10, 30, 160, 20);
-        
+
         jTFData1 = new JTextField();
         jTFData1.setBounds(10, 55, 160, 20);
-                
+
         jLData2 = new JLabel("DATA ZAKOŃCZENIA");
         jLData1.setHorizontalAlignment(SwingConstants.CENTER);
         jLData2.setBounds(10, 80, 160, 20);
-        
+
         jTFData2 = new JTextField();
         jTFData2.setBounds(10, 105, 160, 20);
-        
+
         jLSaldo = new JLabel("SALDO POCZĄTKOWE");
         jLSaldo.setHorizontalAlignment(SwingConstants.CENTER);
         jLSaldo.setBounds(10, 130, 160, 20);
-        
+
         jTFSaldo = new JTextField();
         jTFSaldo.setBounds(10, 155, 160, 20);
-        
+
+        jLStanPoczatkowy = new JLabel("0.00");
+        jLStanPoczatkowy.setBounds(10, 180, 160, 80);
+        jLStanPoczatkowy.setFont(new Font("Arial Black", 1, 28));
+        jLStanPoczatkowy.setHorizontalAlignment(SwingConstants.CENTER);
+        jLStanPoczatkowy.setVerticalAlignment(SwingConstants.CENTER);
         jLStan = new JLabel("0.00");
-        jLStan.setBounds(10, 180, 160, 160);
+        jLStan.setBounds(10, 265, 160, 80);
         jLStan.setFont(new Font("Arial Black", 1, 28));
         jLStan.setHorizontalAlignment(SwingConstants.CENTER);
         jLStan.setVerticalAlignment(SwingConstants.CENTER);
-        
+
         jBSymulacja = new JButton("SYMULUJ");
         jBSymulacja.setBackground(Color.GRAY);
-        jBSymulacja.setBounds(10, 345, 160, 40);
-        
+        jBSymulacja.setBounds(10, 350, 160, 40);
+
         //action listener
         jBSymulacja.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
@@ -118,7 +122,7 @@ public class z5_Symulacja extends JLayeredPane{
                     String data1 = jTFData1.getText();
                     String data2 = jTFData2.getText();
 
-
+                    double stan0 = 0;//stan poczatkowy tymczasowy
                     int intData1 = 20080701;
                     int intData2 = 20080801;
                     try
@@ -129,20 +133,15 @@ public class z5_Symulacja extends JLayeredPane{
 
 
                     System.out.println(data1 + "\n" + data2);
-                    if(!sprawdzDate(data1) || !sprawdzDate(data2) || intData1 >= intData2)
+                    if(!sprawdzDate(data1) || !sprawdzDate(data2) ||
+intData1 >= intData2)
                     {
-                        JOptionPane.showMessageDialog(jPPreferencje, "Sprawdz daty");
+                        JOptionPane.showMessageDialog(jPPreferencje,
+"Sprawdz daty");
                     }
 
-                    try
-                    {
-                        stanKonta = Double.parseDouble(jTFSaldo.getText());
-                    }
-                    catch(NumberFormatException ex)
-                    {
-                        JOptionPane.showMessageDialog(jPPreferencje, "Sprawdz początkowe saldo");
-                    }
-
+                    stanKonta = Double.parseDouble(jTFSaldo.getText());
+                    stan0 = (double) stanKonta;
                     //Strategia dla danych dat
                     mecze = test.getStrategy(intData1, intData2);
                     //do tabeli
@@ -178,9 +177,17 @@ public class z5_Symulacja extends JLayeredPane{
                     }
                     //ustawiamy na jlabelu
                     DecimalFormat df = new DecimalFormat("#.##");
-                    jLStan.setText(df.format(stanKonta) + "PLN");
+                    if(stan0 > stanKonta)
+                    {
+                        jLStan.setForeground(Color.RED);
+                    }
+                    else
+                    {
+                        jLStan.setForeground(Color.green);
+                    }
+                    jLStan.setText(df.format(stanKonta));
+                    jLStanPoczatkowy.setText(df.format(stan0));
 
-                    System.out.println("stanKonta: " + stanKonta);
                     XYSeriesCollection dataset = new XYSeriesCollection(xy);
                     dataset.addSeries(xy2);
                     chart = createChart(dataset);
@@ -195,35 +202,35 @@ public class z5_Symulacja extends JLayeredPane{
                     //CategoryPlot catplot = (CategoryPlot) chart.getPlot();
                     //catplot.setBackgroundPaint(Color.LIGHT_GRAY);
                     //catplot.setRangeGridlinePaint(Color.DARK_GRAY);
-                    chartPanel.setChart(chart);
-                    //chartPanel = new ChartPanel(chart);
-                    chartPanel.setPreferredSize(new java.awt.Dimension(825, 218));
+
+                    ChartPanel chartPanel = new ChartPanel(chart);
+                    chartPanel.setPreferredSize(new
+java.awt.Dimension(825, 188));
 
                     //825, 228, 190, 290
-                    chartPanel.setBounds(0,0, 825, 218);
-                    //jPWykres.add(chartPanel);
+                    chartPanel.setBounds(0, 30, 825, 188);
+                    jPWykres.add(chartPanel);
                 }
                 catch (NumberFormatException ex)
                 {
-                    JOptionPane.showMessageDialog(jPPreferencje, "Sprawdz daty");   
+                    JOptionPane.showMessageDialog(jPPreferencje,
+"Sprawdz wprowadzone dane");
                 }
             }
         });
-       // jLData1.
-        jPWykres.add(chartPanel);
+
         jPPreferencje.add(jLData1);
         jPPreferencje.add(jTFData1);
         jPPreferencje.add(jLData2);
         jPPreferencje.add(jTFData2);
         jPPreferencje.add(jLSaldo);
         jPPreferencje.add(jTFSaldo);
+        jPPreferencje.add(jLStanPoczatkowy);
         jPPreferencje.add(jLStan);
         jPPreferencje.add(jBSymulacja);
-        
+
         add(jPPreferencje);
         add(jPWykres);
-        jPWykres.setBackground(new java.awt.Color(209, 210, 211));
-        jPWykres.setOpaque(true);
         add(jPTabela);
     }
 
@@ -239,10 +246,10 @@ public class z5_Symulacja extends JLayeredPane{
         //Object[][] values = {"", "", "","",""};
         JTable t = null;
         //t = new JTable(columnNames);
-        
+
         return t;
     }
-    
+
     private JFreeChart createChart(XYDataset dataset)
     {
         final JFreeChart chart = ChartFactory.createXYLineChart(
@@ -255,12 +262,13 @@ public class z5_Symulacja extends JLayeredPane{
             true,
             false
         );
-        
+
         return chart;
     }
-    
+
     private boolean sprawdzDate(String data)
     {
-        return (Integer.parseInt(data) > 19800000 && Integer.parseInt(data) < 20130000) ? true : false;
+        return (Integer.parseInt(data) > 19800000 &&
+Integer.parseInt(data) < 20130000) ? true : false;
     }
 }
