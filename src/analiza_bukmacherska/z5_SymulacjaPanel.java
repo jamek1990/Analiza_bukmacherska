@@ -225,7 +225,7 @@ public class z5_SymulacjaPanel extends javax.swing.JPanel {
         {
             if(i.R1 > i.R2)
             {
-                stanKonta = (1 + i.stawka)*stanKonta;
+                stanKonta += i.stawka*stanKonta*i.kurs;
             }
             else
             {
