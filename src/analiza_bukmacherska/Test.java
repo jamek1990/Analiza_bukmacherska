@@ -363,10 +363,12 @@ public class Test{
     }    
     
     private void generate() throws SQLException, ClassNotFoundException{
+        database.con.close();
         database = new SQL();
         Statement stat;
         stat = database.con.createStatement(); 
         System.out.println("dsad");
+        
         String query = "select DIV, DATA, HomeTeam, AwayTeam, FTHG, FTAG, K1, K2 from MECZE_STATYSTYKI where K1 not null and K2 not null and (K1 > 1.8 or K2 > 1.9) order by data desc";
         System.out.println("fsdfsdf");
         ResultSet rs1 = stat.executeQuery(query);   
@@ -382,6 +384,7 @@ public class Test{
             K2.add(Double.parseDouble(rs1.getString(8)));
         }
         stat.close();
+        database.con.close();
         if (hometeam1.size() > 0) X = false;
         System.out.println(hometeam1.size());
     }        
@@ -410,6 +413,7 @@ public class Test{
             A.add(Integer.parseInt(rs1.getString(6)));
         }
         stat.close();
+        database.con.close();
         int q1 = hometeam.size();                
         String[] names = new String[q1];
         double[] courses = new double[q1];

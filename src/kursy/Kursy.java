@@ -37,6 +37,7 @@ public class Kursy extends JLayeredPane implements Observer{
     SQL database;
     
     public void dodaj_kursy() throws SQLException, ClassNotFoundException{
+        database.con.close();
         database =new SQL();
         Statement stat;
         String query="";

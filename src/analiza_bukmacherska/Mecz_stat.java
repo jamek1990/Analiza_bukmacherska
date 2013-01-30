@@ -50,12 +50,14 @@ public class Mecz_stat {
             date=null;
         }
         if(st[2]!=null) {
+            st[2].replace("'", "");
             hometeam=st[2];
         }
         else {
             hometeam=null;
         }
         if(st[3]!=null) {
+            st[2].replace("'", "");
             awayteam=st[3];
         }
         else {

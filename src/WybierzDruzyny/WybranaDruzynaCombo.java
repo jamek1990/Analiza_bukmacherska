@@ -33,11 +33,16 @@ public class WybranaDruzynaCombo extends JLayeredPane implements Observer{
                 database =new SQL();
                 stat = database.con.createStatement();
                 String query = "SELECT DISTINCT HOMETEAM FROM MECZE_STATYSTYKI  WHERE DIV ='" + wybranaLigas +  "' ORDER BY HOMETEAM ASC";
+                System.out.println("PIBRANE DWIE DRUZYNY1");
                 ResultSet rs = stat.executeQuery(query);
+                
                 while (rs.next()) {
                     team1.addItem(rs.getString(1));
                     team2.addItem(rs.getString(1));
                 }
+                stat.close();
+                database.con.close();
+                System.out.println("PIBRANE DWIE DRUZYNY");
             } catch (SQLException ex) {
                 Logger.getLogger(WybranaDruzynaCombo.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {

@@ -4,11 +4,14 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Robot {
     public void RefreshDataBase() throws Exception {
-        String ligi[]={"P1","I1","G1","D1","D2","E0","E1","E2","E3","EC","F1","F2","B1","I2","N1","SC0","SC1","SC2","SC3","SP1","SP2","T1"};
-        String kolumny[]={"Div","Date","HomeTeam","AwayTeam","FTHG","FTAG","FTR","HTHG","HTAG","HTR","HS","AS","HST","AST","HHW","AHW","HC","AC","HF","AF","HO","AO","HY","AY","HR","AR","GBH","GBD","GBA"};
+        String ligi[]={ "P1","I1","G1","D1","D2","E0","E1","E2","E3","EC","F1","F2","B1","I2","N1","SC0","SC1","SC2","SC3","SP1","SP2","T1"};
+            String kolumny[]={"Div","Date","HomeTeam","AwayTeam","FTHG","FTAG","FTR","HTHG","HTAG","HTR","HS","AS","HST","AST","HHW","AHW","HC","AC","HF","AF","HO","AO","HY","AY","HR","AR","GBH","GBD","GBA"};
         String kolumny2[]={"***","***","HT","AT"};
         String mecz[]= new String[29];
         int[] hash = new int[29];
@@ -82,6 +85,19 @@ public class Robot {
             }
         }
         sql.con.close();   
+    }
+     public void g() throws SQLException, ClassNotFoundException{
+        SQL sql = new SQL();
+        Statement stat;
+        String query="select DIV from MECZE_STATYSTYKI";
+        stat = sql.con.createStatement();
+        System.out.println("fsdfsdf");
+        ResultSet rs = stat.executeQuery(query);
+        while (rs.next()) {
+            System.out.println(rs.getString(1));
+        }
+       sql.con.close();
+       System.out.println("sdfwef");
     }
     public void RefreshNewKurs() throws Exception {
         SQL sql = new SQL();

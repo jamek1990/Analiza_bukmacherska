@@ -464,6 +464,7 @@ public class z3_TeamVsTeam extends JLayeredPane{
         String stringQuery = "SELECT HomeTeam, FTAG, FTHG FROM MECZE_STATYSTYKI WHERE AwayTeam = '" + 
                              team.toUpperCase() + "' ORDER BY DATA LIMIT " + Integer.toString(n) + ";";
         //  
+        System.out.println("WYK1");
         ResultSet r = stat.executeQuery(stringQuery);
         
         final DefaultPieDataset result = new DefaultPieDataset();
@@ -478,7 +479,8 @@ public class z3_TeamVsTeam extends JLayeredPane{
             else if(FTAG == FTHG) draw++;
             else win++;
         }
-        
+        System.out.println("WYK1");
+        stat.close();
         int sum = draw + win + loses;
         result.setValue("Win", new Double((double) win/sum));
         result.setValue("Draw", new Double((double) draw/sum));
