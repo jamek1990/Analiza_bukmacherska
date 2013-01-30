@@ -31,7 +31,14 @@ public class z1_Baza extends JLayeredPane{
         kursy=new Kursy(wybranaLiga);
         setLocation(0,0);
         setBounds(0, 0, 1024, 520);
+        setBackground(new java.awt.Color(209, 210, 211));
+        setOpaque(true);
         add(mwybierzLige);
+        mwybierzLige.setBackground(new java.awt.Color(209, 210, 211));
+        mwybierzLige.setOpaque(true);
+        
         add(kursy);
+        kursy.setBackground(new java.awt.Color(209, 210, 211));
+        kursy.setOpaque(true);
     }
 }

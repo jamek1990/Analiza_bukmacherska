@@ -36,11 +36,9 @@ public class A_B{
         tabele.setVisible(false);
         team.setVisible(false);
         prognozy.setVisible(false);
+        symulacja.setVisible(false);
         f.setSize(1024, 600);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     }
-    /*public static void main(String[] args) throws SQLException, ClassNotFoundException, Exception {
-        rysuj();
-    }*/
 }
