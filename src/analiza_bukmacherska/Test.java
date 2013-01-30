@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Vector;
 import javax.swing.*;
+import java.util.Arrays;
 
         
 
@@ -49,50 +50,68 @@ public class Test{
     int TIME;
     public Test(){      
         try{
-        start();
+        start2();
         }
-        catch(Exception ex){System.out.println(ex.getMessage());}
+        catch(Exception ex){System.out.println(ex.getMessage());}        
     }    
     public Test(boolean z){      
         try{
-        start2();
+        start();
         }
-        catch(Exception ex){System.out.println(ex.getMessage());}
-    }      
-    
-     public Vector<mecz> getStrategy(int Time1, int Time2){      
-        /*try{
-            if(Y) generate();
-        }
-        catch(Exception ex){}
+        catch(Exception ex){System.out.println("Zanotowałem blad: "+ex.getMessage());}
+    }          
+    public Vector<mecz> getStrategy(int Time1, int Time2){      
+        //try{
+        //    if(X) generate();
+        //}
+        //catch(Exception ex){System.out.println("Zanotowałem blad: "+ex.getMessage());}
+        if(X) return new Vector<mecz>();
         TIME = Time1;
         Vector<mecz> strategy = new Vector<mecz>();
-        while (TIME <= Time2) strategy.addAll(getOptimalStrategy(Time1, true));       
-        return strategy;*/
-        Vector<mecz> strategy = new Vector<mecz>();
-        strategy.add(new mecz());
-        strategy.add(new mecz());
-        strategy.add(new mecz());
-        strategy.add(new mecz());
-        strategy.add(new mecz());
+        while (TIME <= Time2) {
+            System.out.print("\n"+TIME + " ");
+            strategy.addAll(getStrategy(TIME));
+            if(TIME%100 > 24){
+                if(TIME%10000 >= 1200){
+                    TIME += 10000;
+                    int a = TIME%100;
+                    TIME = TIME - TIME%10000+100;
+                    TIME += (a+7)%31;
+                }
+                else{
+                    int a = TIME%100;
+                    TIME += 100;
+                    TIME = TIME - a + (a+7)%31;                    
+                }
+            }
+            else TIME += 7;            
+        }
+        //System.out.println("dlugosc strategii: " + strategy.size());
+        
         return strategy;
-    }     
-    
+    }         
     public Vector<mecz> getStrategy(int time){
         int s = 0, e = 0;
-        do{
+        while(s < data1.size() && data1.get(s) >= time) {
+//            System.out.print(data1.get(s)+" ");
             s++;
-        }while(  s < data1.size() && data1.get(s) < time);
+        }        
+        --s;
+        
         while(e < data1.size()){
             if(365*((data1.get(e) - data1.get(e)%10000)/10000) + 31*((data1.get(e)%10000 - data1.get(e)%100)/100) + data1.get(e)%100 - (365*((time - time%10000)/10000) + 31*((time%10000 - time%100)/100) + time%100) > 7){
                 e++;
             }
             else break;
         }
-        
+        if(e == data1.size())return new Vector<mecz>();
+//        System.out.print("s = " + s + " " + data1.get(s)+" ");        
+//        System.out.print("e = " + e + " " + data1.get(e)+" ");// + data1.get(e)+" ");
         //for(int i = 0; i < hometeam1.size(); i++)
-        int q1 = s-e+1;        
+        int q1 = s-e+1;    
+        //System.out.println(s + " " + e);
         if(q1 == 0) return new Vector<mecz>();
+        
         String[] names1 = new String[q1];
         String[] names2 = new String[q1];
         int[] R1 = new int[q1];
@@ -100,13 +119,71 @@ public class Test{
         int[] dataT = new int[q1];
         double[] courses = new double[q1];
         double[] preView = new double[q1];        
+        //System.out.println(e);
+        //System.out.println(s);
         int k = 0;
-        for(int i = e; i < s+1; ++i)
+        for(int i = e; i < s; ++i)        
         {
-            System.out.println(i);
             if(K1.get(i) > 1.8 && K1.get(i) > K2.get(i)){
-                int rangeH = hRange(i);
-                int rangeA = aRange(i);
+                int rangeH = hRangeT(i);
+                int rangeA = aRangeT(i);
+                //System.out.println("H-A " + rangeH + " " + rangeA);
+                if (K1.get(i)*(double)(rangeH - rangeA)/100.0 > 0.1){                                        
+                    names1[k] = hometeam1.get(i);
+                    names2[k] = awayteam1.get(i);
+                    R1[k] = H.get(i);
+                    R2[k] = A.get(i);
+                    dataT[k] = data1.get(i);
+                    courses[k] = K1.get(i);
+                    preView[k] = (rangeH - rangeA)/100;
+                    k++;
+                }
+                else if(K2.get(i) > 1.8){
+                   // System.out.println("A-H " + rangeH + " " + rangeA);                
+                    if (K2.get(i)*(double)(rangeA - rangeH)/100.0 > 0.1){
+                        names1[k] = awayteam1.get(i);
+                        names2[k] = hometeam1.get(i);
+                        courses[k] = K2.get(i);
+                        preView[k] = (double)(rangeA - rangeH)/100.0;
+                        R1[k] = A.get(i);
+                        R2[k] = H.get(i);
+                        dataT[k] = data1.get(i);
+                        k++;
+                    }                                
+                }
+            }
+            else if(K2.get(i) > 1.8){
+                int rangeH = hRangeT(i);
+                int rangeA = aRangeT(i); 
+                //System.out.println("A-H " + rangeH + " " + rangeA);                
+                if (K2.get(i)*(double)(rangeA - rangeH)/100.0 > 0.1){
+                        names1[k] = awayteam1.get(i);
+                        names2[k] = hometeam1.get(i);
+                        courses[k] = K2.get(i);
+                        preView[k] = (double)(rangeA - rangeH)/100.0;
+                        R1[k] = A.get(i);
+                        R2[k] = H.get(i);
+                        dataT[k] = data1.get(i);
+                        k++;
+                }
+            if(K1.get(i) > 1.8){
+                    //System.out.println("H-A " + rangeH + " " + rangeA);
+                    if (K1.get(i)*(double)(rangeH - rangeA)/100.0 > 0.1){
+                        names1[k] = hometeam1.get(i);
+                        names2[k] = awayteam1.get(i);
+                        R1[k] = H.get(i);
+                        R2[k] = A.get(i);
+                        dataT[k] = data1.get(i);
+                        courses[k] = K1.get(i);
+                        preView[k] = (rangeH - rangeA)/100;
+                        k++;
+                    }
+                }
+            }
+/*//            System.out.println("parametr i = " + i);
+            if(K1.get(i) > 1.8 && K1.get(i) > K2.get(i)){
+                int rangeH = hRangeT(i);
+                int rangeA = aRangeT(i);
                 //System.out.println(rangeH + " " + rangeA);
                 if (K1.get(i)*(double)(rangeH - rangeA)/100.0 > 0.1){
                     //names[k] = hometeam1.get(i) + ".vs." + awayteam1.get(i);
@@ -121,8 +198,8 @@ public class Test{
                 k++;
             }
             else if(K2.get(i) > 1.8){
-                int rangeH = hRange(i);
-                int rangeA = aRange(i); 
+                int rangeH = hRangeT(i);
+                int rangeA = aRangeT(i); 
                 //System.out.println(rangeH + " " + rangeA);                
                 if (K2.get(i)*(double)(rangeA - rangeH)/100.0 > 0.1){
                     //names[k] = awayteam1.get(i) + ".vs." + hometeam1.get(i);
@@ -135,7 +212,7 @@ public class Test{
                     preView[k] = (rangeA - rangeH)/100;
                 }                
                 k++;
-            }
+            }*/
         }
         if(k!=0){
             this.names1 = new String[k];
@@ -146,22 +223,22 @@ public class Test{
             this.R2 = new int[k];
             this.dataT = new int[k];
             while (k > 0){
+            --k;
             this.dataT[k] = dataT[k];
             this.names1[k] = names1[k];
             this.names2[k] = names2[k];
             this.R1[k] = R1[k];
             this.R2[k] = R2[k];            
             this.courses[k] = courses[k];
-            this.preView[k] = preView[k]; 
+            this.preView[k] = preView[k];             
             }
         }
-        return getOptimalStrategy();
+        return getOptimalStrategy(0,true);
         //q1 = names.length;
         //for(int i = 0; i < q1; i++){
         //    System.out.println(names[i] + " " + preView[i] + " " + courses[i]);
         //}       
-    }
-        
+    }        
     public Vector<mecz> getLameStrategy(){
         DateFormat dateFormat = new SimpleDateFormat("dd");
         DateFormat dateFormat2 = new SimpleDateFormat("MM");
@@ -193,41 +270,151 @@ public class Test{
         String s2 =dateFormat2.format(cal.getTime());
         String s3 =dateFormat3.format(cal.getTime());
         Integer date2=Integer.parseInt(s)+Integer.parseInt(s2)*100+(Integer.parseInt(s3)+2000)*10000;
+        
+        System.out.println(date2);
         return getAgresiveStartegy(date2);
-    }
-    
+    }    
     private Vector<mecz> getOptimalStrategy(int time, boolean wyniki){
-        if(X) {return new Vector<mecz>();}
+        if(X) {return new Vector<mecz>();}        
         double max = 0.2*countMaxOfExpectedValue();
-        //double[] stawka;
+        if (max <= 0) return new Vector<mecz>();
+        //System.out.println("max = " + max);                
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
+        //System.out.println("n = " + n);        
         for (int i = 0; i < n; i++){
             if(expectedValues[i]>max){
                 optionsNumber.add(i);
+                //System.out.print("," + i);
             }
         }
+        //System.out.println(optionsNumber.size());
         double[] antyRisk = new double[optionsNumber.size()];
         for (int i = 0; i < optionsNumber.size(); i++){
-            antyRisk[i] = getChance(next(optionsNumber.get(i)+1));
+            antyRisk[i] = preView[optionsNumber.get(i)];//getChance(next(optionsNumber.get(i)));
         }
-        /*double maksimum = max(antyRisk);
+//        for (int i = 0; i < antyRisk.length; i++){
+//            System.out.print(", " + antyRisk[i]);
+//        }
+        double maksimum = max(antyRisk);
         int i = 0;
         while(antyRisk[i] != maksimum){
             i++;
-        }*/
-        //int[] table = {optionsNumber.get(i)};
-//        return mmV();
-        
-        Vector<mecz> strategy = new Vector<mecz>();
-        for (int i = 0; i < optionsNumber.size(); i++){
-            strategy.add(new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],1.0/optionsNumber.size(), dataT[optionsNumber.get(i)],R1[optionsNumber.get(i)],R2[optionsNumber.get(i)]));
         }
-        return strategy;
+        double[] T = antyRisk;
+        Arrays.sort(T);
+        if(!wyniki){
+            if(antyRisk.length == 1){
+                mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],1.0);            
+                Vector<mecz> strategy =  new Vector<mecz>();
+                strategy.add(A);
+        for(int w = 0;  w < strategy.size(); w++){
+            System.out.println(strategy.get(w).wypisz());
+        }
+        System.out.println("");                
+                return strategy;
+                //return new Vector<mecz>();
+            }
+            else{           
+                int k = T.length - 1;
+                while(k >= 0 && T[k] == maksimum) --k;
+                double r = 0;
+                if(T.length-1-k == 0){
+                    r = T[k-1];
+                    while(k >= 0 && T[k] == r) --k;
+                    int m = T.length-1-k;
+                    mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],0.5);            
+                    Vector<mecz> strategy =  new Vector<mecz>();
+                    strategy.add(A);                
+                    for(int l = 0; l < T.length; l++)
+                        if(antyRisk[l] == r){
+                            strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/m));   
+                        }
+        for(int w = 0;  w < strategy.size(); w++){
+            System.out.println(strategy.get(w).wypisz());
+        }
+        System.out.println("");                    
+                return strategy;
+                }
+                else{
+                    Vector<mecz> strategy =  new Vector<mecz>();
+                    for(int l = 0; l < T.length; l++) {
+                        if(antyRisk[l] == maksimum){
+                            strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/(T.length - k)));   
+                        }
+                    }
+        for(int w = 0;  w < strategy.size(); w++){
+            System.out.println(strategy.get(w).wypisz());
+        }
+        System.out.println("");                    
+                    return strategy;
+                }
+                //double j = 0.0;
+                //while(antyRisk[i] != maksimum){
+                //    i++;
+                //}            
+            }
+        }
+        else{
+            if(antyRisk.length == 1){
+                mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],1.0,dataT[optionsNumber.get(i)],R1[optionsNumber.get(i)],R2[optionsNumber.get(i)]);            
+                Vector<mecz> strategy =  new Vector<mecz>();
+                strategy.add(A);
+        for(int w = 0;  w < strategy.size(); w++){
+            System.out.println(strategy.get(w).wypisz());
+        }
+        System.out.println("");                
+                return strategy;
+                //return new Vector<mecz>();
+            }
+            else{           
+                int k = T.length - 1;
+                while(k >= 0 && T[k] == maksimum) --k;
+                double r = 0;
+                if(T.length-1-k == 0){
+                    r = T[k-1];
+                    while(k >= 0 && T[k] == r) --k;
+                    int m = T.length-1-k;
+                    mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],0.5,dataT[optionsNumber.get(i)],R1[optionsNumber.get(i)],R2[optionsNumber.get(i)]);            
+                    Vector<mecz> strategy =  new Vector<mecz>();
+                    strategy.add(A);                
+                    for(int l = 0; l < T.length; l++)
+                        if(antyRisk[l] == r){
+                            strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/m,dataT[optionsNumber.get(l)],R1[optionsNumber.get(l)],R2[optionsNumber.get(l)]));   
+                        }
+        for(int w = 0;  w < strategy.size(); w++){
+            System.out.println(strategy.get(w).wypisz());
+        }
+        System.out.println("");                    
+                return strategy;
+                }
+                else{
+                    Vector<mecz> strategy =  new Vector<mecz>();
+                    for(int l = 0; l < T.length; l++) {
+                        if(antyRisk[l] == maksimum){
+                            strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/(T.length - k),dataT[optionsNumber.get(l)],R1[optionsNumber.get(l)],R2[optionsNumber.get(l)]));   
+                        }
+                    }
+        for(int w = 0;  w < strategy.size(); w++){
+            System.out.println(strategy.get(w).wypisz());
+        }
+        System.out.println("");
+                    return strategy;
+                }
+                //double j = 0.0;
+                //while(antyRisk[i] != maksimum){
+                //    i++;
+                //}            
+            }            
+        }
+        //int[] table = {optionsNumber.get(i)};
+//        setResult(table);
+    //return new Vector<mecz>();
+
     }        
     private Vector<mecz> getLameStrategy(int time){
         if(X) {return new Vector<mecz>();}
-        countMaxOfExpectedValue();
+        if (countMaxOfExpectedValue() <= 0) return new Vector<mecz>(); //countMaxOfExpectedValue();
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
         for (int i = 0; i < n; i++){
@@ -237,60 +424,152 @@ public class Test{
         }
         double[] antyRisk = new double[optionsNumber.size()];
         for (int i = 0; i < optionsNumber.size(); i++){
-            antyRisk[i] = getChance(next(optionsNumber.get(i)+1));
+            antyRisk[i] = preView[optionsNumber.get(i)];
         }
-        //for(int j = 0; j<antyRisk.length;j++){System.out.print(antyRisk[j]);System.out.print(", ");}        
         double maksimum = max(antyRisk);
         int i = 0;
         while(antyRisk[i] != maksimum){
             i++;
         }
-        //System.out.println("");
-        //System.out.println(i);
-        //System.out.println(optionsNumber.get(i));
-        int[] table = {optionsNumber.get(i)};   
-        return new Vector<mecz>();
+        double[] T = antyRisk;
+        Arrays.sort(T);
+        //Vector<mecz> strategy =  new Vector<mecz>();
+        /*
+        int e = 1;
+        while (e < 6){
+            
+        }*/
+        //strategy.add(new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],1.0));
+       // return strategy;
+        if(antyRisk.length == 1){
+            mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],1.0);            
+            Vector<mecz> strategy =  new Vector<mecz>();
+            strategy.add(A);
+            return strategy;
+            //return new Vector<mecz>();
+        }
+        else{           
+            int k = T.length - 1;
+            while(k >= 0 && T[k] == maksimum) --k;
+            double r = 0;
+            if(T.length-1-k == 0){
+                r = T[k-1];
+                while(k >= 0 && T[k] == r) --k;
+                int m = T.length-1-k;
+                mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],0.5);            
+                Vector<mecz> strategy =  new Vector<mecz>();
+                strategy.add(A);                
+                for(int l = 0; l < T.length; l++)
+                    if(antyRisk[l] == r){
+                        strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/m));   
+                    }
+            return strategy;
+            }
+            else{
+                Vector<mecz> strategy =  new Vector<mecz>();
+                for(int l = 0; l < T.length; l++) {
+                    if(antyRisk[l] == maksimum){
+                        strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/(T.length - k)));   
+                    }
+                }
+                return strategy;
+            }       
+        }
+
     }        
     private Vector<mecz> getAgresiveStartegy(int time){
-        if(X) {return new Vector<mecz>();}
+        if(X) {return new Vector<mecz>();}        
         double max = 0.75*countMaxOfExpectedValue();
+        if (max <= 0) return new Vector<mecz>();
+        //System.out.println("max = " + max);                
         Vector<Integer> optionsNumber = new Vector<Integer>(0);
         int n = expectedValues.length;
+        //System.out.println("n = " + n);        
         for (int i = 0; i < n; i++){
             if(expectedValues[i]>max){
                 optionsNumber.add(i);
+                //System.out.print("," + i);
             }
         }
+        //System.out.println(optionsNumber.size());
         double[] antyRisk = new double[optionsNumber.size()];
         for (int i = 0; i < optionsNumber.size(); i++){
-            antyRisk[i] = getChance(next(optionsNumber.get(i)));
+            antyRisk[i] = preView[optionsNumber.get(i)];//getChance(next(optionsNumber.get(i)));
         }
+//        for (int i = 0; i < antyRisk.length; i++){
+//            System.out.print(", " + antyRisk[i]);
+//        }
         double maksimum = max(antyRisk);
         int i = 0;
         while(antyRisk[i] != maksimum){
             i++;
         }
-        int[] table = {optionsNumber.get(i)};
+        double[] T = antyRisk;
+        Arrays.sort(T);
+        if(antyRisk.length == 1){
+            mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],1.0);            
+            Vector<mecz> strategy =  new Vector<mecz>();
+            strategy.add(A);
+            return strategy;
+            //return new Vector<mecz>();
+        }
+        else{           
+            int k = T.length - 1;
+            while(k >= 0 && T[k] == maksimum) --k;
+            double r = 0;
+            if(T.length-1-k == 0){
+                r = T[k-1];
+                while(k >= 0 && T[k] == r) --k;
+                int m = T.length-1-k;
+                mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],0.5);            
+                Vector<mecz> strategy =  new Vector<mecz>();
+                strategy.add(A);                
+                for(int l = 0; l < T.length; l++)
+                    if(antyRisk[l] == r){
+                        strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/m));   
+                    }
+            return strategy;
+            }
+            else{
+                Vector<mecz> strategy =  new Vector<mecz>();
+                for(int l = 0; l < T.length; l++) {
+                    if(antyRisk[l] == maksimum){
+                        strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/(T.length - k)));   
+                    }
+                }
+                return strategy;
+            }
+            //double j = 0.0;
+            //while(antyRisk[i] != maksimum){
+            //    i++;
+            //}            
+        }
+        //int[] table = {optionsNumber.get(i)};
 //        setResult(table);
-    return new Vector<mecz>();
-    }
-    
-    private double getChance(int[] table){
+    //return new Vector<mecz>();
+    }    
+/*    private double getChance(int[] table){
         int n = table.length;
         double p = 1.0;
         for (int i = 0; i < n; i++){
             p *= preView[table[i]];
         }
         return p;
-    }   
+    }   */
     private double countMaxOfExpectedValue(){
-        System.out.println(courses.length);
+        expectedValues = new double[courses.length];  
+        for(int i = 0; i < courses.length; i++){
+            expectedValues[i] = courses[i]*preView[i] - 1;
+        }
+        
+        /*//System.out.println(courses.length);
         double n = Math.pow(2.0,(double)courses.length)-1.0;
         expectedValues = new double[(int)n];                
         for (int i = 0; i < n; i++){
             expectedValues[i] = expectedValueOf(next(i+1));
         }
-        //for(int i=0;i<expectedValues.length;i++){System.out.print(expectedValues[i]);System.out.print(",");}         
+//                for(int i=0;i<preView.length;i++){System.out.print(preView[i]);System.out.print(",");}         
+//        for(int i=0;i<expectedValues.length;i++){System.out.print(expectedValues[i]);System.out.print(",");}   */      
         return max(expectedValues);
     }    
     private double max(double[] table){
@@ -302,8 +581,7 @@ public class Test{
             }
         }        
         return r;
-    }        
-    
+    }            
     private int[] next(int i){
         int[] result = new int[preView.length];
         int p = 0;
@@ -321,7 +599,7 @@ public class Test{
         //System.out.println('\n');        
         return result2;
     }    
-    private double expectedValueOf(int[] table){
+/*    private double expectedValueOf(int[] table){
         int n = table.length;
         double k = 1.0;
         double p = 1.0;
@@ -331,10 +609,9 @@ public class Test{
         }
         //return ((0.88*k+0.12)*p-1);
         return p*k-1.0;
-    }
-
+    }*/
     public void start()throws SQLException, ClassNotFoundException{
-    DateFormat dateFormat = new SimpleDateFormat("dd");
+        DateFormat dateFormat = new SimpleDateFormat("dd");
         DateFormat dateFormat2 = new SimpleDateFormat("MM");
         DateFormat dateFormat3 = new SimpleDateFormat("yy");
         Calendar cal = Calendar.getInstance();
@@ -345,10 +622,12 @@ public class Test{
         try{
         generate(date2);}
         catch(SQLException ex){
-        throw new SQLException(ex.getMessage());
+            System.out.println("349");
+            throw new SQLException(ex.getMessage());
         }
         catch(ClassNotFoundException ex){
-        throw new ClassNotFoundException(ex.getMessage());
+            System.out.println("353");
+            throw new ClassNotFoundException(ex.getMessage());
         }
     }
     public void start2()throws SQLException, ClassNotFoundException{
@@ -360,19 +639,17 @@ public class Test{
         catch(ClassNotFoundException ex){
         throw new ClassNotFoundException(ex.getMessage());
         }
-    }    
-    
+    }        
     private void generate() throws SQLException, ClassNotFoundException{
-        database.con.close();
         database = new SQL();
         Statement stat;
         stat = database.con.createStatement(); 
-        System.out.println("dsad");
-        
+        //System.out.println("dsad");
         String query = "select DIV, DATA, HomeTeam, AwayTeam, FTHG, FTAG, K1, K2 from MECZE_STATYSTYKI where K1 not null and K2 not null and (K1 > 1.8 or K2 > 1.9) order by data desc";
-        System.out.println("fsdfsdf");
+        //System.out.println("fsdfsdf");
         ResultSet rs1 = stat.executeQuery(query);   
-        System.out.println("sdfwef");
+        //System.out.println("sdfwef");
+//        System.out.println(rs1);
         while (rs1.next()) {          
             hometeam1.add(rs1.getString(3));
             awayteam1.add(rs1.getString(4));
@@ -384,17 +661,19 @@ public class Test{
             K2.add(Double.parseDouble(rs1.getString(8)));
         }
         stat.close();
-        database.con.close();
         if (hometeam1.size() > 0) X = false;
         System.out.println(hometeam1.size());
     }        
     private void generate(int date2) throws SQLException, ClassNotFoundException{
+       // System.out.println("pkt.1");
         database = new SQL();
         Statement stat;
         stat = database.con.createStatement(); 
         String query = "";
         query = "select div, hometeam, awayteam, k1, k2 from Kursy where data > '" + date2 + "' and (k1 > '1.8' or k2 > '1.8')";
+       // System.out.println("ds");
         ResultSet rs = stat.executeQuery(query);
+        //System.out.println("ds");
         while (rs.next()) {
             hometeam.add(rs.getString(2));
             awayteam.add(rs.getString(3));
@@ -403,7 +682,9 @@ public class Test{
             A_H.add(Double.parseDouble(rs.getString(5)));
         }
         query = "select DIV, DATA, HomeTeam, AwayTeam, FTHG, FTAG from MECZE_STATYSTYKI order by data desc";
+       // System.out.println("pkt.1,5");
         ResultSet rs1 = stat.executeQuery(query);   
+        //System.out.println("pkt.1,7");
         while (rs1.next()) {          
             hometeam1.add(rs1.getString(3));
             awayteam1.add(rs1.getString(4));
@@ -412,59 +693,98 @@ public class Test{
             H.add(Integer.parseInt(rs1.getString(5)));
             A.add(Integer.parseInt(rs1.getString(6)));
         }
+        //System.out.println("pkt.1,75");
         stat.close();
-        database.con.close();
-        int q1 = hometeam.size();                
-        String[] names = new String[q1];
+        int q1 = hometeam.size();    
+       // System.out.println("q1 = " + q1);
+        String[] names1 = new String[q1];
+        String[] names2 = new String[q1];
         double[] courses = new double[q1];
         double[] preView = new double[q1];        
-        
+      //  System.out.println("pkt.1,875");
         int k = 0;
         for(int i = 0; i < q1; ++i)
         {
             if(H_A.get(i) > 1.8 && H_A.get(i) > A_H.get(i)){
                 int rangeH = hRange(i);
                 int rangeA = aRange(i);
-                //System.out.println(rangeH + " " + rangeA);
+                //System.out.println("H-A " + rangeH + " " + rangeA);
                 if (H_A.get(i)*(double)(rangeH - rangeA)/100.0 > 0.1){
-                    names[k] = hometeam.get(i) + ".vs." + awayteam.get(i);
+                    names1[k] = hometeam.get(i);
+                    //+ ".vs." + 
+                    names2[k] = awayteam.get(i);
                     courses[k] = H_A.get(i);
-                    preView[k] = (rangeH - rangeA)/100;
+                    preView[k] = (double)(rangeH - rangeA)/100.0;
+                    k++;
                 }
-                k++;
+                else if(A_H.get(i) > 1.8){
+                   // System.out.println("A-H " + rangeH + " " + rangeA);                
+                    if (A_H.get(i)*(double)(rangeA - rangeH)/100.0 > 0.1){
+                        names1[k] = awayteam.get(i);
+                    //+ ".vs." + 
+                        names2[k] = hometeam.get(i);
+                        courses[k] = A_H.get(i);
+                        preView[k] = (double)(rangeA - rangeH)/100.0;
+                        k++;
+                    }                                
+                }
             }
             else if(A_H.get(i) > 1.8){
                 int rangeH = hRange(i);
                 int rangeA = aRange(i); 
-                //System.out.println(rangeH + " " + rangeA);                
+                //System.out.println("A-H " + rangeH + " " + rangeA);                
                 if (A_H.get(i)*(double)(rangeA - rangeH)/100.0 > 0.1){
-                    names[k] = awayteam.get(i) + ".vs." + hometeam.get(i);
+                    names1[k] = awayteam.get(i);
+                    //+ ".vs." + 
+                    names2[k] = hometeam.get(i);
                     courses[k] = A_H.get(i);
-                    preView[k] = (rangeA - rangeH)/100;
-                }                
-                k++;
+                    preView[k] = (double)(rangeA - rangeH)/100.0;
+                    k++;
+                }
+            if(H_A.get(i) > 1.8){
+                    //System.out.println("H-A " + rangeH + " " + rangeA);
+                    if (H_A.get(i)*(double)(rangeH - rangeA)/100.0 > 0.1){
+                        names1[k] = hometeam.get(i);
+                    //+ ".vs." + 
+                          names2[k] = awayteam.get(i);
+                        courses[k] = H_A.get(i);
+                        preView[k] = (double)(rangeH - rangeA)/100.0;
+                        k++;
+                    }
+                }
             }
+            //System.out.println(preView[k-1]); 
         }
+        //System.out.println("pkt.2");
         if(k!=0){
+            //System.out.println("pkt.a");
             X = false;
-            this.names = new String[k];
+            this.names1 = new String[k];
+            this.names2 = new String[k];
             this.courses = new double[k];
             this.preView = new double[k]; 
+            //System.out.println("pkt.b");
             while (k > 0){
-            this.names[k] = names[k];
-            this.courses[k] = courses[k];
-            this.preView[k] = preView[k]; 
-            k--;
+               //System.out.print("pkt.c");
+                k--;
+                this.names1[k] = names1[k];
+                this.names2[k] = names2[k];
+                this.courses[k] = courses[k];
+                this.preView[k] = preView[k];                 
+                //System.out.print("pkt.d");
             }
+            //System.out.println("\nent");
         }
-        else return;
-        q1 = names.length;
-        for(int i = 0; i < q1; i++){
-            System.out.println(names[i] + " " + preView[i] + " " + courses[i]);
-        }       
-    }
-    
-    int hRange(int i){
+        
+        else {/*System.out.println("pkt.3");*/return;}
+        //q1 = this.names.length;
+        //System.out.println("pkt.2" + q1);
+       // for(int i = 0; i < q1; i++){
+        //    System.out.println(names[i] + " " + preView[i] + " " + courses[i]);
+        //}       
+        System.out.println("\nent");
+    }    
+    private int hRange(int i){
         int q2 = hometeam1.size();        
         int rangeH = 50;
         boolean a = false,b = false,c = false;        
@@ -552,7 +872,95 @@ public class Test{
         if(p>=2) rangeH+=10;
         return rangeH;
     }
-    int aRange(int i){
+    private int hRangeT(int i){
+        int q2 = hometeam1.size();        
+        int rangeH = 50;
+        boolean a = false,b = false,c = false;        
+        int j = i+1;
+        for(; j < q2; ++j){
+            if(hometeam1.get(i).equals(hometeam1.get(j))){
+                a = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(hometeam1.get(i).equals(awayteam1.get(j))){
+                a = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(hometeam1.get(i).equals(hometeam1.get(j))){
+                b = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(hometeam1.get(i).equals(awayteam1.get(j))){
+                b = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(hometeam1.get(i).equals(hometeam1.get(j))){
+                c = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(hometeam1.get(i).equals(awayteam1.get(j))){
+                c = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        if(a) rangeH+=5;
+        else  rangeH-=5;
+        if(b) rangeH+=5;
+        else  rangeH-=5;
+        if(c) rangeH+=5;
+        else  rangeH-=5;
+        if(a && b && c) rangeH+=20;
+        else if(a && b && !c) rangeH+=25;
+        else if(!a && !b && c) rangeH-=15;
+        else if(!a && !b && !c) rangeH-=25; //kiedyś będzie trzeba się temu przyjrzeć dokłądniej. 
+        for(j = 0; j < q2; ++j){
+            if(hometeam1.get(i).equals(hometeam1.get(j)) && awayteam1.get(i).equals(awayteam1.get(j))){
+                a = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(hometeam1.get(i).equals(awayteam1.get(j)) && awayteam1.get(i).equals(hometeam1.get(j))){
+                a = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(hometeam1.get(i).equals(hometeam1.get(j))){
+                b = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(hometeam1.get(i).equals(awayteam1.get(j))){
+                b = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(hometeam1.get(i).equals(hometeam1.get(j))){
+                c = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(hometeam1.get(i).equals(awayteam1.get(j))){
+                c = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        int p = 0;
+        if(a) p++; 
+        if(b) p++;
+        if(c) p++;
+        if(p>=2) rangeH+=10;
+        return rangeH;
+    }
+    private int aRange(int i){
         int q2 = hometeam1.size();        
         int rangeA = 50;
         boolean a = false,b = false,c = false;        
@@ -628,6 +1036,94 @@ public class Test{
                 break;
             }
             else if(awayteam.get(i).equals(awayteam1.get(j)) && hometeam.get(i).equals(hometeam1.get(j))){
+                c = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        int p = 0;
+        if(a) p++; 
+        if(b) p++;
+        if(c) p++;
+        if(p>=2) rangeA+=10;
+        return rangeA;
+    }
+    private int aRangeT(int i){
+        int q2 = hometeam1.size();        
+        int rangeA = 50;
+        boolean a = false,b = false,c = false;        
+        int j = i+1;
+        for(; j < q2; ++j){
+            if(awayteam1.get(i).equals(hometeam1.get(j))){
+                a = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(awayteam1.get(i).equals(awayteam1.get(j))){
+                a = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(awayteam1.get(i).equals(hometeam1.get(j))){
+                b = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(awayteam1.get(i).equals(awayteam1.get(j))){
+                b = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(awayteam1.get(i).equals(hometeam1.get(j))){
+                c = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(awayteam1.get(i).equals(awayteam1.get(j))){
+                c = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        if(a) rangeA+=5;
+        else  rangeA-=5;
+        if(b) rangeA+=5;
+        else  rangeA-=5;
+        if(c) rangeA+=5;
+        else  rangeA-=5;
+        if(a && b && c) rangeA+=20;
+        else if(a && b && !c) rangeA+=25;
+        else if(!a && !b && c) rangeA-=15;
+        else if(!a && !b && !c) rangeA-=25; //kiedyś będzie trzeba się temu przyjrzeć dokłądniej. 
+        for(j = 0; j < q2; ++j){
+            if(awayteam1.get(i).equals(hometeam1.get(j)) && hometeam1.get(i).equals(awayteam1.get(j))){
+                a = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(awayteam1.get(i).equals(awayteam1.get(j)) && hometeam1.get(i).equals(hometeam1.get(j))){
+                a = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(awayteam1.get(i).equals(hometeam1.get(j)) && hometeam1.get(i).equals(awayteam1.get(j))){
+                b = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(awayteam1.get(i).equals(awayteam1.get(j)) && hometeam1.get(i).equals(hometeam1.get(j))){
+                b = (H.get(j) < A.get(j));
+                break;
+            }
+            else continue;
+        }
+        for(; j < q2; ++j){
+            if(awayteam1.get(i).equals(hometeam1.get(j)) && hometeam1.get(i).equals(awayteam1.get(j))){
+                c = (H.get(j) > A.get(j));
+                break;
+            }
+            else if(awayteam1.get(i).equals(awayteam1.get(j)) && hometeam1.get(i).equals(hometeam1.get(j))){
                 c = (H.get(j) < A.get(j));
                 break;
             }

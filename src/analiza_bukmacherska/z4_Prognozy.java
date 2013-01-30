@@ -66,8 +66,8 @@ public class z4_Prognozy extends JLayeredPane{
         start();
         }
         catch(Exception ex){System.out.println(ex.getMessage());}*/
-        test = new Test();
-        testT = new Test(true);
+        test = new Test(true);
+        //testT = new Test();
         setWindows();
         //setResult(testT.getStrategy(20110101, 20121231));
         //Vector<mecz> strategie = getStrategy(2,4);
@@ -197,29 +197,11 @@ public class z4_Prognozy extends JLayeredPane{
         //add(samplePathDown);
         
     }
-/*    private void setResult(int[] table){
-
-        int[] option = next(table[0]+1);
-        String text = "   ";
-        for(int i = 0; i < option.length; i++){
-            text += names[option[i]];
-            text += ",";
-        }
-        text += '\n';
-        text += "Szansa wygranej wynosi: " + Double.toString(getChance(option))+'\n';
-        try{
-            double cash = Double.valueOf(myMoney.getText());
-            text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option)*cash) + "zl";
-        }
-        catch(Exception ex)
-        {text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option))+ " zainwestowanej kwoty.";}
-        textFrame.setText(text);
-    }*/
-    /*private void setResult(){
-        String text = "   Przykro nam, ale zespoły, które tej chwili grają nie pozostawiają możliwości prognozowania wyników.";
-        textFrame.setText(text);
-    }*/
     private void setResult(Vector<mecz> strategy){
+        if(strategy.size() == 0){
+            textFrame.setText("Niestety, ale obecnie nie ma ciekawych meczów w których opłacałoby się ryzykować.");
+            return;
+        }
         String text = "";
         for (int i  = 0; i < strategy.size(); i++){
             text+=strategy.get(i).wypisz()+"\n";
@@ -240,6 +222,7 @@ public class z4_Prognozy extends JLayeredPane{
     public void agresiveMethode(){         
         setResult(test.getAgresiveStrategy());
     } 
+}
     /*
     private void lameMethode(){  
         if(X) {setResult();return;}
@@ -639,4 +622,25 @@ public class z4_Prognozy extends JLayeredPane{
         return rangeA;
     }
     */
-}
+/*    private void setResult(int[] table){
+
+        int[] option = next(table[0]+1);
+        String text = "   ";
+        for(int i = 0; i < option.length; i++){
+            text += names[option[i]];
+            text += ",";
+        }
+        text += '\n';
+        text += "Szansa wygranej wynosi: " + Double.toString(getChance(option))+'\n';
+        try{
+            double cash = Double.valueOf(myMoney.getText());
+            text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option)*cash) + "zl";
+        }
+        catch(Exception ex)
+        {text += "Przewidywany zysk wynosi: " + Double.toString(expectedValueOf(option))+ " zainwestowanej kwoty.";}
+        textFrame.setText(text);
+    }*/
+    /*private void setResult(){
+        String text = "   Przykro nam, ale zespoły, które tej chwili grają nie pozostawiają możliwości prognozowania wyników.";
+        textFrame.setText(text);
+    }*/

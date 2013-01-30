@@ -7,6 +7,14 @@ public class mecz {
     double kurs;
     int R1, R2;
     
+    public mecz(String teamA, String teamB, double kurss, double stawkas){
+        team1 = teamA;
+        team2 = teamB;
+        //data = datas;
+        kurs = kurss;
+        stawka = stawkas;      
+    }
+    
     public mecz(String teamA, String teamB, double kurss, double stawkas, int datas, int RA, int RB)
     {
         team1 = teamA;
