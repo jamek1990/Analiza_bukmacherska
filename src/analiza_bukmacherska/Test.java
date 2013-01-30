@@ -69,7 +69,7 @@ public class Test{
         TIME = Time1;
         Vector<mecz> strategy = new Vector<mecz>();
         while (TIME <= Time2) {
-            System.out.print("\n"+TIME + " ");
+            //System.out.print("\n"+TIME + " ");
             strategy.addAll(getStrategy(TIME));
             if(TIME%100 > 24){
                 if(TIME%10000 >= 1200){
@@ -308,10 +308,10 @@ public class Test{
                 mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],1.0);            
                 Vector<mecz> strategy =  new Vector<mecz>();
                 strategy.add(A);
-        for(int w = 0;  w < strategy.size(); w++){
-            System.out.println(strategy.get(w).wypisz());
-        }
-        System.out.println("");                
+       // for(int w = 0;  w < strategy.size(); w++){
+       //     System.out.println(strategy.get(w).wypisz());
+       // }
+       // System.out.println("");                
                 return strategy;
                 //return new Vector<mecz>();
             }
@@ -330,10 +330,10 @@ public class Test{
                         if(antyRisk[l] == r){
                             strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/m));   
                         }
-        for(int w = 0;  w < strategy.size(); w++){
-            System.out.println(strategy.get(w).wypisz());
-        }
-        System.out.println("");                    
+       // for(int w = 0;  w < strategy.size(); w++){
+       //     System.out.println(strategy.get(w).wypisz());
+       // }
+       // System.out.println("");                    
                 return strategy;
                 }
                 else{
@@ -343,10 +343,10 @@ public class Test{
                             strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/(T.length - k)));   
                         }
                     }
-        for(int w = 0;  w < strategy.size(); w++){
-            System.out.println(strategy.get(w).wypisz());
-        }
-        System.out.println("");                    
+       // for(int w = 0;  w < strategy.size(); w++){
+       //     System.out.println(strategy.get(w).wypisz());
+       // }
+       // System.out.println("");                    
                     return strategy;
                 }
                 //double j = 0.0;
@@ -360,10 +360,10 @@ public class Test{
                 mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],1.0,dataT[optionsNumber.get(i)],R1[optionsNumber.get(i)],R2[optionsNumber.get(i)]);            
                 Vector<mecz> strategy =  new Vector<mecz>();
                 strategy.add(A);
-        for(int w = 0;  w < strategy.size(); w++){
-            System.out.println(strategy.get(w).wypisz());
-        }
-        System.out.println("");                
+       // for(int w = 0;  w < strategy.size(); w++){
+       //     System.out.println(strategy.get(w).wypisz());
+       // }
+       // System.out.println("");                
                 return strategy;
                 //return new Vector<mecz>();
             }
@@ -382,10 +382,10 @@ public class Test{
                         if(antyRisk[l] == r){
                             strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/m,dataT[optionsNumber.get(l)],R1[optionsNumber.get(l)],R2[optionsNumber.get(l)]));   
                         }
-        for(int w = 0;  w < strategy.size(); w++){
-            System.out.println(strategy.get(w).wypisz());
-        }
-        System.out.println("");                    
+        //for(int w = 0;  w < strategy.size(); w++){
+       //     System.out.println(strategy.get(w).wypisz());
+      //  }
+       // System.out.println("");                    
                 return strategy;
                 }
                 else{
@@ -395,10 +395,10 @@ public class Test{
                             strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/(T.length - k),dataT[optionsNumber.get(l)],R1[optionsNumber.get(l)],R2[optionsNumber.get(l)]));   
                         }
                     }
-        for(int w = 0;  w < strategy.size(); w++){
-            System.out.println(strategy.get(w).wypisz());
-        }
-        System.out.println("");
+      //  for(int w = 0;  w < strategy.size(); w++){
+      //      System.out.println(strategy.get(w).wypisz());
+      //  }
+       // System.out.println("");
                     return strategy;
                 }
                 //double j = 0.0;
@@ -641,6 +641,7 @@ public class Test{
         }
     }        
     private void generate() throws SQLException, ClassNotFoundException{
+        database.con.close();
         database = new SQL();
         Statement stat;
         stat = database.con.createStatement(); 
@@ -666,6 +667,7 @@ public class Test{
     }        
     private void generate(int date2) throws SQLException, ClassNotFoundException{
        // System.out.println("pkt.1");
+        database.con.close();
         database = new SQL();
         Statement stat;
         stat = database.con.createStatement(); 
