@@ -29,9 +29,9 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 /**
- *
- * @author User
- */
+*
+* @author User
+*/
 public class z5_Symulacja extends JLayeredPane{
     m1_okienko jPPreferencje;
     m1_okienko jPWykres;
@@ -253,12 +253,12 @@ java.awt.Dimension(825, 188));
     private JFreeChart createChart(XYDataset dataset)
     {
         final JFreeChart output = ChartFactory.createXYLineChart(
-            "",          // chart title
-            "Kolejka",               // domain axis label
-            "",                  // range axis label
-            dataset,                  // data
+            "", // chart title
+            "Kolejka", // domain axis label
+            "", // range axis label
+            dataset, // data
             PlotOrientation.VERTICAL,
-            true,                     // include legend
+            true, // include legend
             true,
             false
         );
