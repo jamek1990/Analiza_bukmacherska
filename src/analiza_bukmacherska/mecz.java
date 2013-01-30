@@ -7,10 +7,10 @@ public class mecz {
     double kurs;
     int R1, R2;
     
-    public mecz(String teamA, String teamB, double kurss, double stawkas){
+    public mecz(String teamA, String teamB, double kurss, double stawkas, int datas){
         team1 = teamA;
         team2 = teamB;
-        //data = datas;
+        data = datas;
         kurs = kurss;
         stawka = stawkas;      
     }
@@ -25,7 +25,7 @@ public class mecz {
         R1 = RA;
         R2 = RB;
     }    
-    public mecz(){
+/*    public mecz(){
         Random rand = new Random();
         kurs = rand.nextDouble()*4;
         team1 = "" + rand.nextInt(999999);                
@@ -35,7 +35,7 @@ public class mecz {
         R1 = rand.nextInt(6);
         R2 = rand.nextInt(6);
         stawka = rand.nextDouble();
-    }
+    }*/
     public String getTeam1(){
         return team1;
     }

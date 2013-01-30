@@ -37,6 +37,7 @@ public class Test{
     Vector<String> ligue = new Vector<String>();
     Vector<Double> H_A = new Vector<Double>();
     Vector<Double> A_H = new Vector<Double>();
+    Vector<Integer> data = new Vector<Integer>();
     Vector<String> hometeam1 = new Vector<String>();
     Vector<String> awayteam1 = new Vector<String>();
     Vector<Integer> data1 = new Vector<Integer>();
@@ -240,7 +241,7 @@ public class Test{
         Arrays.sort(T);
         if(!wyniki){
             if(antyRisk.length == 1){
-                mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],1.0);            
+                mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],1.0,dataT[optionsNumber.get(i)]);            
                 Vector<mecz> strategy =  new Vector<mecz>();
                 strategy.add(A);               
                 return strategy;
@@ -255,12 +256,12 @@ public class Test{
                     --k;
                     while(k >= 0 && T[k] == r) --k;
                     int m = T.length-2-k;
-                    mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],0.5);            
+                    mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],0.5,dataT[optionsNumber.get(i)]);            
                     Vector<mecz> strategy =  new Vector<mecz>();
                     strategy.add(A);                
                     for(int l = 0; l < T.length; l++)
                         if(antyRisk[l] == r){
-                            strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/m));   
+                            strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/m,dataT[optionsNumber.get(l)]));   
                         }                  
                 return strategy;
                 }
@@ -268,7 +269,7 @@ public class Test{
                     Vector<mecz> strategy =  new Vector<mecz>();
                     for(int l = 0; l < T.length; l++) {
                         if(antyRisk[l] == maksimum){
-                            strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],1.0/(T.length - k)));   
+                            strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],1.0/(T.length - k),dataT[optionsNumber.get(l)]));   
                         }
                     }                
                     return strategy;
@@ -335,7 +336,7 @@ public class Test{
         double[] T = antyRisk;
         Arrays.sort(T);
         if(antyRisk.length == 1){
-            mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],1.0);            
+            mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],1.0,dataT[optionsNumber.get(i)]);            
             Vector<mecz> strategy =  new Vector<mecz>();
             strategy.add(A);
             return strategy;
@@ -350,12 +351,12 @@ public class Test{
                 r = T[k-1];
                 while(k >= 0 && T[k] == r) --k;
                 int m = T.length-1-k;
-                mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],0.5);            
+                mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],0.5,dataT[optionsNumber.get(i)]);            
                 Vector<mecz> strategy =  new Vector<mecz>();
                 strategy.add(A);                
                 for(int l = 0; l < T.length; l++)
                     if(antyRisk[l] == r){
-                        strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/m));   
+                        strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/m,dataT[optionsNumber.get(l)]));   
                     }
             return strategy;
             }
@@ -363,7 +364,7 @@ public class Test{
                 Vector<mecz> strategy =  new Vector<mecz>();
                 for(int l = 0; l < T.length; l++) {
                     if(antyRisk[l] == maksimum){
-                        strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],1.0/(T.length - k)));   
+                        strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],1.0/(T.length - k),dataT[optionsNumber.get(l)]));   
                     }
                 }
                 return strategy;
@@ -393,7 +394,7 @@ public class Test{
         double[] T = antyRisk;
         Arrays.sort(T);
         if(antyRisk.length == 1){
-            mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],1.0);            
+            mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],1.0,dataT[optionsNumber.get(i)]);            
             Vector<mecz> strategy =  new Vector<mecz>();
             strategy.add(A);
             return strategy;
@@ -408,12 +409,12 @@ public class Test{
                 --k;
                 while(k >= 0 && T[k] == r) --k;
                 int m = T.length-1-k;
-                mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],0.5);            
+                mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],0.5,dataT[optionsNumber.get(i)]);            
                 Vector<mecz> strategy =  new Vector<mecz>();
                 strategy.add(A);                
                 for(int l = 0; l < T.length; l++)
                     if(antyRisk[l] == r){
-                        strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/m));   
+                        strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/m,dataT[optionsNumber.get(l)]));   
                     }
             return strategy;
             }
@@ -421,7 +422,7 @@ public class Test{
                 Vector<mecz> strategy =  new Vector<mecz>();
                 for(int l = 0; l < T.length; l++) {
                     if(antyRisk[l] == maksimum){
-                        strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],1.0/(T.length - k)));   
+                        strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],1.0/(T.length - k),dataT[optionsNumber.get(l)]));   
                     }
                 }
                 return strategy;
@@ -516,7 +517,7 @@ public class Test{
         Statement stat;
         stat = database.con.createStatement(); 
         String query = "";
-        query = "select div, hometeam, awayteam, k1, k2 from Kursy where data > '" + date2 + "' and (k1 > '1.8' or k2 > '1.8')";
+        query = "select div, hometeam, awayteam, k1, k2, data from Kursy where data > '" + date2 + "' and (k1 > '1.8' or k2 > '1.8')";
         ResultSet rs = stat.executeQuery(query);
         while (rs.next()) {
             hometeam.add(rs.getString(2));
@@ -524,6 +525,7 @@ public class Test{
             ligue.add(rs.getString(1));
             H_A.add(Double.parseDouble(rs.getString(4)));
             A_H.add(Double.parseDouble(rs.getString(5)));
+            data.add(Integer.parseInt(rs.getString(6)));
         }
         query = "select DIV, DATA, HomeTeam, AwayTeam, FTHG, FTAG from MECZE_STATYSTYKI where DIV not null and DATA not null and HomeTeam not null and AwayTeam not null and FTHG not null and FTAG not null order by data desc";
         ResultSet rs1 = stat.executeQuery(query);   
@@ -538,6 +540,7 @@ public class Test{
         }
         stat.close();
         int q1 = hometeam.size();    
+        int[] dataT = new int[q1];
         String[] names1 = new String[q1];
         String[] names2 = new String[q1];
         double[] courses = new double[q1];
@@ -553,6 +556,7 @@ public class Test{
                     names2[k] = awayteam.get(i);
                     courses[k] = H_A.get(i);
                     preView[k] = (double)(rangeH - rangeA)/100.0;
+                    dataT[k] = data.get(i);
                     k++;
                 }
                 else if(A_H.get(i) > 1.8){               
@@ -561,6 +565,7 @@ public class Test{
                         names2[k] = hometeam.get(i);
                         courses[k] = A_H.get(i);
                         preView[k] = (double)(rangeA - rangeH)/100.0;
+                        dataT[k] = data.get(i);
                         k++;
                     }                                
                 }
@@ -573,6 +578,7 @@ public class Test{
                     names2[k] = hometeam.get(i);
                     courses[k] = A_H.get(i);
                     preView[k] = (double)(rangeA - rangeH)/100.0;
+                    dataT[k] = data.get(i);
                     k++;
                 }
             if(H_A.get(i) > 1.8){
@@ -581,6 +587,7 @@ public class Test{
                           names2[k] = awayteam.get(i);
                         courses[k] = H_A.get(i);
                         preView[k] = (double)(rangeH - rangeA)/100.0;
+                        dataT[k] = data.get(i);
                         k++;
                     }
                 }
@@ -592,12 +599,14 @@ public class Test{
             this.names2 = new String[k];
             this.courses = new double[k];
             this.preView = new double[k]; 
+            this.dataT = new int[k];
             while (k > 0){
                 k--;
                 this.names1[k] = names1[k];
                 this.names2[k] = names2[k];
                 this.courses[k] = courses[k];
-                this.preView[k] = preView[k];                 
+                this.preView[k] = preView[k];   
+                this.dataT[k] = dataT[k];
             }
         }
         else {return;}
