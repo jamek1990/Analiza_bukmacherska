@@ -92,7 +92,7 @@ public class z4_Prognozy extends JLayeredPane{
         add(myMoney);        
         /////////////////////////////////////////////////////////czesc dwa i pol          
         JLabel strAgr = new JLabel();
-        strAgr.setText("METODA AGRESYWNA");
+        strAgr.setText("METODA SPOKOJNA");
         strAgr.setBounds(10, 380, 140, 35);
         
         JLabel strOpt = new JLabel();
@@ -100,7 +100,7 @@ public class z4_Prognozy extends JLayeredPane{
         strOpt.setBounds(150, 380, 140, 35);
        
         JLabel strLam = new JLabel();
-        strLam.setText("METODA SPOKOJNA");
+        strLam.setText("METODA AGRESYWNA");
         strLam.setBounds(290, 380, 140, 35);
         
         add(strLam);
@@ -148,7 +148,23 @@ public class z4_Prognozy extends JLayeredPane{
             catch(Exception ex){}  
             for(int i = 0; i < N; i++){
                 System.out.println(strategy.get(i).wypisz());
-                opcja[i] = new NastepnyWynik(""+strategy.get(i).getStawka()*K,strategy.get(i).getTeam1().toUpperCase(),strategy.get(i).getTeam2().toUpperCase(),"" + (strategy.get(i).getData()%10000)/100 + "." +strategy.get(i).getData()%100,S);
+                int a = (strategy.get(i).getData()%10000)/100;
+                String A = "", B = "";
+                if(a > 9) {
+                    A += a;
+                }
+                else {
+
+                    A = A + "0" + a;
+                }
+                int b = strategy.get(i).getData()%100;                
+                if(b > 9) {
+                    B += b;
+                }
+                else{
+                    B = B + "0" + b;
+                }
+                opcja[i] = new NastepnyWynik(""+strategy.get(i).getStawka()*K,strategy.get(i).getTeam1().toUpperCase(),strategy.get(i).getTeam2().toUpperCase(), A + "." + B,S);
                 opcja[i].setLocation(460, i*60+60);   
                 add(opcja[i]);
             }
