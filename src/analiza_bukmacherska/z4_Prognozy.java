@@ -129,8 +129,8 @@ public class z4_Prognozy extends JLayeredPane{
     }
     private void setResult(Vector<mecz> strategy, int S){
         if(strategy.isEmpty()){
-            int k = opcja.length;
-            while (k > 0){opcja[k].setVisible(false);--k;}
+            int k = opcja.length-1;
+            while (k >= 0){opcja[k].setVisible(false);--k;}
             opcja = new NastepnyWynik[0];            
             textFrame.setVisible(true);
         }
@@ -138,8 +138,8 @@ public class z4_Prognozy extends JLayeredPane{
             int N = strategy.size();
             System.out.println(N);
             textFrame.setVisible(false);
-            int k = opcja.length;
-            while (k > 0){opcja[k].setVisible(false);--k;}
+            int k = opcja.length-1;
+            while (k >= 0){opcja[k].setVisible(false);--k;}
             opcja = new NastepnyWynik[N];
             double K = 1.0;
             try{

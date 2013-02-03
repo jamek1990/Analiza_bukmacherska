@@ -6,7 +6,7 @@ import javax.swing.SwingConstants;
 
 public class NastepnyWynik extends JLabel{
     
-    JLabel wynik;
+    JLabel stawka;
     JLabel druzyna;
     JLabel druzyna1;
     JLabel data;
@@ -43,12 +43,12 @@ public class NastepnyWynik extends JLabel{
         this.druzyna.setHorizontalAlignment( SwingConstants.CENTER );
         
         //USTAW WYNIK
-        this.wynik = new JLabel(wynik);
-        add(this.wynik);
+        this.stawka = new JLabel(wynik);
+        add(this.stawka);
         
-        this.wynik.setForeground(Color.WHITE);
-        this.wynik.setFont(new Font("sansserif", Font.BOLD, 32));
-        this.wynik.setBounds(270, 1, 50, 30);
+        this.stawka.setForeground(Color.WHITE);
+        this.stawka.setFont(new Font("sansserif", Font.BOLD, 32));
+        this.stawka.setBounds(270, 1, 90, 30);
         
         //USTAW SPOTKANIE
         setBounds(12, 77, 400, 36);

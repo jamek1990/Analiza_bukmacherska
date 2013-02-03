@@ -350,6 +350,7 @@ public class Test{
                 --k;
                 r = T[k-1];
                 while(k >= 0 && T[k] == r) --k;
+                ++k;
                 int m = T.length-1-k;
                 mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],0.5,dataT[optionsNumber.get(i)]);            
                 Vector<mecz> strategy =  new Vector<mecz>();
@@ -408,10 +409,12 @@ public class Test{
                 r = T[k-1];
                 --k;
                 while(k >= 0 && T[k] == r) --k;
+                ++k;
                 int m = T.length-1-k;
+                System.out.println(m + " = m");
                 mecz A = new mecz(names1[optionsNumber.get(i)],names2[optionsNumber.get(i)],courses[optionsNumber.get(i)],0.5,dataT[optionsNumber.get(i)]);            
                 Vector<mecz> strategy =  new Vector<mecz>();
-                strategy.add(A);                
+                strategy.add(A);
                 for(int l = 0; l < T.length; l++)
                     if(antyRisk[l] == r){
                         strategy.add(new mecz(names1[optionsNumber.get(l)],names2[optionsNumber.get(l)],courses[optionsNumber.get(l)],0.5/m,dataT[optionsNumber.get(l)]));   
@@ -517,7 +520,7 @@ public class Test{
         Statement stat;
         stat = database.con.createStatement(); 
         String query = "";
-        query = "select div, hometeam, awayteam, k1, k2, data from Kursy where data > '" + date2 + "' and (k1 > '1.8' or k2 > '1.8')";
+        query = "select div, hometeam, awayteam, k1, k2, data from Kursy where data >= '" + date2 + "' and (k1 > '1.8' or k2 > '1.8')";
         ResultSet rs = stat.executeQuery(query);
         while (rs.next()) {
             hometeam.add(rs.getString(2));
