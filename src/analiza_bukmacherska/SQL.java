@@ -60,7 +60,8 @@ public class SQL {
 +"KX REAL,"
 +"K2 REAL);");
     }
-
+/*CREATE TABLE PROFILE(ID INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,Name TEXT,Lastname TEXT,Phone TEXT,Email TEXT,ADRESS TEXT);*/
+    /*CREATE TABLE Login(ID INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,Username TEXT,Password TEXT,IdProfile INTEGER);*/
     public void clear_stare_kursy()throws SQLException{
         DateFormat dateFormat = new SimpleDateFormat("dd");
         DateFormat dateFormat2 = new SimpleDateFormat("MM");
@@ -284,6 +285,19 @@ public class SQL {
        // prep.cancel();
     }
     
+   
+    public void rejestracja(String imie, String nazwisko, String email,String telefon,String adres) throws SQLException{
+         System.out.println("Lets go!");
+        PreparedStatement prep = con
+          .prepareStatement("insert into PROFILE values(?,?,?,?,?,?);");
+        prep.setString(2, imie);
+        prep.setString(3, nazwisko);
+        prep.setString(4, email);
+        prep.setString(5, telefon);
+        prep.setString(6, adres);
+        boolean rows = prep.execute();
+        System.out.println("update tabeli!");
+    }
     
     public void insert(String home, String away, String wynik) throws SQLException{
         System.out.println(home + " " + " vs " + away);

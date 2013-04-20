@@ -63,7 +63,6 @@ public class Intro {//implements ActionListener {
                 jB_exit.setVisible(false);
                 rob = new Robot();
                 try {
-                    //rob.g();
                     rob.RefreshNewKurs();
                     //rob.RefreshDataBase();
                 } catch (Exception ex) {
@@ -83,7 +82,8 @@ public class Intro {//implements ActionListener {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                
                     try {
-                        A_B.rysuj();
+                       Logowanie.rysuj();
+                       // A_B.rysuj();
                     } catch (Exception ex) {
                         Logger.getLogger(Intro.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -116,40 +116,11 @@ public class Intro {//implements ActionListener {
         jB_exit.setBounds(90, 155, 230, 30);
         jB_aktualizacja.setBounds(200, 155, 100, 30);
         jB_program.setBounds(320, 155, 230, 30);
-        //jB_aktualizacja.setBounds(360, 195, 230, 30);
-        //jB_program.setBounds(360, 230, 230, 30);
-        //jB_exit.setBounds(360, 265, 230, 30);
-        //jB_program.addActionListener(this);
-        //jB_program.setActionCommand("open");
-
-        //jB_aktualizacja.addActionListener(this);
-        //jB_aktualizacja.setActionCommand("update");
-        
         p.add(jB_aktualizacja);
         p.add(jB_program);
         p.add(jB_exit);
         return p;
-    
     }
-    
-    /*@Override
-    public void actionPerformed(ActionEvent e)
-    {
-        String cmd = e.getActionCommand();
-
-        if(cmd.equals("open"))
-        {
-            try {
-                A_B.rysuj();
-            } catch (SQLException ex) {
-                Logger.getLogger(Intro.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Intro.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            f.dispose();
-        }
-    */
-    
     public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
         Intro n = new Intro();
         n.createUI();
