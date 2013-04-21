@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import org.jfree.data.general.DefaultPieDataset;
 
 public class SQL {
     public static Connection con;
@@ -295,6 +296,28 @@ public class SQL {
         prep.setString(4, email);
         prep.setString(5, telefon);
         prep.setString(6, adres);
+        boolean rows = prep.execute();
+        System.out.println("update tabeli!");
+    }
+  //  CREATE TABLE PROFILE(ID INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,Name TEXT,Lastname TEXT,Phone TEXT,Email TEXT,ADRESS TEXT);*/
+  
+    public int get_profile_id(String imie, String nazwisko, String email,String telefon,String adres) throws SQLException{
+        String stringQuery = "SELECT Id FROM PROFILE WHERE Name = '" + imie + "' And  Lastname = '" + nazwisko + "';";
+        System.out.println(stringQuery);
+        ResultSet r = stat.executeQuery(stringQuery);
+        int u=0;
+        while(r.next()){   
+            u=  r.getInt(1);
+        }
+        return u;
+    }
+    public void login(String username, String password, int idprofile) throws SQLException{
+         System.out.println("Lets go!");
+        PreparedStatement prep = con
+          .prepareStatement("insert into Login values(?,?,?,?);");
+        prep.setString(2, username);
+        prep.setString(3, password);
+        prep.setInt(4, idprofile);
         boolean rows = prep.execute();
         System.out.println("update tabeli!");
     }

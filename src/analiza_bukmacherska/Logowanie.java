@@ -13,7 +13,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.GroupLayout;
@@ -60,6 +62,21 @@ public class Logowanie {
         jLabel5.setBounds(121, 155, 230, 30);
         jComboBox1.setBounds(201, 135, 230, 20);
         jPasswordField1.setBounds(201, 160, 230, 20);
+        
+        
+        jComboBox1.removeAllItems();
+        SQL database;
+        Statement stat;
+        database =new SQL();
+        stat = database.con.createStatement();
+        String query = "SELECT DISTINCT username FROM Login  ORDER BY username ASC";
+        ResultSet rs = stat.executeQuery(query);
+        while (rs.next()) {
+            jComboBox1.addItem(rs.getString(1));
+        }
+        stat.close();
+        database.con.close();
+
         p.add(jLabel4);
         p.add(jLabel5);
         p.add(jComboBox1);

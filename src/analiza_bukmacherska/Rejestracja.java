@@ -1,5 +1,6 @@
 package analiza_bukmacherska;
 
+import WybierzDruzyny.WybranaDruzynaCombo;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -13,7 +14,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.GroupLayout;
@@ -41,7 +46,7 @@ public class Rejestracja {
         ImagePanel p2 = new ImagePanel(new ImageIcon("images/intro.png").getImage());
            JLabel jB_Anuluj = new javax.swing.JLabel();;
         JLabel jB_rejest= new javax.swing.JLabel();;
-        JTextField jTextField1 = new javax.swing.JTextField();
+        final JTextField jTextField1 = new javax.swing.JTextField();
         JLabel jLabel1 = new javax.swing.JLabel();
         final JTextField jTextField2 = new javax.swing.JTextField();
         JLabel jLabel2 = new javax.swing.JLabel();
@@ -53,7 +58,7 @@ public class Rejestracja {
         final JTextField jTextField5 = new javax.swing.JTextField();
         JLabel jLabel6 = new javax.swing.JLabel();
         final JTextField jTextField6 = new javax.swing.JTextField();
-        JPasswordField jPasswordField1 = new javax.swing.JPasswordField();
+        final JPasswordField jPasswordField1 = new javax.swing.JPasswordField();
         JLabel jLabel7 = new javax.swing.JLabel();
         JPasswordField jPasswordField2 = new javax.swing.JPasswordField();
         JLabel jLabel8 = new javax.swing.JLabel();
@@ -133,9 +138,21 @@ public class Rejestracja {
                         System.out.println("sdfdsf");
                         SQL sql = new SQL();
                         sql.rejestracja(jTextField2.getText(), jTextField3.getText(), jTextField4.getText(), jTextField5.getText(), jTextField6.getText());
-                        sql.con.close(); 
-
-                        
+                        sql.con.close();
+                        String stringQuery = "SELECT Id FROM PROFILE WHERE Name = '" + jTextField2.getText() + "' And  Lastname = '" + jTextField3.getText() + "';";
+                        Connection conn;
+                        Statement stat;
+                        conn = DriverManager.getConnection("jdbc:sqlite:mydb.db");
+                        stat = conn.createStatement();
+                        ResultSet r = stat.executeQuery(stringQuery);
+                        int u=0;
+                        while(r.next()){   
+                            u=  r.getInt(1);
+                        }
+                        SQL sql2 = new SQL();
+                               System.out.println(u);
+                        sql2.login(jTextField1.getText(), jPasswordField1.getText(), u);
+                        sql2.con.close();
                         Logowanie.rysuj();
                     } catch (Exception ex) {
                         Logger.getLogger(Intro.class.getName()).log(Level.SEVERE, null, ex);
